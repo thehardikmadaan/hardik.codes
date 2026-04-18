@@ -141,11 +141,16 @@ body {
 }
 
 .intro-line {
-  overflow:hidden;
+  overflow: hidden;
   /* This prevents the word from EVER breaking in half */
-  white-space:nowrap;
+  white-space: nowrap;
+  display: block;
 }
-.intro-line span { display:block; transform:translateY(100%) }
+.intro-line span {
+  display: block;
+  transform: translateY(100%);
+  will-change: transform;
+}
 .it-solid { color:var(--text) }
 .it-outline {
   -webkit-text-stroke:1.5px rgba(0,212,255,.4);
