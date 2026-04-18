@@ -3,35 +3,33 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Projects Gallery — Hardik Madaan</title>
-<meta name="description" content="Full project gallery — videos, screenshots and results for Hardik Madaan's aerospace and AI engineering work."/>
+<title>Work — Hardik Madaan</title>
+<meta name="description" content="Selected engineering work — aerospace, AI, HMI and mechatronics projects by Hardik Madaan."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@300;400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 /* ═══════════════════════════════════════════
-   DESIGN TOKENS — identical to index.html
+   DESIGN TOKENS
 ═══════════════════════════════════════════ */
 :root {
-  --bg:      #020408;
-  --surface: #060c14;
-  --card:    #0a111c;
-  --accent:  #00d4ff;
-  --accent2: #7b61ff;
-  --accent3: #ff6b35;
-  --text:    #e8edf5;
-  --muted:   #4a5a70;
-  --border:  rgba(0,212,255,0.1);
+  --bg:     #010205;
+  --accent: #00d4ff;
+  --a2:     #7b61ff;
+  --a3:     #ff6b35;
+  --text:   #e8edf5;
+  --muted:  #4a5a70;
+  --border: rgba(0,212,255,.08);
 }
 
-*,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
-html { scroll-behavior:smooth }
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0 }
+html { overflow-x:hidden }
 body {
   background:var(--bg); color:var(--text);
   font-family:'Outfit',sans-serif; font-weight:300;
   overflow-x:hidden; cursor:none;
 }
 
-/* ── ROCKET CURSOR (shared) ──────────────── */
+/* ── ROCKET CURSOR ──────────────────────── */
 #rocket-cursor {
   position:fixed; width:44px; height:44px;
   pointer-events:none; z-index:9999;
@@ -42,7 +40,7 @@ body {
 #rocket-cursor svg {
   width:100%; height:100%;
   filter:drop-shadow(0 0 5px rgba(0,212,255,.65));
-  transition:filter .25s,transform .25s;
+  transition:filter .25s, transform .25s;
 }
 #rocket-cursor.ignite svg {
   filter:drop-shadow(0 0 14px rgba(0,212,255,1)) drop-shadow(0 0 28px rgba(255,107,53,.75));
@@ -50,346 +48,391 @@ body {
 }
 .flame-path  { transition:opacity .2s }
 .flame-path2 { transition:opacity .2s }
-#rocket-cursor.ignite .flame-path  { opacity:1 !important; animation:flicker .12s infinite alternate }
-#rocket-cursor.ignite .flame-path2 { opacity:.85 !important; animation:flicker .18s .06s infinite alternate-reverse }
+#rocket-cursor.ignite .flame-path  { opacity:1!important; animation:flicker .12s infinite alternate }
+#rocket-cursor.ignite .flame-path2 { opacity:.85!important; animation:flicker .18s .06s infinite alternate-reverse }
 @keyframes flicker {
   from { transform:scaleY(.8) scaleX(1.15) }
   to   { transform:scaleY(1.12) scaleX(.88) }
 }
 
-/* ── SCROLL PROGRESS ─────────────────────── */
+/* ── SCROLL PROGRESS ────────────────────── */
 #prog {
   position:fixed; top:0; left:0; height:2px;
-  background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));
-  z-index:400; width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--a2),var(--a3));
+  z-index:600; width:0%;
 }
 
-/* ── GRID + ORBS ────────────────────────── */
-.bg-grid {
-  position:fixed; inset:0; z-index:0;
-  background-image:
-    linear-gradient(rgba(0,212,255,.022) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,212,255,.022) 1px, transparent 1px);
-  background-size:60px 60px; pointer-events:none;
-}
-.orb { position:fixed; border-radius:50%; filter:blur(90px); pointer-events:none; z-index:0 }
-.o1 { width:600px; height:600px; background:radial-gradient(circle,rgba(0,212,255,.06),transparent 70%); top:-150px; left:-150px }
-.o2 { width:480px; height:480px; background:radial-gradient(circle,rgba(123,97,255,.05),transparent 70%); top:40%; right:-120px }
-.o3 { width:400px; height:400px; background:radial-gradient(circle,rgba(255,107,53,.04),transparent 70%); bottom:10%; left:10% }
-
-/* ── NAV ─────────────────────────────────── */
-nav {
-  position:fixed; top:0; left:0; right:0; z-index:200;
+/* ── TOP NAV ────────────────────────────── */
+.top-nav {
+  position:fixed; top:0; left:0; right:0; z-index:400;
   display:flex; justify-content:space-between; align-items:center;
   padding:1.4rem 4rem;
-  background:rgba(2,4,8,.8); backdrop-filter:blur(24px);
-  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(1,2,5,.92) 0%,transparent 100%);
 }
 .nav-logo {
   font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  background:linear-gradient(135deg,var(--accent),var(--a2));
   -webkit-background-clip:text; -webkit-text-fill-color:transparent;
   text-decoration:none;
 }
 .nav-links { display:flex; gap:2.5rem; list-style:none }
 .nav-links a {
-  color:var(--muted); text-decoration:none;
-  font-family:'DM Mono',monospace; font-size:.7rem;
+  color:rgba(232,237,245,.45); text-decoration:none;
+  font-family:'DM Mono',monospace; font-size:.68rem;
   letter-spacing:.12em; text-transform:uppercase; transition:color .3s;
-  position:relative;
 }
-.nav-links a::after {
-  content:''; position:absolute; bottom:-3px; left:0; right:0;
-  height:1px; background:var(--accent);
-  transform:scaleX(0); transition:transform .3s; transform-origin:left;
-}
-.nav-links a:hover { color:var(--accent) }
-.nav-links a.active { color:var(--accent) }
-.nav-links a:hover::after, .nav-links a.active::after { transform:scaleX(1) }
+.nav-links a:hover, .nav-links a.active { color:var(--accent) }
 
-/* ── MAIN ────────────────────────────────── */
-main { position:relative; z-index:2; padding-top:82px }
+/* ── SIDE NAV ───────────────────────────── */
+.side-nav {
+  position:fixed; left:1.8rem; top:50%;
+  transform:translateY(-50%); z-index:500;
+  display:flex; flex-direction:column; gap:1.6rem; align-items:center;
+}
+.sn-item {
+  display:flex; flex-direction:column; align-items:center; gap:.4rem;
+  text-decoration:none; cursor:none;
+}
+.sn-num {
+  font-family:'DM Mono',monospace; font-size:.5rem;
+  letter-spacing:.08em; color:rgba(74,90,112,.5); transition:color .4s;
+}
+.sn-bar {
+  width:1.5px; height:22px;
+  background:rgba(74,90,112,.25); border-radius:2px; transition:all .45s;
+}
+.sn-item.active .sn-num  { color:var(--accent) }
+.sn-item.active .sn-bar  { background:var(--accent); height:38px }
+.sn-item:hover .sn-num   { color:var(--text) }
+.sn-item:hover .sn-bar   { background:rgba(232,237,245,.35) }
 
-/* ── HERO ────────────────────────────────── */
-.ph {
-  padding:5.5rem 4rem 3.5rem; position:relative; overflow:hidden;
-}
-.ph-eyebrow {
-  font-family:'DM Mono',monospace; font-size:.7rem; color:var(--accent);
-  letter-spacing:.22em; text-transform:uppercase;
-  display:flex; align-items:center; gap:1rem; margin-bottom:1.4rem;
-  opacity:0; animation:fadeUp .7s .25s ease forwards;
-}
-.ph-eyebrow::before { content:''; width:36px; height:1px; background:var(--accent) }
-.ph-title {
-  font-family:'Syne',sans-serif; font-weight:800;
-  font-size:clamp(3rem,8.5vw,7.5rem); line-height:.92; letter-spacing:-.03em;
-  opacity:0; animation:fadeUp .7s .4s ease forwards;
-}
-.ph-title em {
-  font-style:normal;
-  background:linear-gradient(135deg,var(--accent),var(--accent2) 55%,var(--accent3));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-}
-.ph-sub {
-  margin-top:1.4rem; font-size:1rem; color:var(--muted);
-  max-width:580px; line-height:1.8;
-  opacity:0; animation:fadeUp .7s .55s ease forwards;
-}
-.ph-back {
-  position:absolute; top:6rem; right:4rem;
-  font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted);
-  text-decoration:none; letter-spacing:.1em; text-transform:uppercase;
-  display:flex; align-items:center; gap:.5rem; transition:color .25s;
-  opacity:0; animation:fadeUp .5s .7s ease forwards;
-}
-.ph-back:hover { color:var(--accent) }
-.ph-back::before { content:'←'; font-size:.8rem }
-
-@keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
-
-/* ── FILTER BAR ─────────────────────────── */
-.filter-bar {
-  padding:0 4rem 2.8rem;
-  display:flex; gap:.7rem; flex-wrap:wrap; align-items:center;
-  opacity:0; animation:fadeUp .6s .7s ease forwards;
-}
-.filter-label {
-  font-family:'DM Mono',monospace; font-size:.6rem; color:var(--muted);
-  letter-spacing:.14em; text-transform:uppercase; margin-right:.4rem;
-}
-.f-btn {
-  font-family:'DM Mono',monospace; font-size:.65rem; letter-spacing:.08em;
-  text-transform:uppercase; padding:.55rem 1.3rem;
-  background:transparent; border:1px solid var(--border); border-radius:2px;
-  color:var(--muted); cursor:none; transition:all .25s;
-}
-.f-btn:hover { background:rgba(0,212,255,.06); color:var(--text); border-color:rgba(0,212,255,.25) }
-.f-btn.active { background:rgba(0,212,255,.1); color:var(--accent); border-color:rgba(0,212,255,.4) }
-
-/* ── PROJECTS GRID ──────────────────────── */
-.proj-grid {
-  padding:0 4rem 7rem;
-  display:flex; flex-direction:column; gap:2.2rem;
-}
-
-/* ── PROJECT CARD ───────────────────────── */
-.proj-card {
-  border:1px solid var(--border); border-radius:6px;
-  background:rgba(6,12,20,.55); backdrop-filter:blur(14px);
-  overflow:hidden;
-  box-shadow:0 8px 48px rgba(0,0,0,.45);
-  opacity:0; transform:translateY(32px);
-  transition:opacity .75s ease, transform .75s ease, border-color .3s, box-shadow .3s;
-}
-.proj-card.visible {
-  opacity:1; transform:translateY(0);
-}
-.proj-card:hover {
-  border-color:rgba(0,212,255,.28);
-  box-shadow:0 16px 72px rgba(0,212,255,.06);
-}
-
-.card-body {
-  display:grid; grid-template-columns:1.05fr .95fr; min-height:440px;
-}
-
-/* ── MEDIA COLUMN ───────────────────────── */
-.media-col {
-  border-right:1px solid var(--border);
+/* ── INTRO SLIDE ────────────────────────── */
+.intro-slide {
+  height:100vh; position:relative; overflow:hidden;
   display:flex; flex-direction:column;
+  justify-content:center; padding:0 6.5rem 0 5.5rem;
+}
+.intro-slide::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse 55% 65% at 75% 55%, rgba(0,212,255,.04), transparent);
+  pointer-events:none;
+}
+.intro-grid-bg {
+  position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,212,255,.016) 1px, transparent 1px),
+    linear-gradient(90deg,rgba(0,212,255,.016) 1px, transparent 1px);
+  background-size:64px 64px;
+}
+.intro-eyebrow {
+  font-family:'DM Mono',monospace; font-size:.68rem; color:var(--accent);
+  letter-spacing:.22em; text-transform:uppercase;
+  display:flex; align-items:center; gap:1rem; margin-bottom:2.2rem;
+  opacity:0;
+}
+.intro-eyebrow::before { content:''; width:32px; height:1px; background:var(--accent) }
+.intro-title {
+  font-family:'Syne',sans-serif; font-weight:800;
+  font-size:clamp(5rem,13vw,12rem); line-height:.86; letter-spacing:-.04em;
+}
+.intro-line { overflow:hidden }
+.intro-line span { display:block; transform:translateY(100%) }
+.it-solid { color:var(--text) }
+.it-outline {
+  -webkit-text-stroke:1.5px rgba(0,212,255,.4);
+  color:transparent;
+}
+.intro-bottom {
+  margin-top:3.8rem;
+  display:flex; align-items:flex-end; gap:4.5rem;
+}
+.intro-stat {
+  font-family:'DM Mono',monospace; font-size:.65rem;
+  color:var(--muted); letter-spacing:.1em; text-transform:uppercase; line-height:2;
+}
+.intro-stat strong {
+  display:block; font-family:'Syne',sans-serif;
+  font-size:2.4rem; font-weight:800; color:var(--text);
+  line-height:1; letter-spacing:-.03em;
+}
+.intro-scroll {
+  font-family:'DM Mono',monospace; font-size:.6rem; color:var(--muted);
+  letter-spacing:.12em; text-transform:uppercase;
+  display:flex; align-items:center; gap:.7rem; opacity:0;
+}
+.intro-scroll::before {
+  content:''; width:1px; height:52px;
+  background:linear-gradient(to bottom,transparent,var(--accent));
+  animation:scrollLine 2.2s ease infinite;
+}
+@keyframes scrollLine { 0%,100%{opacity:.25} 50%{opacity:1} }
+
+/* ── PROJECT SLIDE ──────────────────────── */
+.proj-slide {
+  min-height:100vh; position:relative; overflow:hidden;
+  display:grid; grid-template-columns:46% 54%;
+  border-top:1px solid var(--border);
+}
+.proj-slide.alt { grid-template-columns:54% 46% }
+.proj-slide.alt .slide-left { order:2; padding-left:3.5rem; padding-right:6rem; border-left:1px solid var(--border); border-right:none }
+.proj-slide.alt .slide-right { order:1 }
+
+/* Gradient separators per project */
+.proj-slide::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,212,255,.1),transparent);
+  pointer-events:none;
+}
+
+/* Left info panel */
+.slide-left {
+  position:relative; z-index:2;
+  padding:8rem 3.5rem 5rem 6.5rem;
+  display:flex; flex-direction:column; justify-content:center;
+  border-right:1px solid var(--border);
+  background:linear-gradient(90deg,var(--bg) 0%,rgba(1,2,5,.95) 100%);
+}
+
+/* Animated-in children start hidden */
+.slide-idx,
+.slide-cat,
+.slide-title,
+.slide-org,
+.slide-desc,
+.slide-metrics,
+.slide-tags,
+.slide-actions {
+  opacity:0; transform:translateX(-28px);
+}
+.proj-slide.alt .slide-idx,
+.proj-slide.alt .slide-cat,
+.proj-slide.alt .slide-title,
+.proj-slide.alt .slide-org,
+.proj-slide.alt .slide-desc,
+.proj-slide.alt .slide-metrics,
+.proj-slide.alt .slide-tags,
+.proj-slide.alt .slide-actions {
+  transform:translateX(28px);
+}
+
+.slide-idx {
+  font-family:'DM Mono',monospace; font-size:.65rem; color:var(--accent);
+  letter-spacing:.2em; text-transform:uppercase;
+  display:flex; align-items:center; gap:.8rem; margin-bottom:1rem;
+}
+.slide-idx::before { content:''; width:24px; height:1px; background:var(--accent) }
+.slide-cat {
+  font-family:'DM Mono',monospace; font-size:.6rem; color:var(--muted);
+  letter-spacing:.14em; text-transform:uppercase; margin-bottom:1.5rem;
+}
+.slide-title {
+  font-family:'Syne',sans-serif; font-weight:800;
+  font-size:clamp(1.6rem,2.8vw,2.6rem); line-height:1.1; letter-spacing:-.02em;
+  margin-bottom:.7rem;
+}
+.slide-org {
+  font-family:'DM Mono',monospace; font-size:.6rem; color:var(--a3);
+  letter-spacing:.06em; margin-bottom:1.4rem;
+}
+.slide-desc {
+  font-size:.87rem; color:rgba(232,237,245,.52); line-height:1.95;
+  max-width:400px; margin-bottom:2rem;
+}
+
+/* Metric bars */
+.slide-metrics { display:flex; flex-direction:column; gap:.65rem; margin-bottom:1.8rem }
+.sm-row {
+  display:flex; align-items:center; gap:.8rem;
+  font-family:'DM Mono',monospace; font-size:.58rem;
+}
+.sm-lbl { color:var(--muted); min-width:95px }
+.sm-track {
+  flex:1; height:1.5px; background:rgba(255,255,255,.05);
+  overflow:hidden;
+}
+.sm-fill {
+  height:100%;
+  background:linear-gradient(90deg,var(--accent),var(--a2));
+  width:0; transition:width 1.5s .2s ease;
+}
+.proj-slide.in-view .sm-fill { width:var(--tw) }
+.sm-val { color:var(--accent); min-width:44px; text-align:right }
+
+/* Tags */
+.slide-tags { display:flex; flex-wrap:wrap; gap:.3rem; margin-bottom:1.6rem }
+.s-tag {
+  font-family:'DM Mono',monospace; font-size:.53rem; padding:.18rem .5rem;
+  border:1px solid rgba(0,212,255,.12); border-radius:2px; color:rgba(74,90,112,.85);
+}
+
+/* CTA buttons */
+.slide-actions { display:flex; gap:.65rem; flex-wrap:wrap }
+.s-btn {
+  font-family:'DM Mono',monospace; font-size:.6rem; padding:.48rem .95rem;
+  border:1px solid var(--border); border-radius:2px; text-decoration:none;
+  color:var(--muted); cursor:none; transition:all .25s;
+  display:inline-flex; align-items:center; gap:.4rem;
+}
+.s-btn svg { width:10px; height:10px; flex-shrink:0 }
+.s-btn:hover { border-color:var(--accent); color:var(--accent) }
+.s-btn.pri {
+  background:rgba(0,212,255,.07); border-color:rgba(0,212,255,.28); color:var(--accent);
+}
+.s-btn.pri:hover { background:rgba(0,212,255,.14) }
+
+/* Big watermark number */
+.slide-num-bg {
+  position:absolute; z-index:0; pointer-events:none; user-select:none;
+  font-family:'Syne',sans-serif; font-weight:800; letter-spacing:-.07em;
+  font-size:clamp(8rem,20vw,20rem); line-height:1;
+  -webkit-text-stroke:1px rgba(0,212,255,.035);
+  color:transparent; bottom:-4%; right:1%;
+}
+
+/* Right media panel */
+.slide-right {
+  position:relative; z-index:1;
+  display:flex; flex-direction:column;
+  background:#020609;
+  overflow:hidden;
 }
 
 /* Video slot */
-.video-slot {
-  flex:1; position:relative; background:#030810; min-height:280px;
-  display:flex; align-items:center; justify-content:center; overflow:hidden;
-  cursor:none;
+.s-video {
+  flex:1; position:relative; display:flex;
+  align-items:center; justify-content:center;
+  overflow:hidden; cursor:none; min-height:320px;
+  background:linear-gradient(160deg,#020609,#030d18,#020609);
 }
-/*
-  ─────────────────────────────────────────────────────────────────
-  HOW TO ADD YOUR VIDEO:
-
-  Option A — local file:
-    Remove the .placeholder-ui div and add:
-    <video autoplay muted loop playsinline src="assets/videos/phm-demo.mp4"></video>
-
-  Option B — YouTube embed:
-    <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1&mute=1&loop=1"
-            allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
-  Option C — Vimeo embed:
-    <iframe src="https://player.vimeo.com/video/YOUR_VIDEO_ID?autoplay=1&muted=1&loop=1"
-            allow="autoplay; fullscreen" allowfullscreen></iframe>
-  ─────────────────────────────────────────────────────────────────
-*/
-.video-slot video, .video-slot iframe {
+.s-video::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,212,255,.015) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,212,255,.015) 1px,transparent 1px);
+  background-size:44px 44px;
+}
+.s-video video,
+.s-video iframe {
   position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border:none;
 }
 .v-badge {
-  position:absolute; top:.85rem; left:.85rem; z-index:2;
-  font-family:'DM Mono',monospace; font-size:.55rem; letter-spacing:.1em;
-  text-transform:uppercase; color:var(--accent);
-  padding:.2rem .55rem;
+  position:absolute; top:.85rem; left:.85rem; z-index:4;
+  font-family:'DM Mono',monospace; font-size:.52rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--accent); padding:.2rem .5rem;
   background:rgba(0,212,255,.07); border:1px solid rgba(0,212,255,.22); border-radius:2px;
 }
-.placeholder-ui {
-  display:flex; flex-direction:column; align-items:center; gap:.9rem;
-  opacity:.4; transition:opacity .3s; position:relative; z-index:1; pointer-events:none;
+.s-video-ph {
+  position:relative; z-index:2;
+  display:flex; flex-direction:column; align-items:center; gap:1.1rem;
+  opacity:.38; pointer-events:none; text-align:center; padding:2.5rem;
+  transition:opacity .3s;
 }
-.video-slot:hover .placeholder-ui { opacity:.65 }
-.ph-circle {
-  width:58px; height:58px; border:1.5px dashed rgba(0,212,255,.45); border-radius:50%;
+.s-video:hover .s-video-ph { opacity:.58 }
+.s-play-ring {
+  width:76px; height:76px;
+  border:1.5px dashed rgba(0,212,255,.38); border-radius:50%;
   display:flex; align-items:center; justify-content:center;
+  animation:rotateSpin 14s linear infinite;
 }
-.ph-circle svg { width:22px; height:22px; color:var(--accent) }
-.ph-text { font-family:'DM Mono',monospace; font-size:.62rem; color:var(--muted); text-align:center; line-height:1.5 }
-.ph-hint { font-family:'DM Mono',monospace; font-size:.55rem; color:rgba(74,90,112,.6); text-align:center }
+@keyframes rotateSpin { to { transform:rotate(360deg) } }
+.s-play-ring svg { animation:rotateSpin 14s linear infinite reverse }
+.s-vid-label { font-family:'DM Mono',monospace; font-size:.6rem; color:var(--muted); letter-spacing:.1em; text-transform:uppercase }
+.s-vid-hint  { font-family:'DM Mono',monospace; font-size:.52rem; color:rgba(74,90,112,.45) }
 
 /* Photo strip */
-.photo-strip {
+.s-photos {
   display:grid; grid-template-columns:repeat(3,1fr);
-  border-top:1px solid var(--border); height:128px; flex-shrink:0;
+  height:132px; flex-shrink:0;
+  border-top:1px solid var(--border);
 }
-.photo-slot {
-  position:relative; background:#020609; cursor:none;
-  display:flex; align-items:center; justify-content:center; overflow:hidden;
-  transition:background .3s;
+.s-photo {
+  position:relative; background:#010508;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; cursor:none;
 }
-.photo-slot + .photo-slot { border-left:1px solid var(--border) }
-/*
-  ─────────────────────────────────────────────────────────────────
-  HOW TO ADD PHOTOS:
-    Remove the .photo-placeholder-ui div and add:
-    <img src="assets/images/project-screenshot.jpg" alt="Description" loading="lazy">
-  ─────────────────────────────────────────────────────────────────
-*/
-.photo-slot img {
-  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+.s-photo + .s-photo { border-left:1px solid var(--border) }
+.s-photo img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover }
+.s-photo-ph {
+  display:flex; flex-direction:column; align-items:center; gap:.3rem;
+  opacity:.22; pointer-events:none; transition:opacity .3s;
 }
-.photo-slot:hover { background:#030b14 }
-.photo-placeholder-ui {
-  display:flex; flex-direction:column; align-items:center; gap:.35rem;
-  opacity:.3; transition:opacity .3s; position:relative; z-index:1; pointer-events:none;
+.s-photo:hover .s-photo-ph { opacity:.45 }
+.s-photo-ph svg { width:14px; height:14px; color:var(--accent) }
+.s-photo-ph span {
+  font-family:'DM Mono',monospace; font-size:.48rem;
+  color:var(--muted); letter-spacing:.08em; text-transform:uppercase;
 }
-.photo-slot:hover .photo-placeholder-ui { opacity:.55 }
-.photo-placeholder-ui svg { width:15px; height:15px; color:var(--accent) }
-.photo-placeholder-ui span {
-  font-family:'DM Mono',monospace; font-size:.5rem; color:var(--muted);
+
+/* ── OUTRO SLIDE ────────────────────────── */
+.outro-slide {
+  min-height:60vh; position:relative; overflow:hidden;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:2rem; padding:5rem 4rem;
+  border-top:1px solid var(--border);
+}
+.outro-slide::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse 55% 80% at 50% 100%,rgba(123,97,255,.05),transparent);
+}
+.outro-label {
+  font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted);
+  letter-spacing:.2em; text-transform:uppercase;
+}
+.outro-title {
+  font-family:'Syne',sans-serif; font-weight:800;
+  font-size:clamp(2.5rem,6.5vw,5.5rem); text-align:center; letter-spacing:-.03em; line-height:1.05;
+}
+.outro-title span {
+  -webkit-text-stroke:1.5px rgba(0,212,255,.35); color:transparent;
+}
+.outro-actions { display:flex; gap:1.2rem; flex-wrap:wrap; justify-content:center }
+.o-btn {
+  font-family:'DM Mono',monospace; font-size:.66rem; padding:.65rem 1.7rem;
+  border:1px solid rgba(0,212,255,.22); border-radius:2px; text-decoration:none;
+  color:var(--text); cursor:none; transition:all .35s;
   letter-spacing:.08em; text-transform:uppercase;
 }
-
-/* ── INFO COLUMN ────────────────────────── */
-.info-col {
-  padding:2.4rem 2.2rem; display:flex; flex-direction:column;
-}
-.proj-num {
-  font-family:'Syne',sans-serif; font-weight:800; font-size:3.8rem;
-  color:rgba(0,212,255,.05); line-height:1; margin-bottom:-.35rem;
-}
-.proj-title {
-  font-family:'Syne',sans-serif; font-weight:800; font-size:1.38rem;
-  line-height:1.15; margin-bottom:.4rem; color:var(--text);
-}
-.proj-org {
-  font-family:'DM Mono',monospace; font-size:.62rem; color:var(--accent3);
-  letter-spacing:.07em; margin-bottom:1.3rem;
-}
-.proj-desc {
-  font-size:.92rem; color:rgba(232,237,245,.65); line-height:1.82; flex:1;
-}
-
-/* Metrics */
-.proj-metrics {
-  margin-top:1.3rem; display:flex; flex-direction:column; gap:.6rem;
-}
-.pm-row {
-  display:flex; align-items:center; gap:.8rem;
-  font-family:'DM Mono',monospace; font-size:.64rem;
-}
-.pm-label { color:var(--muted); min-width:92px }
-.pm-bar-wrap { flex:1; height:2px; background:rgba(255,255,255,.05); border-radius:2px; overflow:hidden }
-.pm-bar {
-  height:100%; border-radius:2px;
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  width:0; transition:width 1.3s .25s ease;
-}
-.proj-card.visible .pm-bar { width:var(--target-w) }
-.pm-val { color:var(--accent); min-width:44px; text-align:right }
-
-/* Tags */
-.proj-tags { margin-top:1.2rem; display:flex; flex-wrap:wrap; gap:.35rem }
-.p-tag {
-  font-family:'DM Mono',monospace; font-size:.58rem; padding:.2rem .55rem;
-  border-radius:2px; background:rgba(0,212,255,.06);
-  border:1px solid rgba(0,212,255,.14); color:var(--accent);
-}
-
-/* Action links */
-.proj-actions {
-  margin-top:1.6rem; display:flex; gap:.75rem; flex-wrap:wrap;
-}
-.p-action {
-  font-family:'DM Mono',monospace; font-size:.63rem; padding:.48rem .95rem;
-  border:1px solid var(--border); border-radius:2px; text-decoration:none;
-  color:var(--muted); cursor:none; transition:all .25s;
-  display:flex; align-items:center; gap:.45rem;
-}
-.p-action svg { width:11px; height:11px; flex-shrink:0 }
-.p-action:hover { border-color:var(--accent); color:var(--accent) }
-.p-action.primary {
-  background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(123,97,255,.12));
-  border-color:rgba(0,212,255,.3); color:var(--accent);
-}
-.p-action.primary:hover { background:linear-gradient(135deg,rgba(0,212,255,.2),rgba(123,97,255,.2)) }
-
-/* ── COMING SOON CARD ───────────────────── */
-.proj-card.placeholder {
-  border-style:dashed; min-height:200px;
-  display:flex; align-items:center; justify-content:center;
-  border-color:rgba(0,212,255,.12);
-}
-.placeholder-inner { text-align:center; padding:3rem }
-.placeholder-icon {
-  width:64px; height:64px;
-  border:1.5px dashed rgba(0,212,255,.28); border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  margin:0 auto 1.3rem;
-}
-.placeholder-inner h3 {
-  font-family:'Syne',sans-serif; font-size:1.1rem; margin-bottom:.5rem;
-  color:rgba(232,237,245,.6);
-}
-.placeholder-inner p {
-  font-family:'DM Mono',monospace; font-size:.63rem; color:var(--muted);
+.o-btn:hover { background:rgba(0,212,255,.07); border-color:var(--accent); color:var(--accent) }
+.o-btn.fill {
+  background:linear-gradient(135deg,rgba(0,212,255,.1),rgba(123,97,255,.1));
+  border-color:rgba(0,212,255,.28);
 }
 
 /* ── FOOTER ─────────────────────────────── */
 footer {
   padding:1.8rem 4rem; border-top:1px solid var(--border);
   display:flex; justify-content:space-between; align-items:center;
-  position:relative; z-index:2; background:var(--bg);
   flex-wrap:wrap; gap:.8rem;
 }
-.ft { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted) }
-.fa { color:var(--accent) }
+.ft  { font-family:'DM Mono',monospace; font-size:.63rem; color:var(--muted) }
+.fa  { color:var(--accent) }
 .ft-nav { display:flex; align-items:center; gap:.7rem }
-.ft-nav a { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted); text-decoration:none; transition:color .25s }
+.ft-nav a {
+  font-family:'DM Mono',monospace; font-size:.63rem; color:var(--muted);
+  text-decoration:none; transition:color .25s;
+}
 .ft-nav a:hover { color:var(--accent) }
 
-/* ── MOBILE ──────────────────────────────── */
+/* ── RESPONSIVE ─────────────────────────── */
 @media(max-width:960px) {
-  nav { padding:1.2rem 1.5rem }
+  .side-nav  { display:none }
+  .top-nav   { padding:1.2rem 1.5rem }
   .nav-links { display:none }
-  .ph,.filter-bar,.proj-grid { padding-left:1.5rem; padding-right:1.5rem }
-  .ph-back { position:static; margin-top:1.5rem; display:inline-flex; opacity:1; animation:none }
-  .card-body { grid-template-columns:1fr }
-  .media-col { border-right:none; border-bottom:1px solid var(--border) }
-  footer { flex-direction:column; text-align:center; padding:1.5rem }
+  .intro-slide { padding:0 2rem }
+  .intro-title { font-size:clamp(3.5rem,16vw,5.5rem) }
+  .proj-slide  { grid-template-columns:1fr; min-height:auto }
+  .proj-slide.alt { grid-template-columns:1fr }
+  .proj-slide.alt .slide-left { order:unset; padding:4rem 1.5rem 2rem; border-left:none; border-right:none }
+  .proj-slide.alt .slide-right { order:unset }
+  .slide-left  { padding:5rem 1.5rem 3rem; border-right:none }
+  .slide-right { min-height:50vh }
+  .s-photos    { height:88px }
+  footer       { flex-direction:column; text-align:center; padding:1.5rem }
+  .outro-slide { padding:4rem 1.5rem; min-height:auto }
 }
-
 @media(prefers-reduced-motion:reduce) {
-  * { animation:none !important; transition:none !important }
+  *, *::before, *::after { animation:none!important; transition:none!important }
 }
 </style>
 </head>
@@ -414,14 +457,32 @@ footer {
 
 <div id="prog"></div>
 
-<!-- Atmosphere -->
-<div class="bg-grid"></div>
-<div class="orb o1"></div>
-<div class="orb o2"></div>
-<div class="orb o3"></div>
+<!-- ── SIDE NAV ────────────────────────────────────────── -->
+<nav class="side-nav" id="sideNav">
+  <a href="#s0" class="sn-item active" data-sid="s0">
+    <span class="sn-num">00</span>
+    <span class="sn-bar"></span>
+  </a>
+  <a href="#s1" class="sn-item" data-sid="s1">
+    <span class="sn-num">01</span>
+    <span class="sn-bar"></span>
+  </a>
+  <a href="#s2" class="sn-item" data-sid="s2">
+    <span class="sn-num">02</span>
+    <span class="sn-bar"></span>
+  </a>
+  <a href="#s3" class="sn-item" data-sid="s3">
+    <span class="sn-num">03</span>
+    <span class="sn-bar"></span>
+  </a>
+  <a href="#s4" class="sn-item" data-sid="s4">
+    <span class="sn-num">04</span>
+    <span class="sn-bar"></span>
+  </a>
+</nav>
 
-<!-- Nav -->
-<nav>
+<!-- ── TOP NAV ──────────────────────────────────────────── -->
+<nav class="top-nav">
   <a href="index.html" class="nav-logo">HM</a>
   <ul class="nav-links">
     <li><a href="index.html#about">About</a></li>
@@ -433,451 +494,541 @@ footer {
   </ul>
 </nav>
 
-<main>
-
-<!-- Hero -->
-<section class="ph">
-  <a href="index.html" class="ph-back">Back to home</a>
-  <div class="ph-eyebrow">Project Gallery</div>
-  <h1 class="ph-title">Selected<br/><em>Work.</em></h1>
-  <p class="ph-sub">Four engineering projects where aerospace precision meets machine intelligence. Add your demo videos and screenshots to each project slot below.</p>
+<!-- ══════════════════════════════════════════════════════════
+     INTRO — FULL SCREEN
+══════════════════════════════════════════════════════════ -->
+<section class="intro-slide" id="s0">
+  <div class="intro-grid-bg"></div>
+  <div class="intro-eyebrow" id="iEyebrow">Selected work</div>
+  <h1 class="intro-title">
+    <div class="intro-line"><span class="it-solid" id="il1">SELECTED</span></div>
+    <div class="intro-line"><span class="it-outline" id="il2">WORK.</span></div>
+  </h1>
+  <div class="intro-bottom">
+    <div class="intro-stat" id="is1">
+      <strong>04</strong>
+      Projects
+    </div>
+    <div class="intro-stat" id="is2">
+      <strong>2024—26</strong>
+      Timeline
+    </div>
+    <div class="intro-scroll" id="iScroll">Scroll to explore</div>
+  </div>
 </section>
 
-<!-- Filter bar -->
-<div class="filter-bar">
-  <span class="filter-label">Filter:</span>
-  <button class="f-btn active" data-filter="all">All</button>
-  <button class="f-btn" data-filter="ml">Machine Learning</button>
-  <button class="f-btn" data-filter="aerospace">Aerospace</button>
-  <button class="f-btn" data-filter="hmi">HMI / Software</button>
-  <button class="f-btn" data-filter="mechatronics">Mechatronics</button>
-</div>
-
-<!-- ─────────────── PROJECTS GRID ─────────────── -->
-<div class="proj-grid" id="projGrid">
-
-  <!-- ══ PROJECT 1 — PHM SYSTEM ══ -->
-  <article class="proj-card" data-cats="ml aerospace">
-    <div class="card-body">
-
-      <div class="media-col">
-        <!-- VIDEO SLOT ─────────────────────────────────────────
-             To embed your demo: remove .placeholder-ui and add:
-             <video autoplay muted loop playsinline src="assets/videos/phm-demo.mp4"></video>
-        ───────────────────────────────────────────────────── -->
-        <div class="video-slot">
-          <span class="v-badge">Demo Video</span>
-          <div class="placeholder-ui">
-            <div class="ph-circle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            </div>
-            <div class="ph-text">PHM System Walkthrough</div>
-            <div class="ph-hint">Replace this with your video</div>
-          </div>
-        </div>
-
-        <!-- PHOTO STRIP ─────────────────────────────────────────
-             To add photos: remove .photo-placeholder-ui and add:
-             <img src="assets/images/phm-architecture.png" alt="Architecture" loading="lazy">
-        ───────────────────────────────────────────────────── -->
-        <div class="photo-strip">
-          <div class="photo-slot">
-            <!-- <img src="assets/images/phm-1.png" alt="PHM Architecture"> -->
-            <div class="photo-placeholder-ui">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span>Screenshot</span>
-            </div>
-          </div>
-          <div class="photo-slot">
-            <!-- <img src="assets/images/phm-2.png" alt="LSTM Results"> -->
-            <div class="photo-placeholder-ui">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span>Screenshot</span>
-            </div>
-          </div>
-          <div class="photo-slot">
-            <!-- <img src="assets/images/phm-3.png" alt="MLflow Dashboard"> -->
-            <div class="photo-placeholder-ui">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span>Screenshot</span>
-            </div>
-          </div>
-        </div>
-      </div><!-- /media-col -->
-
-      <div class="info-col">
-        <div class="proj-num">01</div>
-        <h2 class="proj-title">Prognostics &amp; Health Management System</h2>
-        <div class="proj-org">Personal Project · Oct – Dec 2025</div>
-        <p class="proj-desc">End-to-end ML pipeline predicting engine Remaining Useful Life on the NASA C-MAPSS dataset. Custom Asymmetric Loss Function cuts safety violations from 12.4 % to 1.09 %. LSTM model outperforms Random Forest baseline (RMSE 17.17 → 13.32 cycles).</p>
-        <div class="proj-metrics">
-          <div class="pm-row">
-            <span class="pm-label">RMSE reduction</span>
-            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:78%"></div></div>
-            <span class="pm-val">78 %</span>
-          </div>
-          <div class="pm-row">
-            <span class="pm-label">Safety violations</span>
-            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:91%"></div></div>
-            <span class="pm-val">↓ 91 %</span>
-          </div>
-          <div class="pm-row">
-            <span class="pm-label">Model accuracy</span>
-            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:87%"></div></div>
-            <span class="pm-val">87 %</span>
-          </div>
-        </div>
-        <div class="proj-tags">
-          <span class="p-tag">LSTM</span><span class="p-tag">Python</span><span class="p-tag">MLflow</span>
-          <span class="p-tag">DVC</span><span class="p-tag">K-Means</span><span class="p-tag">NASA CMAPSS</span>
-        </div>
-        <div class="proj-actions">
-          <a href="https://github.com/thehardikmadaan" target="_blank" rel="noopener" class="p-action primary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-            View on GitHub
-          </a>
-          <a href="index.html#projects" class="p-action">Live Code Demo →</a>
-        </div>
+<!-- ══════════════════════════════════════════════════════════
+     PROJECT 01 — PHM SYSTEM
+══════════════════════════════════════════════════════════ -->
+<section class="proj-slide" id="s1" data-index="01">
+  <div class="slide-left">
+    <div class="slide-idx">01 / 04</div>
+    <div class="slide-cat">Machine Learning · Aerospace</div>
+    <h2 class="slide-title">Prognostics &amp; Health<br>Management System</h2>
+    <div class="slide-org">Personal Project · Oct – Dec 2025</div>
+    <p class="slide-desc">End-to-end ML pipeline predicting engine Remaining Useful Life on the NASA C-MAPSS dataset. Custom Asymmetric Loss Function cuts safety violations from 12.4 % to 1.09 %. LSTM outperforms Random Forest baseline (RMSE 17.17 → 13.32 cycles).</p>
+    <div class="slide-metrics">
+      <div class="sm-row">
+        <span class="sm-lbl">RMSE Reduction</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:78%"></div></div>
+        <span class="sm-val">78 %</span>
       </div>
-
+      <div class="sm-row">
+        <span class="sm-lbl">Safety Violations</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:91%"></div></div>
+        <span class="sm-val">↓ 91 %</span>
+      </div>
+      <div class="sm-row">
+        <span class="sm-lbl">Model Accuracy</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:87%"></div></div>
+        <span class="sm-val">87 %</span>
+      </div>
     </div>
-  </article>
-
-  <!-- ══ PROJECT 2 — SIMULATOR GUI ══ -->
-  <article class="proj-card" data-cats="hmi aerospace">
-    <div class="card-body">
-
-      <div class="media-col">
-        <div class="video-slot">
-          <span class="v-badge">Demo Video</span>
-          <div class="placeholder-ui">
-            <div class="ph-circle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            </div>
-            <div class="ph-text">Cockpit GUI Live Demo</div>
-            <div class="ph-hint">Replace this with your video</div>
-          </div>
-        </div>
-        <div class="photo-strip">
-          <div class="photo-slot">
-            <!-- <img src="assets/images/sim-pfd.png" alt="Primary Flight Display"> -->
-            <div class="photo-placeholder-ui">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span>Screenshot</span>
-            </div>
-          </div>
-          <div class="photo-slot">
-            <div class="photo-placeholder-ui">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span>Screenshot</span>
-            </div>
-          </div>
-          <div class="photo-slot">
-            <div class="photo-placeholder-ui">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span>Screenshot</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="info-col">
-        <div class="proj-num">02</div>
-        <h2 class="proj-title">Single-Pilot Simulator Displays</h2>
-        <div class="proj-org">FSR — TU Darmstadt · Apr – Sep 2025</div>
-        <p class="proj-desc">Modular GUI for single-pilot cockpit operations built with PySide6. Multi-threaded UDP layer streams real-time telemetry from X-Plane 12 at 50 Hz with sub-20 ms latency. Awarded a 1.3 grade for HMI performance and backend reliability.</p>
-        <div class="proj-metrics">
-          <div class="pm-row">
-            <span class="pm-label">Data rate</span>
-            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:95%"></div></div>
-            <span class="pm-val">50 Hz</span>
-          </div>
-          <div class="pm-row">
-            <span class="pm-label">Grade score</span>
-            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:92%"></div></div>
-            <span class="pm-val">1.3</span>
-          </div>
-          <div class="pm-row">
-            <span class="pm-label">Latency</span>
-            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:85%"></div></div>
-            <span class="pm-val">&lt; 20 ms</span>
-          </div>
-        </div>
-        <div class="proj-tags">
-          <span class="p-tag">PySide6</span><span class="p-tag">X-Plane SDK</span>
-          <span class="p-tag">UDP</span><span class="p-tag">Multi-threading</span><span class="p-tag">HMI</span>
-        </div>
-        <div class="proj-actions">
-          <a href="https://github.com/thehardikmadaan" target="_blank" rel="noopener" class="p-action primary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-            View on GitHub
-          </a>
-          <a href="index.html#projects" class="p-action">Live Code Demo →</a>
-        </div>
-      </div>
-
+    <div class="slide-tags">
+      <span class="s-tag">LSTM</span>
+      <span class="s-tag">Python</span>
+      <span class="s-tag">MLflow</span>
+      <span class="s-tag">DVC</span>
+      <span class="s-tag">K-Means</span>
+      <span class="s-tag">NASA C-MAPSS</span>
     </div>
-  </article>
-
-  <!-- ══ PROJECT 3 — RUNWAY SAFETY ══ -->
-  <article class="proj-card" data-cats="ml aerospace">
-    <div class="card-body">
-
-      <div class="media-col">
-        <div class="video-slot">
-          <span class="v-badge">Demo Video</span>
-          <div class="placeholder-ui">
-            <div class="ph-circle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            </div>
-            <div class="ph-text">Analysis Walkthrough</div>
-            <div class="ph-hint">Replace this with your video</div>
-          </div>
-        </div>
-        <div class="photo-strip">
-          <div class="photo-slot">
-            <div class="photo-placeholder-ui">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span>Screenshot</span>
-            </div>
-          </div>
-          <div class="photo-slot">
-            <div class="photo-placeholder-ui">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span>Screenshot</span>
-            </div>
-          </div>
-          <div class="photo-slot">
-            <div class="photo-placeholder-ui">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span>Screenshot</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="info-col">
-        <div class="proj-num">03</div>
-        <h2 class="proj-title">Runway Incursion Safety Analysis</h2>
-        <div class="proj-org">Boeing × FSR · Oct 2024 – Mar 2025</div>
-        <p class="proj-desc">Processed 30 years of runway incursion data to find collision avoidance patterns. Safety logic structured to align with RTCA DO-323. Permutation-importance sensitivity analysis delivered directly to Boeing safety engineers.</p>
-        <div class="proj-metrics">
-          <div class="pm-row">
-            <span class="pm-label">Data coverage</span>
-            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:100%"></div></div>
-            <span class="pm-val">30 yrs</span>
-          </div>
-          <div class="pm-row">
-            <span class="pm-label">Pattern accuracy</span>
-            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:82%"></div></div>
-            <span class="pm-val">82 %</span>
-          </div>
-          <div class="pm-row">
-            <span class="pm-label">DO-323 coverage</span>
-            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:94%"></div></div>
-            <span class="pm-val">94 %</span>
-          </div>
-        </div>
-        <div class="proj-tags">
-          <span class="p-tag">Safety Analysis</span><span class="p-tag">RTCA DO-323</span>
-          <span class="p-tag">Pandas</span><span class="p-tag">NumPy</span><span class="p-tag">Boeing</span>
-        </div>
-        <div class="proj-actions">
-          <a href="index.html#projects" class="p-action">Live Code Demo →</a>
-        </div>
-      </div>
-
+    <div class="slide-actions">
+      <a href="https://github.com/thehardikmadaan" target="_blank" rel="noopener" class="s-btn pri">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+      <a href="index.html#projects" class="s-btn">View Details →</a>
     </div>
-  </article>
+  </div>
 
-  <!-- ══ PROJECT 4 — MOWER UNIT ══ -->
-  <article class="proj-card" data-cats="mechatronics">
-    <div class="card-body">
+  <div class="slide-right">
+    <!--
+    ══════════════════════════════════════════════════════════════
+    HOW TO ADD YOUR DEMO VIDEO  (Project 01 — PHM System)
 
-      <div class="media-col">
-        <div class="video-slot">
-          <span class="v-badge">Demo Video</span>
-          <div class="placeholder-ui">
-            <div class="ph-circle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            </div>
-            <div class="ph-text">PID Step Response</div>
-            <div class="ph-hint">Replace this with your video</div>
-          </div>
+    Option A — local file:
+      Remove the .s-video-ph div and uncomment:
+      <video autoplay muted loop playsinline src="assets/videos/phm-demo.mp4"></video>
+
+    Option B — YouTube:
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID?autoplay=1&mute=1&loop=1"
+              allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+    Option C — Vimeo:
+      <iframe src="https://player.vimeo.com/video/VIDEO_ID?autoplay=1&muted=1&loop=1"
+              allow="autoplay; fullscreen" allowfullscreen></iframe>
+    ══════════════════════════════════════════════════════════════
+    -->
+    <div class="s-video">
+      <span class="v-badge">Demo Video</span>
+      <div class="s-video-ph">
+        <div class="s-play-ring">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.3"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         </div>
-        <div class="photo-strip">
-          <div class="photo-slot">
-            <div class="photo-placeholder-ui">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span>Photo</span>
-            </div>
-          </div>
-          <div class="photo-slot">
-            <div class="photo-placeholder-ui">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span>Photo</span>
-            </div>
-          </div>
-          <div class="photo-slot">
-            <div class="photo-placeholder-ui">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              <span>Photo</span>
-            </div>
-          </div>
-        </div>
+        <div class="s-vid-label">PHM System Walkthrough</div>
+        <div class="s-vid-hint">Replace this placeholder with your video</div>
       </div>
-
-      <div class="info-col">
-        <div class="proj-num">04</div>
-        <h2 class="proj-title">Height-Adjustable Mower Unit</h2>
-        <div class="proj-org">TU Darmstadt · Apr – Sep 2024</div>
-        <p class="proj-desc">Active stabilisation control logic for a mechatronic mowing system using MATLAB/Simulink. Physical prototypes designed in Fusion 360 and 3D-printed. System integration managed via agile SCRUM. All stability specs met on first hardware test.</p>
-        <div class="proj-metrics">
-          <div class="pm-row">
-            <span class="pm-label">Stability gain</span>
-            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:88%"></div></div>
-            <span class="pm-val">88 %</span>
-          </div>
-          <div class="pm-row">
-            <span class="pm-label">Settle time</span>
-            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:75%"></div></div>
-            <span class="pm-val">↓ 75 %</span>
-          </div>
-          <div class="pm-row">
-            <span class="pm-label">Overshoot</span>
-            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:60%"></div></div>
-            <span class="pm-val">&lt; 5 %</span>
-          </div>
-        </div>
-        <div class="proj-tags">
-          <span class="p-tag">MATLAB</span><span class="p-tag">Simulink</span>
-          <span class="p-tag">Fusion 360</span><span class="p-tag">SCRUM</span><span class="p-tag">3D Printing</span>
-        </div>
-        <div class="proj-actions">
-          <a href="index.html#projects" class="p-action">Live Code Demo →</a>
-        </div>
-      </div>
-
     </div>
-  </article>
-
-  <!-- ══ PLACEHOLDER — COMING NEXT ══ -->
-  <article class="proj-card placeholder">
-    <div class="placeholder-inner">
-      <div class="placeholder-icon">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="rgba(0,212,255,0.45)" stroke-width="1.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    <!--
+    HOW TO ADD PHOTOS  (Project 01)
+    For each slot, remove .s-photo-ph and uncomment the img:
+    <img src="assets/images/phm-architecture.png" alt="Architecture" loading="lazy">
+    -->
+    <div class="s-photos">
+      <div class="s-photo">
+        <!-- <img src="assets/images/phm-arch.png" alt="PHM Architecture" loading="lazy"> -->
+        <div class="s-photo-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Photo</span>
+        </div>
       </div>
-      <h3>Next Project</h3>
-      <p>Currently in development — check back soon</p>
+      <div class="s-photo">
+        <!-- <img src="assets/images/phm-lstm.png" alt="LSTM Results" loading="lazy"> -->
+        <div class="s-photo-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Photo</span>
+        </div>
+      </div>
+      <div class="s-photo">
+        <!-- <img src="assets/images/phm-mlflow.png" alt="MLflow Dashboard" loading="lazy"> -->
+        <div class="s-photo-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Photo</span>
+        </div>
+      </div>
     </div>
-  </article>
+  </div>
 
-</div><!-- /proj-grid -->
+  <div class="slide-num-bg">01</div>
+</section>
 
-</main>
+<!-- ══════════════════════════════════════════════════════════
+     PROJECT 02 — SIMULATOR GUI  (media RIGHT, info LEFT alt)
+══════════════════════════════════════════════════════════ -->
+<section class="proj-slide alt" id="s2" data-index="02">
+  <div class="slide-right">
+    <!--
+    HOW TO ADD YOUR DEMO VIDEO  (Project 02 — Simulator GUI)
+    <video autoplay muted loop playsinline src="assets/videos/sim-demo.mp4"></video>
+    -->
+    <div class="s-video">
+      <span class="v-badge">Demo Video</span>
+      <div class="s-video-ph">
+        <div class="s-play-ring">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.3"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </div>
+        <div class="s-vid-label">Cockpit GUI Live Demo</div>
+        <div class="s-vid-hint">Replace this placeholder with your video</div>
+      </div>
+    </div>
+    <div class="s-photos">
+      <div class="s-photo">
+        <!-- <img src="assets/images/sim-pfd.png" alt="Primary Flight Display" loading="lazy"> -->
+        <div class="s-photo-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Photo</span>
+        </div>
+      </div>
+      <div class="s-photo">
+        <!-- <img src="assets/images/sim-nd.png" alt="Navigation Display" loading="lazy"> -->
+        <div class="s-photo-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Photo</span>
+        </div>
+      </div>
+      <div class="s-photo">
+        <!-- <img src="assets/images/sim-ecam.png" alt="ECAM Systems" loading="lazy"> -->
+        <div class="s-photo-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Photo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-left">
+    <div class="slide-idx">02 / 04</div>
+    <div class="slide-cat">HMI · Aerospace · Software</div>
+    <h2 class="slide-title">Single-Pilot Simulator<br>Displays</h2>
+    <div class="slide-org">FSR — TU Darmstadt · Apr – Sep 2025</div>
+    <p class="slide-desc">Modular GUI for single-pilot cockpit operations built with PySide6. Multi-threaded UDP layer streams real-time telemetry from X-Plane 12 at 50 Hz with sub-20 ms latency. Awarded a 1.3 grade for HMI performance and backend reliability.</p>
+    <div class="slide-metrics">
+      <div class="sm-row">
+        <span class="sm-lbl">Data Rate</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:95%"></div></div>
+        <span class="sm-val">50 Hz</span>
+      </div>
+      <div class="sm-row">
+        <span class="sm-lbl">Grade Score</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:92%"></div></div>
+        <span class="sm-val">1.3</span>
+      </div>
+      <div class="sm-row">
+        <span class="sm-lbl">Latency</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:85%"></div></div>
+        <span class="sm-val">&lt; 20 ms</span>
+      </div>
+    </div>
+    <div class="slide-tags">
+      <span class="s-tag">PySide6</span>
+      <span class="s-tag">X-Plane SDK</span>
+      <span class="s-tag">UDP</span>
+      <span class="s-tag">Multi-threading</span>
+      <span class="s-tag">HMI</span>
+    </div>
+    <div class="slide-actions">
+      <a href="https://github.com/thehardikmadaan" target="_blank" rel="noopener" class="s-btn pri">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+      <a href="index.html#projects" class="s-btn">View Details →</a>
+    </div>
+  </div>
+
+  <div class="slide-num-bg">02</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     PROJECT 03 — RUNWAY SAFETY
+══════════════════════════════════════════════════════════ -->
+<section class="proj-slide" id="s3" data-index="03">
+  <div class="slide-left">
+    <div class="slide-idx">03 / 04</div>
+    <div class="slide-cat">Safety Analysis · Aerospace · ML</div>
+    <h2 class="slide-title">Runway Incursion<br>Safety Analysis</h2>
+    <div class="slide-org">Boeing × FSR · Oct 2024 – Mar 2025</div>
+    <p class="slide-desc">Processed 30 years of runway incursion data to uncover collision avoidance patterns. Safety logic structured to align with RTCA DO-323. Permutation-importance sensitivity analysis delivered directly to Boeing safety engineers.</p>
+    <div class="slide-metrics">
+      <div class="sm-row">
+        <span class="sm-lbl">Data Coverage</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:100%"></div></div>
+        <span class="sm-val">30 yrs</span>
+      </div>
+      <div class="sm-row">
+        <span class="sm-lbl">Pattern Accuracy</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:82%"></div></div>
+        <span class="sm-val">82 %</span>
+      </div>
+      <div class="sm-row">
+        <span class="sm-lbl">DO-323 Coverage</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:94%"></div></div>
+        <span class="sm-val">94 %</span>
+      </div>
+    </div>
+    <div class="slide-tags">
+      <span class="s-tag">Safety Analysis</span>
+      <span class="s-tag">RTCA DO-323</span>
+      <span class="s-tag">Pandas</span>
+      <span class="s-tag">NumPy</span>
+      <span class="s-tag">Boeing</span>
+    </div>
+    <div class="slide-actions">
+      <a href="index.html#projects" class="s-btn">View Details →</a>
+    </div>
+  </div>
+
+  <div class="slide-right">
+    <!--
+    HOW TO ADD YOUR DEMO VIDEO  (Project 03 — Runway Safety)
+    <video autoplay muted loop playsinline src="assets/videos/runway-demo.mp4"></video>
+    -->
+    <div class="s-video">
+      <span class="v-badge">Analysis Walkthrough</span>
+      <div class="s-video-ph">
+        <div class="s-play-ring">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.3"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </div>
+        <div class="s-vid-label">Runway Safety Analysis</div>
+        <div class="s-vid-hint">Replace this placeholder with your video</div>
+      </div>
+    </div>
+    <div class="s-photos">
+      <div class="s-photo">
+        <div class="s-photo-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Photo</span>
+        </div>
+      </div>
+      <div class="s-photo">
+        <div class="s-photo-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Photo</span>
+        </div>
+      </div>
+      <div class="s-photo">
+        <div class="s-photo-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Photo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-num-bg">03</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     PROJECT 04 — MOWER UNIT  (alt layout)
+══════════════════════════════════════════════════════════ -->
+<section class="proj-slide alt" id="s4" data-index="04">
+  <div class="slide-right">
+    <!--
+    HOW TO ADD YOUR DEMO VIDEO  (Project 04 — Mower Unit)
+    <video autoplay muted loop playsinline src="assets/videos/mower-demo.mp4"></video>
+    -->
+    <div class="s-video">
+      <span class="v-badge">PID Step Response</span>
+      <div class="s-video-ph">
+        <div class="s-play-ring">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.3"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </div>
+        <div class="s-vid-label">Mower Unit Demo</div>
+        <div class="s-vid-hint">Replace this placeholder with your video</div>
+      </div>
+    </div>
+    <div class="s-photos">
+      <div class="s-photo">
+        <!-- <img src="assets/images/mower-cad.png" alt="CAD Design" loading="lazy"> -->
+        <div class="s-photo-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Photo</span>
+        </div>
+      </div>
+      <div class="s-photo">
+        <!-- <img src="assets/images/mower-proto.png" alt="Prototype" loading="lazy"> -->
+        <div class="s-photo-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Photo</span>
+        </div>
+      </div>
+      <div class="s-photo">
+        <!-- <img src="assets/images/mower-test.png" alt="Test Results" loading="lazy"> -->
+        <div class="s-photo-ph">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Photo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-left">
+    <div class="slide-idx">04 / 04</div>
+    <div class="slide-cat">Mechatronics · Control Systems</div>
+    <h2 class="slide-title">Height-Adjustable<br>Mower Unit</h2>
+    <div class="slide-org">TU Darmstadt · Apr – Sep 2024</div>
+    <p class="slide-desc">Active stabilisation control logic for a mechatronic mowing system using MATLAB/Simulink. Physical prototypes designed in Fusion 360 and 3D-printed. System integration managed via agile SCRUM. All stability specs met on first hardware test.</p>
+    <div class="slide-metrics">
+      <div class="sm-row">
+        <span class="sm-lbl">Stability Gain</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:88%"></div></div>
+        <span class="sm-val">88 %</span>
+      </div>
+      <div class="sm-row">
+        <span class="sm-lbl">Settle Time</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:75%"></div></div>
+        <span class="sm-val">↓ 75 %</span>
+      </div>
+      <div class="sm-row">
+        <span class="sm-lbl">Overshoot</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:60%"></div></div>
+        <span class="sm-val">&lt; 5 %</span>
+      </div>
+    </div>
+    <div class="slide-tags">
+      <span class="s-tag">MATLAB</span>
+      <span class="s-tag">Simulink</span>
+      <span class="s-tag">Fusion 360</span>
+      <span class="s-tag">SCRUM</span>
+      <span class="s-tag">3D Printing</span>
+    </div>
+    <div class="slide-actions">
+      <a href="index.html#projects" class="s-btn">View Details →</a>
+    </div>
+  </div>
+
+  <div class="slide-num-bg">04</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     OUTRO
+══════════════════════════════════════════════════════════ -->
+<section class="outro-slide" id="soutro">
+  <div class="outro-label">What's next</div>
+  <h2 class="outro-title">Currently<br><span>In Development</span></h2>
+  <p style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;text-align:center">More projects dropping soon — check back or get in touch</p>
+  <div class="outro-actions">
+    <a href="index.html" class="o-btn">← Back to Home</a>
+    <a href="index.html#contact" class="o-btn fill">Get in Touch</a>
+  </div>
+</section>
 
 <footer>
   <div class="ft">© 2026 <span class="fa">Hardik Madaan</span> · Darmstadt, Germany</div>
   <nav class="ft-nav">
-    <a href="index.html" class="ft">Home</a>
+    <a href="index.html">Home</a>
     <span class="ft">·</span>
-    <a href="terms.html" class="ft">Terms &amp; Support</a>
+    <a href="terms.html">Terms &amp; Support</a>
     <span class="ft">·</span>
-    <a href="privacy.html" class="ft">Privacy</a>
+    <a href="privacy.html">Privacy</a>
   </nav>
   <div class="ft">Aerospace + AI <span class="fa">✦</span></div>
 </footer>
 
-<!-- GSAP for filter animations -->
+<!-- GSAP + Lenis -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 <script>
 'use strict';
 
-/* ── Lenis smooth scroll ────────────────── */
-if(typeof Lenis !== 'undefined'){
-  const lenis = new Lenis({ duration:1.2, easing: t=>Math.min(1,1.001-Math.pow(2,-10*t)) });
-  function raf(t){ lenis.raf(t); requestAnimationFrame(raf) }
-  requestAnimationFrame(raf);
-}
+/* ── Lenis smooth scroll ────────────────────────────── */
+const lenis = new Lenis({ duration:1.25, easing: t=>Math.min(1,1.001-Math.pow(2,-10*t)) });
+gsap.registerPlugin(ScrollTrigger);
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(t => lenis.raf(t * 1000));
+gsap.ticker.lagSmoothing(0);
 
-/* ── Rocket cursor ──────────────────────── */
-const rocketEl = document.getElementById('rocket-cursor');
-let mx=window.innerWidth/2, my=window.innerHeight/2;
-let cx=mx, cy=my, prevCx=mx, prevCy=my, rAngle=-90;
-document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY });
-(function rocketLoop(){
-  cx+=(mx-cx)*.14; cy+=(my-cy)*.14;
-  const dvx=cx-prevCx, dvy=cy-prevCy, spd=Math.sqrt(dvx*dvx+dvy*dvy);
-  if(spd>.6){
-    let t=Math.atan2(dvy,dvx)*180/Math.PI+90;
-    let d=t-rAngle;
-    while(d>180)d-=360; while(d<-180)d+=360;
-    rAngle+=d*.18;
-  }
-  prevCx=cx; prevCy=cy;
-  rocketEl.style.left=cx+'px'; rocketEl.style.top=cy+'px';
-  rocketEl.style.transform=`rotate(${rAngle}deg)`;
-  requestAnimationFrame(rocketLoop);
-})();
-document.querySelectorAll('a,button').forEach(el=>{
-  el.addEventListener('mouseenter',()=>rocketEl.classList.add('ignite'));
-  el.addEventListener('mouseleave',()=>rocketEl.classList.remove('ignite'));
-});
-
-/* ── Scroll progress ────────────────────── */
+/* ── Scroll progress bar ────────────────────────────── */
 const prog = document.getElementById('prog');
-window.addEventListener('scroll',()=>{
-  prog.style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';
-},{passive:true});
+window.addEventListener('scroll', () => {
+  prog.style.width = (window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100) + '%';
+}, { passive:true });
 
-/* ── Scroll reveal cards ────────────────── */
-const cards = document.querySelectorAll('.proj-card:not(.placeholder)');
-const cardObs = new IntersectionObserver(entries=>{
-  entries.forEach((e,i)=>{
-    if(e.isIntersecting){
-      setTimeout(()=>e.target.classList.add('visible'),i*60);
-      cardObs.unobserve(e.target);
+/* ── Intro animations (page load) ──────────────────── */
+const tl = gsap.timeline({ delay:.3 });
+tl.to('#il1',   { y:'0%', duration:.9, ease:'power3.out' })
+  .to('#il2',   { y:'0%', duration:.9, ease:'power3.out' }, '-=.65')
+  .to('#iEyebrow', { opacity:1, y:0, duration:.7, ease:'power2.out' }, '-=.5')
+  .to('#is1',   { opacity:1, y:0, duration:.6, ease:'power2.out' }, '-=.4')
+  .to('#is2',   { opacity:1, y:0, duration:.6, ease:'power2.out' }, '-=.45')
+  .to('#iScroll', { opacity:1, duration:.6 }, '-=.3');
+
+/* ── Per-project slide animations ──────────────────── */
+document.querySelectorAll('.proj-slide').forEach(slide => {
+  const isAlt = slide.classList.contains('alt');
+  const dx    = isAlt ? 28 : -28;
+
+  const els = slide.querySelectorAll(
+    '.slide-idx, .slide-cat, .slide-title, .slide-org, ' +
+    '.slide-desc, .slide-metrics, .slide-tags, .slide-actions'
+  );
+
+  ScrollTrigger.create({
+    trigger: slide,
+    start: 'top 72%',
+    once: true,
+    onEnter: () => {
+      slide.classList.add('in-view');
+      gsap.to(els, {
+        opacity: 1, x: 0, duration: .85,
+        stagger: .07, ease: 'power2.out'
+      });
     }
   });
-},{threshold:.08});
-cards.forEach(c=>cardObs.observe(c));
 
-/* Placeholder card reveal */
-const phCard = document.querySelector('.proj-card.placeholder');
-if(phCard){
-  new IntersectionObserver(ents=>{
-    if(ents[0].isIntersecting) phCard.classList.add('visible');
-  },{threshold:.1}).observe(phCard);
-}
-
-/* ── Filter ─────────────────────────────── */
-document.querySelectorAll('.f-btn').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    const f=btn.dataset.filter;
-    document.querySelectorAll('.proj-card:not(.placeholder)').forEach(card=>{
-      const cats=card.dataset.cats||'';
-      const show = f==='all' || cats.includes(f);
-      gsap.to(card,{
-        opacity:show?1:.18, scale:show?1:.975, y:show?0:8,
-        duration:.45, ease:'power2.out'
-      });
-      card.style.pointerEvents = show ? '' : 'none';
-    });
-  });
+  /* Subtle parallax on the watermark number */
+  gsap.fromTo(slide.querySelector('.slide-num-bg'),
+    { y: 40 },
+    {
+      y: -40,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: slide,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true
+      }
+    }
+  );
 });
 
-/* ── Magnetic action buttons ─────────────── */
-document.querySelectorAll('.p-action').forEach(el=>{
-  el.addEventListener('mousemove',e=>{
-    const r=el.getBoundingClientRect();
-    const x=e.clientX-r.left-r.width/2, y=e.clientY-r.top-r.height/2;
-    gsap.to(el,{x:x*.28,y:y*.22,duration:.35,ease:'power2.out'});
+/* ── Outro animation ────────────────────────────────── */
+ScrollTrigger.create({
+  trigger: '.outro-slide',
+  start: 'top 78%',
+  once: true,
+  onEnter: () => {
+    gsap.from('.outro-label, .outro-title, .outro-slide p, .outro-actions', {
+      opacity:0, y:30, duration:.8, stagger:.1, ease:'power2.out'
+    });
+  }
+});
+
+/* ── Side nav active state ──────────────────────────── */
+const sections   = ['s0','s1','s2','s3','s4'];
+const snItems    = document.querySelectorAll('.sn-item');
+const sectionEls = sections.map(id => document.getElementById(id));
+
+const setActive = id => {
+  snItems.forEach(el => el.classList.toggle('active', el.dataset.sid === id));
+};
+
+const navObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) setActive(e.target.id);
   });
-  el.addEventListener('mouseleave',()=>{
-    gsap.to(el,{x:0,y:0,duration:.8,ease:'elastic.out(1,.35)'});
+}, { rootMargin:'-45% 0px -45% 0px', threshold:0 });
+
+sectionEls.forEach(el => el && navObs.observe(el));
+
+/* ── Rocket cursor ──────────────────────────────────── */
+const rocketEl = document.getElementById('rocket-cursor');
+let mx = window.innerWidth/2, my = window.innerHeight/2;
+let cx = mx, cy = my, prevCx = mx, prevCy = my, rAngle = -90;
+
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY });
+
+(function rocketLoop() {
+  cx += (mx - cx) * .14; cy += (my - cy) * .14;
+  const dvx = cx - prevCx, dvy = cy - prevCy, spd = Math.sqrt(dvx*dvx + dvy*dvy);
+  if(spd > .6) {
+    let t = Math.atan2(dvy, dvx) * 180/Math.PI + 90;
+    let d = t - rAngle;
+    while(d > 180) d -= 360; while(d < -180) d += 360;
+    rAngle += d * .18;
+  }
+  prevCx = cx; prevCy = cy;
+  rocketEl.style.left  = cx + 'px';
+  rocketEl.style.top   = cy + 'px';
+  rocketEl.style.transform = `rotate(${rAngle}deg)`;
+  requestAnimationFrame(rocketLoop);
+})();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => rocketEl.classList.add('ignite'));
+  el.addEventListener('mouseleave', () => rocketEl.classList.remove('ignite'));
+});
+
+/* ── Magnetic CTA buttons ───────────────────────────── */
+document.querySelectorAll('.s-btn, .o-btn').forEach(el => {
+  el.addEventListener('mousemove', e => {
+    const r = el.getBoundingClientRect();
+    const x = e.clientX - r.left - r.width/2;
+    const y = e.clientY - r.top  - r.height/2;
+    gsap.to(el, { x: x*.28, y: y*.22, duration:.35, ease:'power2.out' });
+  });
+  el.addEventListener('mouseleave', () => {
+    gsap.to(el, { x:0, y:0, duration:.65, ease:'elastic.out(1,.55)' });
   });
 });
 </script>

@@ -1136,22 +1136,34 @@ window.addEventListener('scroll', ()=>{
     planeGroup.add(glow);
   });
 
-  /* 10. Spinning propeller (ref for animation) */
-  const propDisc = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.02,0.02,2.6,4),
-    matProp
-  );
-  propDisc.position.set(2.93,0,0); propDisc.rotation.z = Math.PI/2;
-  planeGroup.add(propDisc);
+  /* 10. Propeller — hub + 3 swept blades */
+  const propGroup = new THREE.Group();
+  propGroup.position.set(2.93, 0, 0);
+  propGroup.add(new THREE.Mesh(new THREE.SphereGeometry(0.075, 8, 6), matProp));
+  for(let i = 0; i < 3; i++){
+    const pivot = new THREE.Object3D();
+    pivot.rotation.x = (i / 3) * Math.PI * 2;
+    const blade = new THREE.Mesh(new THREE.BoxGeometry(0.055, 1.15, 0.065), matProp);
+    blade.position.y = 0.575;
+    blade.rotation.z = 0.14;
+    pivot.add(blade);
+    propGroup.add(pivot);
+  }
+  planeGroup.add(propGroup);
 
   /* 11. Landing gear fairings */
   add(new THREE.CylinderGeometry(0.06,0.06,0.25,8), matEngine, 0,-0.32, 0.3, 0,0,0);
   add(new THREE.CylinderGeometry(0.06,0.06,0.25,8), matEngine, 0,-0.32,-0.3, 0,0,0);
 
-  /* 12. Fuselage windows strip */
+  /* 12. Fuselage windows strip — visible lit glass */
+  const matWindow = new THREE.MeshStandardMaterial({
+    color:0x88ccff, roughness:0.05, metalness:0.1,
+    transparent:true, opacity:0.82,
+    emissive:0x003355, emissiveIntensity:2.5
+  });
   for(let i=0;i<5;i++){
-    const win = new THREE.Mesh(new THREE.BoxGeometry(0.001,0.11,0.08), matGlass);
-    win.position.set(0.29, 0.06, -1.0 + i*0.42);
+    const win = new THREE.Mesh(new THREE.BoxGeometry(0.065, 0.1, 0.09), matWindow);
+    win.position.set(0.3, 0.06, -1.0 + i*0.42);
     planeGroup.add(win);
   }
 
@@ -1277,7 +1289,7 @@ window.addEventListener('scroll', ()=>{
 
     /* Propeller spin */
     propAngle += 0.06;
-    propDisc.rotation.x = propAngle;
+    propGroup.rotation.x = propAngle;
 
     /* ── Constellation update: move particles + rebuild lines ── */
     const mxW = mouseNDC.x * 16, myW = mouseNDC.y * 11;
