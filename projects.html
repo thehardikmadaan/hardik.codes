@@ -133,10 +133,18 @@ body {
 .intro-eyebrow::before { content:''; width:32px; height:1px; background:var(--accent) }
 .intro-title {
   font-family:'Syne',sans-serif; font-weight:800;
-  font-size:clamp(3.2rem,10vw,10rem); line-height:.88; letter-spacing:-.04em;
-  overflow:hidden; word-break:break-word;
+  /* Reduced from 10vw / 10rem to 7vw / 7rem to keep it manageable */
+  font-size:clamp(2.5rem, 7vw, 7rem);
+  line-height:.95;
+  letter-spacing:-.03em;
+  overflow:hidden;
 }
-.intro-line { overflow:hidden }
+
+.intro-line {
+  overflow:hidden;
+  /* This prevents the word from EVER breaking in half */
+  white-space:nowrap;
+}
 .intro-line span { display:block; transform:translateY(100%) }
 .it-solid { color:var(--text) }
 .it-outline {
