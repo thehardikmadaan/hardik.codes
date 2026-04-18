@@ -445,13 +445,14 @@ footer {
   padding:1.8rem 4rem; border-top:1px solid var(--border);
   display:flex; justify-content:space-between; align-items:center;
   position:relative; z-index:2; background:var(--bg);
-  flex-wrap:wrap; gap:.8rem;
+  flex-wrap:wrap; gap:.8rem; overflow:hidden;
 }
-.ft { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted) }
+.ft { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted); min-width:0 }
 .fa { color:var(--accent) }
-.ft-nav { display:flex; align-items:center; gap:.7rem }
+.ft-nav { display:flex; align-items:center; gap:.7rem; flex-wrap:wrap }
 .ft-nav a { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted); text-decoration:none; transition:color .25s }
 .ft-nav a:hover { color:var(--accent) }
+.ft-sep { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted) }
 
 /* ── GLITCH ON NAME ──────────────────────── */
 @keyframes glitch {
@@ -633,11 +634,14 @@ footer {
   <div class="s-inner">
     <div class="s-label rv" data-n="03">Project Showcase</div>
     <h2 class="s-title rv d1">Interactive<br/><span class="grad-text">code &amp; results.</span></h2>
-    <div class="proj-tabs rv d2" id="projTabs">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem">
+      <div class="proj-tabs rv d2" id="projTabs" style="margin-bottom:0">
       <button class="p-tab active" data-proj="0">PHM System</button>
       <button class="p-tab" data-proj="1">Simulator GUI</button>
       <button class="p-tab" data-proj="2">Runway Safety</button>
       <button class="p-tab" data-proj="3">Mower Control</button>
+    </div>
+      <a href="projects.html" class="btn-o rv d2" style="font-size:.75rem;padding:.6rem 1.4rem;white-space:nowrap">View Full Gallery →</a>
     </div>
     <div class="proj-showcase rv d3">
 
@@ -900,11 +904,11 @@ footer {
 <footer>
   <div class="ft">© 2026 <span class="fa">Hardik Madaan</span> · Darmstadt, Germany</div>
   <nav class="ft-nav" aria-label="Footer links">
-    <a href="projects.html" class="ft">Gallery</a>
-    <span class="ft" aria-hidden="true">·</span>
-    <a href="terms.html" class="ft">Terms &amp; Support</a>
-    <span class="ft" aria-hidden="true">·</span>
-    <a href="privacy.html" class="ft">Privacy</a>
+    <a href="projects.html">Gallery</a>
+    <span class="ft-sep">·</span>
+    <a href="terms.html">Terms &amp; Support</a>
+    <span class="ft-sep">·</span>
+    <a href="privacy.html">Privacy</a>
   </nav>
   <div class="ft">Aerospace + AI <span class="fa">✦</span> Built with precision</div>
 </footer>
@@ -1085,56 +1089,79 @@ window.addEventListener('scroll', ()=>{
   /* 3. Tail cone */
   add(new THREE.ConeGeometry(0.22, 0.7, 10), matFuse, -2.35,0,0, 0,0,Math.PI/2);
 
-  /* 4. Main wings — swept back */
+  /* 4. Main wings — swept back, built as mirrored pairs */
   const wingShape = new THREE.Shape();
-  wingShape.moveTo(0,  0);
-  wingShape.lineTo(0.3, 2.5);
-  wingShape.lineTo(-0.2, 2.5);
-  wingShape.lineTo(-0.6, 0);
+  wingShape.moveTo(0,   0);
+  wingShape.lineTo(0.28, 2.4);
+  wingShape.lineTo(-0.18, 2.4);
+  wingShape.lineTo(-0.55, 0);
   wingShape.closePath();
-  const wingExt = { depth:0.07, bevelEnabled:false };
+  const wingExt = { depth:0.08, bevelEnabled:false };
   const wingGeo = new THREE.ExtrudeGeometry(wingShape, wingExt);
-  /* Left wing */
+
+  /* Left wing — extrudes in +Z from z=0.04 outward */
   const lw = new THREE.Mesh(wingGeo, matWing); lw.castShadow=true;
-  lw.position.set(-0.2, -0.12, 0.5);
-  lw.rotation.set(-Math.PI/2, 0, -0.08);
+  lw.position.set(-0.15, -0.1, 0.04);
+  lw.rotation.set(-Math.PI/2, 0, -0.07);
   planeGroup.add(lw);
-  /* Right wing — mirror */
-  const rw = lw.clone();
-  rw.scale.z = -1;
-  rw.position.z = -0.5;
-  rw.rotation.set(-Math.PI/2, 0, 0.08); // Right wing mirrored properly
+
+  /* Right wing — mirror shape built manually (extrudes in -Z from z=-0.04) */
+  const wingShapeR = new THREE.Shape();
+  wingShapeR.moveTo(0,    0);
+  wingShapeR.lineTo(0.28, -2.4);
+  wingShapeR.lineTo(-0.18,-2.4);
+  wingShapeR.lineTo(-0.55, 0);
+  wingShapeR.closePath();
+  const wingGeoR = new THREE.ExtrudeGeometry(wingShapeR, { depth:0.08, bevelEnabled:false });
+  const rw = new THREE.Mesh(wingGeoR, matWing); rw.castShadow=true;
+  rw.position.set(-0.15, -0.1, -0.04);
+  rw.rotation.set(-Math.PI/2, 0, -0.07);
   planeGroup.add(rw);
 
   /* 5. Winglets */
-  add(new THREE.BoxGeometry(0.06, 0.35, 0.18), matTail,  0.1, 0.12,  2.55, 0.3, 0, 0);
-  add(new THREE.BoxGeometry(0.06, 0.35, 0.18), matTail,  0.1, 0.12, -2.55, -0.3,0, 0);
+  add(new THREE.BoxGeometry(0.06, 0.32, 0.16), matTail,  0.1, 0.1,  2.48, 0.28, 0, 0);
+  add(new THREE.BoxGeometry(0.06, 0.32, 0.16), matTail,  0.1, 0.1, -2.48, -0.28,0, 0);
 
   /* 6. Horizontal stabiliser */
-  const hStab = new THREE.BoxGeometry(1.8, 0.06, 0.55);
-  add(hStab, matWing, -1.8, 0.12, 0);
+  add(new THREE.BoxGeometry(1.7, 0.06, 0.52), matWing, -1.75, 0.1, 0);
 
-  /* 7. Vertical tail fin */
+  /* 7. Vertical tail fin — properly rooted IN the fuselage top, swept profile */
   const finShape = new THREE.Shape();
-  finShape.moveTo(0,0); finShape.lineTo(-0.65,0.9); finShape.lineTo(-0.65,1.15); finShape.lineTo(0.1,0.3); finShape.closePath();
-  const finGeo = new THREE.ExtrudeGeometry(finShape,{ depth:0.06, bevelEnabled:false });
+  finShape.moveTo(-0.06, -0.22);   // root front, sunk into fuselage
+  finShape.lineTo( 0.08, -0.22);   // root rear
+  finShape.lineTo( 0.08,  0.0);
+  finShape.lineTo(-0.42,  0.82);   // leading edge sweep
+  finShape.lineTo(-0.54,  1.05);   // tip
+  finShape.lineTo(-0.54,  1.22);
+  finShape.lineTo( 0.02,  0.30);   // trailing edge
+  finShape.closePath();
+  const finGeo = new THREE.ExtrudeGeometry(finShape, { depth:0.065, bevelEnabled:false });
   const fin = new THREE.Mesh(finGeo, matTail);
-  fin.position.set(-1.5, 0.15, -0.03); fin.rotation.y = Math.PI/2;
+  /* Sit on top of fuselage at tail — rotate so fin stands vertically */
+  fin.position.set(-1.55, 0.22, -0.033);
+  fin.rotation.set(0, Math.PI/2, 0);
   fin.castShadow = true;
   planeGroup.add(fin);
 
   /* 8. Cockpit canopy */
   add(new THREE.CylinderGeometry(0.22, 0.28, 0.7, 10, 1, false, 0, Math.PI), matGlass, 0.7, 0.28, 0, 0,0,Math.PI/2);
 
-  /* 9. Engine nacelles (under wings) */
-  [0.85, -0.85].forEach(z => {
-    add(new THREE.CylinderGeometry(0.14,0.14,0.9,12), matEngine, 0.2,-0.32, z, 0,0,Math.PI/2);
-    /* Engine intake ring */
-    add(new THREE.TorusGeometry(0.14, 0.02, 8, 16), matTail, 0.65,-0.32, z, 0,Math.PI/2,0);
-    /* Exhaust glow */
-    const glow = new THREE.Mesh(new THREE.CircleGeometry(0.10,12), new THREE.MeshBasicMaterial({ color:0xff4400, transparent:true, opacity:0.6 }));
-    glow.position.set(-0.25,-0.32,z); glow.rotation.y=Math.PI/2;
+  /* 9. Engine nacelles — under wings, one each side at ~40% span */
+  [ 1.0, -1.0 ].forEach(z => {
+    /* Nacelle body */
+    add(new THREE.CylinderGeometry(0.13, 0.13, 0.88, 12), matEngine,  0.05, -0.28, z, 0, 0, Math.PI/2);
+    /* Intake ring */
+    add(new THREE.TorusGeometry(0.13, 0.02, 8, 16), matTail,  0.50, -0.28, z, 0, Math.PI/2, 0);
+    /* Exhaust glow disc */
+    const glow = new THREE.Mesh(
+      new THREE.CircleGeometry(0.09, 12),
+      new THREE.MeshBasicMaterial({ color:0xff4400, transparent:true, opacity:0.65 })
+    );
+    glow.position.set(-0.39, -0.28, z);
+    glow.rotation.y = Math.PI/2;
     planeGroup.add(glow);
+    /* Pylon connecting nacelle to wing */
+    add(new THREE.BoxGeometry(0.06, 0.18, 0.06), matEngine, 0.05, -0.14, z);
   });
 
   /* 10. Propeller — hub + 3 swept blades */
@@ -1576,8 +1603,8 @@ document.querySelectorAll('.btn-p,.btn-o').forEach(btn=>{
     { opacity:0, y:72, rotateX:-80 },
     { opacity:1, y:0,  rotateX:0,
       stagger:.048, duration:.85, ease:'back.out(2.8)',
-      delay:.85, /* matches the CSS .h-name fadeUp delay */
-      clearProps:'transform'
+      delay:.65, /* matches the CSS .h-name fadeUp delay — in sync with l1 */
+      clearProps:'all'
     }
   );
 })();
