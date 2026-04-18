@@ -33,20 +33,31 @@ body {
   overflow-x:hidden; cursor:none;
 }
 
-/* ── CURSOR ──────────────────────────────── */
-#cur {
-  position:fixed; width:10px; height:10px; background:var(--accent);
-  border-radius:50%; pointer-events:none; z-index:9999;
-  transform:translate(-50%,-50%); mix-blend-mode:screen;
-  transition:width .2s,height .2s,background .2s;
-  will-change:transform;
+/* ── ROCKET CURSOR ──────────────────────── */
+/* The SVG nose points UP by default; JS rotates it to face direction of travel */
+#rocket-cursor {
+  position:fixed; width:44px; height:44px;
+  pointer-events:none; z-index:9999;
+  transform-origin:50% 50%;
+  will-change:left,top,transform;
+  margin-left:-22px; margin-top:-22px;
 }
-#cur-r {
-  position:fixed; width:36px; height:36px;
-  border:1px solid rgba(0,212,255,.45); border-radius:50%;
-  pointer-events:none; z-index:9998; transform:translate(-50%,-50%);
-  transition:width .2s,height .2s,border-color .2s;
-  will-change:transform;
+#rocket-cursor svg {
+  width:100%; height:100%;
+  filter:drop-shadow(0 0 5px rgba(0,212,255,.65));
+  transition:filter .25s,transform .25s;
+}
+#rocket-cursor.ignite svg {
+  filter:drop-shadow(0 0 14px rgba(0,212,255,1)) drop-shadow(0 0 28px rgba(255,107,53,.75));
+  transform:scale(1.22);
+}
+.flame-path  { transition:opacity .2s }
+.flame-path2 { transition:opacity .2s }
+#rocket-cursor.ignite .flame-path  { opacity:1 !important; animation:flicker .12s infinite alternate }
+#rocket-cursor.ignite .flame-path2 { opacity:.85 !important; animation:flicker .18s .06s infinite alternate-reverse }
+@keyframes flicker {
+  from { transform:scaleY(.8) scaleX(1.15); }
+  to   { transform:scaleY(1.12) scaleX(.88); }
 }
 
 /* ── SCROLL PROGRESS ─────────────────────── */
@@ -247,7 +258,8 @@ section { min-height:100vh; display:flex; align-items:center }
 .stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem }
 .sc {
   padding:1.5rem; border:1px solid var(--border); border-radius:3px;
-  background:rgba(0,212,255,.02);
+  background:rgba(6,12,20,.55); backdrop-filter:blur(12px);
+  box-shadow:0 8px 32px rgba(0,212,255,.04), inset 0 1px 0 rgba(255,255,255,.03);
   transition:border-color .35s,transform .35s,background .35s;
   position:relative; overflow:hidden; will-change:transform;
 }
@@ -270,8 +282,9 @@ section { min-height:100vh; display:flex; align-items:center }
 .sk-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem }
 .sk-cat {
   padding:1.8rem; border:1px solid var(--border); border-radius:3px;
-  background:var(--card); transition:border-color .35s;
-  transform-style:preserve-3d; will-change:transform;
+  background:rgba(6,12,20,.6); backdrop-filter:blur(14px);
+  box-shadow:0 8px 32px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.03);
+  transition:border-color .35s; transform-style:preserve-3d; will-change:transform;
 }
 .sk-cat:hover { border-color:var(--accent2) }
 .sk-cat-t {
@@ -387,7 +400,9 @@ pre { font-family:'DM Mono',monospace; font-size:.68rem; line-height:1.8; color:
 .edu-card {
   padding:2.2rem; border:1px solid var(--border); border-radius:3px;
   position:relative; overflow:hidden;
-  transition:border-color .35s,transform .35s; background:var(--card);
+  transition:border-color .35s,transform .35s;
+  background:rgba(6,12,20,.55); backdrop-filter:blur(12px);
+  box-shadow:0 8px 32px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.03);
   transform-style:preserve-3d; will-change:transform;
 }
 .edu-card::before {
@@ -419,6 +434,8 @@ pre { font-family:'DM Mono',monospace; font-size:.68rem; line-height:1.8; color:
   padding:.9rem 1.8rem; border:1px solid var(--border); border-radius:3px;
   text-decoration:none; color:var(--text); font-family:'DM Mono',monospace;
   font-size:.72rem; transition:all .3s;
+  background:rgba(6,12,20,.5); backdrop-filter:blur(10px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
 }
 .c-link:hover { border-color:var(--accent); color:var(--accent); transform:translateY(-4px) }
 .c-link svg { width:16px; height:16px; flex-shrink:0 }
@@ -428,9 +445,13 @@ footer {
   padding:1.8rem 4rem; border-top:1px solid var(--border);
   display:flex; justify-content:space-between; align-items:center;
   position:relative; z-index:2; background:var(--bg);
+  flex-wrap:wrap; gap:.8rem;
 }
 .ft { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted) }
 .fa { color:var(--accent) }
+.ft-nav { display:flex; align-items:center; gap:.7rem }
+.ft-nav a { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted); text-decoration:none; transition:color .25s }
+.ft-nav a:hover { color:var(--accent) }
 
 /* ── GLITCH ON NAME ──────────────────────── */
 @keyframes glitch {
@@ -473,9 +494,30 @@ footer {
 </head>
 <body>
 
-<!-- Cursors & Progress -->
-<div id="cur"></div>
-<div id="cur-r"></div>
+<!-- Rocket Cursor — SVG nose points UP; JS rotates to face movement direction -->
+<div id="rocket-cursor">
+  <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Body: tapered teardrop from nose (22,5) down to nozzle -->
+    <path d="M22 5 C27 10 29 17 29 23 L22 29 L15 23 C15 17 17 10 22 5 Z"
+          stroke="#00d4ff" stroke-width="1.5" fill="rgba(0,212,255,0.07)" stroke-linejoin="round"/>
+    <!-- Left fin -->
+    <path d="M15 22 L9 33 L15 28 Z"
+          stroke="#00d4ff" stroke-width="1.3" fill="rgba(0,212,255,0.05)" stroke-linejoin="round"/>
+    <!-- Right fin -->
+    <path d="M29 22 L35 33 L29 28 Z"
+          stroke="#00d4ff" stroke-width="1.3" fill="rgba(0,212,255,0.05)" stroke-linejoin="round"/>
+    <!-- Engine nozzle -->
+    <path d="M17 28 L17 32 Q22 35 27 32 L27 28"
+          stroke="#00d4ff" stroke-width="1.3" fill="none" stroke-linejoin="round"/>
+    <!-- Porthole window -->
+    <circle cx="22" cy="17" r="4" stroke="#7b61ff" stroke-width="1.2" fill="rgba(123,97,255,0.12)"/>
+    <!-- Flame: hidden by default, lit by .ignite class -->
+    <path class="flame-path"  d="M18 32 Q22 44 26 32" stroke="#ff6b35" stroke-width="1.8" fill="none" opacity="0"/>
+    <path class="flame-path2" d="M19.5 32 Q22 39 24.5 32" stroke="#ffbd2e" stroke-width="1.1" fill="none" opacity="0"/>
+  </svg>
+</div>
+
+<!-- Scroll Progress Bar -->
 <div id="prog"></div>
 
 <!-- Three.js 3D Background Canvas -->
@@ -494,6 +536,7 @@ footer {
     <li><a href="#about">About</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#projects">Projects</a></li>
+    <li><a href="projects.html">Gallery</a></li>
     <li><a href="#education">Education</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -856,6 +899,13 @@ footer {
 
 <footer>
   <div class="ft">© 2026 <span class="fa">Hardik Madaan</span> · Darmstadt, Germany</div>
+  <nav class="ft-nav" aria-label="Footer links">
+    <a href="projects.html" class="ft">Gallery</a>
+    <span class="ft" aria-hidden="true">·</span>
+    <a href="terms.html" class="ft">Terms &amp; Support</a>
+    <span class="ft" aria-hidden="true">·</span>
+    <a href="privacy.html" class="ft">Privacy</a>
+  </nav>
   <div class="ft">Aerospace + AI <span class="fa">✦</span> Built with precision</div>
 </footer>
 
@@ -867,6 +917,8 @@ footer {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- Lenis smooth scroll — inertia-based premium feel -->
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 
 <script>
 'use strict';
@@ -900,29 +952,48 @@ const CFG = {
 };
 
 /* ═══════════════════════════════════════════════════════════
-   1. CURSOR
+   1. ROCKET CURSOR
+   SVG nose points UP by default; we rotate it to face the
+   direction of travel using atan2 of the velocity vector.
+   Hovering interactive elements adds class .ignite which
+   triggers the CSS flame animation at the tail.
 ═══════════════════════════════════════════════════════════ */
-const cur  = document.getElementById('cur');
-const curR = document.getElementById('cur-r');
-let mx=0, my=0, rx=0, ry=0;
-document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY });
-(function cursorLoop(){
-  cur.style.left  = mx+'px'; cur.style.top  = my+'px';
-  rx += (mx-rx)*.1; ry += (my-ry)*.1;
-  curR.style.left = rx+'px'; curR.style.top = ry+'px';
-  requestAnimationFrame(cursorLoop);
+const rocketEl = document.getElementById('rocket-cursor');
+let mx=window.innerWidth/2, my=window.innerHeight/2;
+let cx=mx, cy=my;          /* smoothed (current) position */
+let prevCx=mx, prevCy=my;  /* previous frame, used to compute velocity */
+let rAngle=-90;             /* degrees — nose-up default */
+
+document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY });
+
+(function rocketLoop(){
+  /* Smooth-follow the raw mouse */
+  cx += (mx-cx) * 0.14;
+  cy += (my-cy) * 0.14;
+
+  /* Direction vector from velocity */
+  const dvx=cx-prevCx, dvy=cy-prevCy;
+  const spd=Math.sqrt(dvx*dvx+dvy*dvy);
+  if(spd > 0.6){
+    /* atan2 angle from +X axis; rocket SVG points up so +90° offset */
+    let target = Math.atan2(dvy, dvx) * 180/Math.PI + 90;
+    let diff = target - rAngle;
+    while(diff >  180) diff -= 360;
+    while(diff < -180) diff += 360;
+    rAngle += diff * 0.18; /* smooth angular lerp */
+  }
+
+  prevCx=cx; prevCy=cy;
+  rocketEl.style.left = cx + 'px';
+  rocketEl.style.top  = cy + 'px';
+  rocketEl.style.transform = `rotate(${rAngle}deg)`;
+  requestAnimationFrame(rocketLoop);
 })();
+
+/* Ignition effect on interactive elements */
 document.querySelectorAll('a,button,.p-tab,.chip,.sp,.sc,.sk-cat').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{
-    cur.style.width='18px'; cur.style.height='18px';
-    curR.style.width='52px'; curR.style.height='52px';
-    curR.style.borderColor='rgba(0,212,255,.7)';
-  });
-  el.addEventListener('mouseleave',()=>{
-    cur.style.width='10px'; cur.style.height='10px';
-    curR.style.width='36px'; curR.style.height='36px';
-    curR.style.borderColor='rgba(0,212,255,.45)';
-  });
+  el.addEventListener('mouseenter', ()=> rocketEl.classList.add('ignite'));
+  el.addEventListener('mouseleave', ()=> rocketEl.classList.remove('ignite'));
 });
 
 /* ═══════════════════════════════════════════════════════════
@@ -1108,14 +1179,56 @@ window.addEventListener('scroll', ()=>{
 
   scene.add(bgGroup);
 
-  /* ── Particle field ────────────────────────────────────── */
-  const pCount = 220;
-  const pGeo   = new THREE.BufferGeometry();
-  const pPos   = new Float32Array(pCount*3);
-  for(let i=0;i<pCount*3;i++) pPos[i] = (Math.random()-0.5)*40;
-  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-  const pMat  = new THREE.PointsMaterial({ color:0x00d4ff, size:0.06, transparent:true, opacity:0.5 });
-  scene.add(new THREE.Points(pGeo, pMat));
+  /* ── Constellation particle field ──────────────────────────
+     Particles move slowly, lines form between neighbours.
+     AdditiveBlending makes overlapping lines glow like neon.
+  ─────────────────────────────────────────────────────────── */
+  const CON_N    = 160;   // particle count
+  const CON_DIST = 5.5;   // max connection distance (world units)
+  const MAX_SEGS = 800;   // pre-allocated line segment slots
+
+  /* Particle state (plain objects are faster to mutate than buffers) */
+  const cPos = [], cVel = [];
+  for(let i=0; i<CON_N; i++){
+    cPos.push({ x:(Math.random()-.5)*32, y:(Math.random()-.5)*22, z:(Math.random()-.5)*18-6 });
+    cVel.push({ x:(Math.random()-.5)*.007, y:(Math.random()-.5)*.005 });
+  }
+
+  /* Glowing point sprites */
+  const conGeo = new THREE.BufferGeometry();
+  const conBuf = new Float32Array(CON_N*3);
+  conGeo.setAttribute('position', new THREE.BufferAttribute(conBuf,3).setUsage(THREE.DynamicDrawUsage));
+  scene.add(new THREE.Points(conGeo, new THREE.PointsMaterial({
+    color:0x00d4ff, size:0.12, transparent:true, opacity:0.85,
+    blending:THREE.AdditiveBlending, depthWrite:false
+  })));
+
+  /* Cyan neon lines (thin, additive = glow where they cross) */
+  const lineBuf = new Float32Array(MAX_SEGS*6);
+  const lineGeo = new THREE.BufferGeometry();
+  const linePosAttr = new THREE.BufferAttribute(lineBuf,3).setUsage(THREE.DynamicDrawUsage);
+  lineGeo.setAttribute('position', linePosAttr);
+  const conLines = new THREE.LineSegments(lineGeo,
+    new THREE.LineBasicMaterial({ color:0x00d4ff, transparent:true, opacity:0.22,
+      blending:THREE.AdditiveBlending, depthWrite:false }));
+  scene.add(conLines);
+
+  /* White inner-core bloom layer: only the closest connections */
+  const lineBuf2 = new Float32Array(MAX_SEGS*6);
+  const lineGeo2 = new THREE.BufferGeometry();
+  const linePosAttr2 = new THREE.BufferAttribute(lineBuf2,3).setUsage(THREE.DynamicDrawUsage);
+  lineGeo2.setAttribute('position', linePosAttr2);
+  const conLines2 = new THREE.LineSegments(lineGeo2,
+    new THREE.LineBasicMaterial({ color:0xffffff, transparent:true, opacity:0.07,
+      blending:THREE.AdditiveBlending, depthWrite:false }));
+  scene.add(conLines2);
+
+  /* Mouse world position (projected onto z = -6 plane) */
+  let mouseNDC = { x:0, y:0 };
+  document.addEventListener('mousemove', e=>{
+    mouseNDC.x = (e.clientX/window.innerWidth)*2-1;
+    mouseNDC.y = -(e.clientY/window.innerHeight)*2+1;
+  });
 
   /* ── Scroll state proxy (GSAP animates this) ─────────── */
   const scrollState = { progress:0 };
@@ -1165,6 +1278,46 @@ window.addEventListener('scroll', ()=>{
     /* Propeller spin */
     propAngle += 0.06;
     propDisc.rotation.x = propAngle;
+
+    /* ── Constellation update: move particles + rebuild lines ── */
+    const mxW = mouseNDC.x * 16, myW = mouseNDC.y * 11;
+    let segIdx = 0, segIdx2 = 0;
+    for(let i=0; i<CON_N; i++){
+      const p=cPos[i], v=cVel[i];
+      /* Mouse repulsion */
+      const dx=p.x-mxW, dy=p.y-myW;
+      const md=Math.sqrt(dx*dx+dy*dy)||0.01;
+      if(md<5){ const f=(5-md)/5*.0025; v.x+=dx/md*f; v.y+=dy/md*f }
+      v.x*=.994; v.y*=.994;
+      p.x+=v.x; p.y+=v.y;
+      /* Wrap to bounds */
+      if(p.x<-16)p.x=16; if(p.x>16)p.x=-16;
+      if(p.y<-11)p.y=11; if(p.y>11)p.y=-11;
+      /* Write to points buffer */
+      conBuf[i*3]=p.x; conBuf[i*3+1]=p.y; conBuf[i*3+2]=p.z;
+      /* Connect to later particles within CON_DIST */
+      for(let j=i+1; j<CON_N && segIdx<MAX_SEGS; j++){
+        const q=cPos[j];
+        const cx=p.x-q.x, cy=p.y-q.y, cz=p.z-q.z;
+        const cd=Math.sqrt(cx*cx+cy*cy+cz*cz);
+        if(cd<CON_DIST){
+          const b=segIdx*6;
+          lineBuf[b]=p.x;lineBuf[b+1]=p.y;lineBuf[b+2]=p.z;
+          lineBuf[b+3]=q.x;lineBuf[b+4]=q.y;lineBuf[b+5]=q.z;
+          segIdx++;
+          /* Bright inner bloom for very-close pairs */
+          if(cd<CON_DIST*.4 && segIdx2<MAX_SEGS){
+            const b2=segIdx2*6;
+            lineBuf2[b2]=p.x;lineBuf2[b2+1]=p.y;lineBuf2[b2+2]=p.z;
+            lineBuf2[b2+3]=q.x;lineBuf2[b2+4]=q.y;lineBuf2[b2+5]=q.z;
+            segIdx2++;
+          }
+        }
+      }
+    }
+    conGeo.attributes.position.needsUpdate=true;
+    lineGeo.setDrawRange(0,segIdx*2); linePosAttr.needsUpdate=true;
+    lineGeo2.setDrawRange(0,segIdx2*2); linePosAttr2.needsUpdate=true;
 
     /* Background shapes slow rotation */
     iso.rotation.x += 0.003; iso.rotation.y += 0.005;
@@ -1343,6 +1496,78 @@ function closeTerm(idx){
 
 /* ── First panel metric bars ───────────────────────────── */
 setTimeout(()=>{ document.querySelectorAll('#panel-0 .metric-bar').forEach(b=>{ b.style.width=b.dataset.w+'%' }) },900);
+
+/* ═══════════════════════════════════════════════════════════
+   6. LENIS SMOOTH SCROLL — inertia-based premium feel.
+   Synced with GSAP ticker so ScrollTrigger stays accurate.
+═══════════════════════════════════════════════════════════ */
+(function initLenis(){
+  if(typeof Lenis === 'undefined') return;
+  const lenis = new Lenis({
+    duration:   1.25,
+    easing:     t => Math.min(1, 1.001 - Math.pow(2, -10*t)),
+    smoothWheel: true,
+  });
+  /* Sync Lenis → GSAP ticker so ScrollTrigger positions stay correct */
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(time => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  /* Scroll-velocity content skew — subtle "momentum" feel on sections */
+  ScrollTrigger.create({
+    onUpdate: self => {
+      const skew = gsap.utils.clamp(-2.8, 2.8)(self.getVelocity() / -450);
+      gsap.to('.s-inner, .hero-content', {
+        skewY: skew, duration: 0.9, ease: 'power3',
+        overwrite: 'auto'
+      });
+    }
+  });
+})();
+
+/* ═══════════════════════════════════════════════════════════
+   7. MAGNETIC BUTTONS — CTAs feel physically attracted to cursor.
+   Works by shifting the button toward the cursor as it hovers.
+═══════════════════════════════════════════════════════════ */
+document.querySelectorAll('.btn-p,.btn-o').forEach(btn=>{
+  btn.addEventListener('mousemove', e=>{
+    const r=btn.getBoundingClientRect();
+    const x=e.clientX-r.left-r.width/2, y=e.clientY-r.top-r.height/2;
+    gsap.to(btn,{ x:x*.32, y:y*.28, duration:.4, ease:'power2.out' });
+  });
+  btn.addEventListener('mouseleave',()=>{
+    gsap.to(btn,{ x:0, y:0, duration:.9, ease:'elastic.out(1,.35)' });
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════
+   8. HERO NAME CHAR-SPLIT — each character of "Madaan" flies in
+   with a 3D rotateX flip, staggered. Runs once after CSS fadeUp.
+═══════════════════════════════════════════════════════════ */
+(function heroCharSplit(){
+  const l2 = document.querySelector('.h-name .l2');
+  if(!l2) return;
+  /* Split existing text into individual <span> elements */
+  const chars = [...l2.textContent].map(ch=>{
+    const s=document.createElement('span');
+    s.textContent = ch===' ' ? '\u00a0' : ch;
+    s.style.display='inline-block';
+    s.style.willChange='transform,opacity';
+    return s;
+  });
+  l2.textContent='';
+  chars.forEach(s=>l2.appendChild(s));
+
+  /* Animate after the parent's CSS opacity:0 → 1 has already fired */
+  gsap.fromTo(chars,
+    { opacity:0, y:72, rotateX:-80 },
+    { opacity:1, y:0,  rotateX:0,
+      stagger:.048, duration:.85, ease:'back.out(2.8)',
+      delay:.85, /* matches the CSS .h-name fadeUp delay */
+      clearProps:'transform'
+    }
+  );
+})();
 
 /* ── Refresh after load ────────────────────────────────── */
 window.addEventListener('load', ()=>{ ScrollTrigger.refresh() });
