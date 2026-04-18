@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Projects Gallery — Hardik Madaan</title>
+<meta name="description" content="Full project gallery — videos, screenshots and results for Hardik Madaan's aerospace and AI engineering work."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@300;400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS — identical to index.html
+═══════════════════════════════════════════ */
+:root {
+  --bg:      #020408;
+  --surface: #060c14;
+  --card:    #0a111c;
+  --accent:  #00d4ff;
+  --accent2: #7b61ff;
+  --accent3: #ff6b35;
+  --text:    #e8edf5;
+  --muted:   #4a5a70;
+  --border:  rgba(0,212,255,0.1);
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
+html { scroll-behavior:smooth }
+body {
+  background:var(--bg); color:var(--text);
+  font-family:'Outfit',sans-serif; font-weight:300;
+  overflow-x:hidden; cursor:none;
+}
+
+/* ── ROCKET CURSOR (shared) ──────────────── */
+#rocket-cursor {
+  position:fixed; width:44px; height:44px;
+  pointer-events:none; z-index:9999;
+  transform-origin:50% 50%;
+  will-change:left,top,transform;
+  margin-left:-22px; margin-top:-22px;
+}
+#rocket-cursor svg {
+  width:100%; height:100%;
+  filter:drop-shadow(0 0 5px rgba(0,212,255,.65));
+  transition:filter .25s,transform .25s;
+}
+#rocket-cursor.ignite svg {
+  filter:drop-shadow(0 0 14px rgba(0,212,255,1)) drop-shadow(0 0 28px rgba(255,107,53,.75));
+  transform:scale(1.22);
+}
+.flame-path  { transition:opacity .2s }
+.flame-path2 { transition:opacity .2s }
+#rocket-cursor.ignite .flame-path  { opacity:1 !important; animation:flicker .12s infinite alternate }
+#rocket-cursor.ignite .flame-path2 { opacity:.85 !important; animation:flicker .18s .06s infinite alternate-reverse }
+@keyframes flicker {
+  from { transform:scaleY(.8) scaleX(1.15) }
+  to   { transform:scaleY(1.12) scaleX(.88) }
+}
+
+/* ── SCROLL PROGRESS ─────────────────────── */
+#prog {
+  position:fixed; top:0; left:0; height:2px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));
+  z-index:400; width:0%;
+}
+
+/* ── GRID + ORBS ────────────────────────── */
+.bg-grid {
+  position:fixed; inset:0; z-index:0;
+  background-image:
+    linear-gradient(rgba(0,212,255,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,.022) 1px, transparent 1px);
+  background-size:60px 60px; pointer-events:none;
+}
+.orb { position:fixed; border-radius:50%; filter:blur(90px); pointer-events:none; z-index:0 }
+.o1 { width:600px; height:600px; background:radial-gradient(circle,rgba(0,212,255,.06),transparent 70%); top:-150px; left:-150px }
+.o2 { width:480px; height:480px; background:radial-gradient(circle,rgba(123,97,255,.05),transparent 70%); top:40%; right:-120px }
+.o3 { width:400px; height:400px; background:radial-gradient(circle,rgba(255,107,53,.04),transparent 70%); bottom:10%; left:10% }
+
+/* ── NAV ─────────────────────────────────── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:1.4rem 4rem;
+  background:rgba(2,4,8,.8); backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo {
+  font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  text-decoration:none;
+}
+.nav-links { display:flex; gap:2.5rem; list-style:none }
+.nav-links a {
+  color:var(--muted); text-decoration:none;
+  font-family:'DM Mono',monospace; font-size:.7rem;
+  letter-spacing:.12em; text-transform:uppercase; transition:color .3s;
+  position:relative;
+}
+.nav-links a::after {
+  content:''; position:absolute; bottom:-3px; left:0; right:0;
+  height:1px; background:var(--accent);
+  transform:scaleX(0); transition:transform .3s; transform-origin:left;
+}
+.nav-links a:hover { color:var(--accent) }
+.nav-links a.active { color:var(--accent) }
+.nav-links a:hover::after, .nav-links a.active::after { transform:scaleX(1) }
+
+/* ── MAIN ────────────────────────────────── */
+main { position:relative; z-index:2; padding-top:82px }
+
+/* ── HERO ────────────────────────────────── */
+.ph {
+  padding:5.5rem 4rem 3.5rem; position:relative; overflow:hidden;
+}
+.ph-eyebrow {
+  font-family:'DM Mono',monospace; font-size:.7rem; color:var(--accent);
+  letter-spacing:.22em; text-transform:uppercase;
+  display:flex; align-items:center; gap:1rem; margin-bottom:1.4rem;
+  opacity:0; animation:fadeUp .7s .25s ease forwards;
+}
+.ph-eyebrow::before { content:''; width:36px; height:1px; background:var(--accent) }
+.ph-title {
+  font-family:'Syne',sans-serif; font-weight:800;
+  font-size:clamp(3rem,8.5vw,7.5rem); line-height:.92; letter-spacing:-.03em;
+  opacity:0; animation:fadeUp .7s .4s ease forwards;
+}
+.ph-title em {
+  font-style:normal;
+  background:linear-gradient(135deg,var(--accent),var(--accent2) 55%,var(--accent3));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.ph-sub {
+  margin-top:1.4rem; font-size:1rem; color:var(--muted);
+  max-width:580px; line-height:1.8;
+  opacity:0; animation:fadeUp .7s .55s ease forwards;
+}
+.ph-back {
+  position:absolute; top:6rem; right:4rem;
+  font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted);
+  text-decoration:none; letter-spacing:.1em; text-transform:uppercase;
+  display:flex; align-items:center; gap:.5rem; transition:color .25s;
+  opacity:0; animation:fadeUp .5s .7s ease forwards;
+}
+.ph-back:hover { color:var(--accent) }
+.ph-back::before { content:'←'; font-size:.8rem }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── FILTER BAR ─────────────────────────── */
+.filter-bar {
+  padding:0 4rem 2.8rem;
+  display:flex; gap:.7rem; flex-wrap:wrap; align-items:center;
+  opacity:0; animation:fadeUp .6s .7s ease forwards;
+}
+.filter-label {
+  font-family:'DM Mono',monospace; font-size:.6rem; color:var(--muted);
+  letter-spacing:.14em; text-transform:uppercase; margin-right:.4rem;
+}
+.f-btn {
+  font-family:'DM Mono',monospace; font-size:.65rem; letter-spacing:.08em;
+  text-transform:uppercase; padding:.55rem 1.3rem;
+  background:transparent; border:1px solid var(--border); border-radius:2px;
+  color:var(--muted); cursor:none; transition:all .25s;
+}
+.f-btn:hover { background:rgba(0,212,255,.06); color:var(--text); border-color:rgba(0,212,255,.25) }
+.f-btn.active { background:rgba(0,212,255,.1); color:var(--accent); border-color:rgba(0,212,255,.4) }
+
+/* ── PROJECTS GRID ──────────────────────── */
+.proj-grid {
+  padding:0 4rem 7rem;
+  display:flex; flex-direction:column; gap:2.2rem;
+}
+
+/* ── PROJECT CARD ───────────────────────── */
+.proj-card {
+  border:1px solid var(--border); border-radius:6px;
+  background:rgba(6,12,20,.55); backdrop-filter:blur(14px);
+  overflow:hidden;
+  box-shadow:0 8px 48px rgba(0,0,0,.45);
+  opacity:0; transform:translateY(32px);
+  transition:opacity .75s ease, transform .75s ease, border-color .3s, box-shadow .3s;
+}
+.proj-card.visible {
+  opacity:1; transform:translateY(0);
+}
+.proj-card:hover {
+  border-color:rgba(0,212,255,.28);
+  box-shadow:0 16px 72px rgba(0,212,255,.06);
+}
+
+.card-body {
+  display:grid; grid-template-columns:1.05fr .95fr; min-height:440px;
+}
+
+/* ── MEDIA COLUMN ───────────────────────── */
+.media-col {
+  border-right:1px solid var(--border);
+  display:flex; flex-direction:column;
+}
+
+/* Video slot */
+.video-slot {
+  flex:1; position:relative; background:#030810; min-height:280px;
+  display:flex; align-items:center; justify-content:center; overflow:hidden;
+  cursor:none;
+}
+/*
+  ─────────────────────────────────────────────────────────────────
+  HOW TO ADD YOUR VIDEO:
+
+  Option A — local file:
+    Remove the .placeholder-ui div and add:
+    <video autoplay muted loop playsinline src="assets/videos/phm-demo.mp4"></video>
+
+  Option B — YouTube embed:
+    <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1&mute=1&loop=1"
+            allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+  Option C — Vimeo embed:
+    <iframe src="https://player.vimeo.com/video/YOUR_VIDEO_ID?autoplay=1&muted=1&loop=1"
+            allow="autoplay; fullscreen" allowfullscreen></iframe>
+  ─────────────────────────────────────────────────────────────────
+*/
+.video-slot video, .video-slot iframe {
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border:none;
+}
+.v-badge {
+  position:absolute; top:.85rem; left:.85rem; z-index:2;
+  font-family:'DM Mono',monospace; font-size:.55rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--accent);
+  padding:.2rem .55rem;
+  background:rgba(0,212,255,.07); border:1px solid rgba(0,212,255,.22); border-radius:2px;
+}
+.placeholder-ui {
+  display:flex; flex-direction:column; align-items:center; gap:.9rem;
+  opacity:.4; transition:opacity .3s; position:relative; z-index:1; pointer-events:none;
+}
+.video-slot:hover .placeholder-ui { opacity:.65 }
+.ph-circle {
+  width:58px; height:58px; border:1.5px dashed rgba(0,212,255,.45); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+}
+.ph-circle svg { width:22px; height:22px; color:var(--accent) }
+.ph-text { font-family:'DM Mono',monospace; font-size:.62rem; color:var(--muted); text-align:center; line-height:1.5 }
+.ph-hint { font-family:'DM Mono',monospace; font-size:.55rem; color:rgba(74,90,112,.6); text-align:center }
+
+/* Photo strip */
+.photo-strip {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  border-top:1px solid var(--border); height:128px; flex-shrink:0;
+}
+.photo-slot {
+  position:relative; background:#020609; cursor:none;
+  display:flex; align-items:center; justify-content:center; overflow:hidden;
+  transition:background .3s;
+}
+.photo-slot + .photo-slot { border-left:1px solid var(--border) }
+/*
+  ─────────────────────────────────────────────────────────────────
+  HOW TO ADD PHOTOS:
+    Remove the .photo-placeholder-ui div and add:
+    <img src="assets/images/project-screenshot.jpg" alt="Description" loading="lazy">
+  ─────────────────────────────────────────────────────────────────
+*/
+.photo-slot img {
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+}
+.photo-slot:hover { background:#030b14 }
+.photo-placeholder-ui {
+  display:flex; flex-direction:column; align-items:center; gap:.35rem;
+  opacity:.3; transition:opacity .3s; position:relative; z-index:1; pointer-events:none;
+}
+.photo-slot:hover .photo-placeholder-ui { opacity:.55 }
+.photo-placeholder-ui svg { width:15px; height:15px; color:var(--accent) }
+.photo-placeholder-ui span {
+  font-family:'DM Mono',monospace; font-size:.5rem; color:var(--muted);
+  letter-spacing:.08em; text-transform:uppercase;
+}
+
+/* ── INFO COLUMN ────────────────────────── */
+.info-col {
+  padding:2.4rem 2.2rem; display:flex; flex-direction:column;
+}
+.proj-num {
+  font-family:'Syne',sans-serif; font-weight:800; font-size:3.8rem;
+  color:rgba(0,212,255,.05); line-height:1; margin-bottom:-.35rem;
+}
+.proj-title {
+  font-family:'Syne',sans-serif; font-weight:800; font-size:1.38rem;
+  line-height:1.15; margin-bottom:.4rem; color:var(--text);
+}
+.proj-org {
+  font-family:'DM Mono',monospace; font-size:.62rem; color:var(--accent3);
+  letter-spacing:.07em; margin-bottom:1.3rem;
+}
+.proj-desc {
+  font-size:.92rem; color:rgba(232,237,245,.65); line-height:1.82; flex:1;
+}
+
+/* Metrics */
+.proj-metrics {
+  margin-top:1.3rem; display:flex; flex-direction:column; gap:.6rem;
+}
+.pm-row {
+  display:flex; align-items:center; gap:.8rem;
+  font-family:'DM Mono',monospace; font-size:.64rem;
+}
+.pm-label { color:var(--muted); min-width:92px }
+.pm-bar-wrap { flex:1; height:2px; background:rgba(255,255,255,.05); border-radius:2px; overflow:hidden }
+.pm-bar {
+  height:100%; border-radius:2px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  width:0; transition:width 1.3s .25s ease;
+}
+.proj-card.visible .pm-bar { width:var(--target-w) }
+.pm-val { color:var(--accent); min-width:44px; text-align:right }
+
+/* Tags */
+.proj-tags { margin-top:1.2rem; display:flex; flex-wrap:wrap; gap:.35rem }
+.p-tag {
+  font-family:'DM Mono',monospace; font-size:.58rem; padding:.2rem .55rem;
+  border-radius:2px; background:rgba(0,212,255,.06);
+  border:1px solid rgba(0,212,255,.14); color:var(--accent);
+}
+
+/* Action links */
+.proj-actions {
+  margin-top:1.6rem; display:flex; gap:.75rem; flex-wrap:wrap;
+}
+.p-action {
+  font-family:'DM Mono',monospace; font-size:.63rem; padding:.48rem .95rem;
+  border:1px solid var(--border); border-radius:2px; text-decoration:none;
+  color:var(--muted); cursor:none; transition:all .25s;
+  display:flex; align-items:center; gap:.45rem;
+}
+.p-action svg { width:11px; height:11px; flex-shrink:0 }
+.p-action:hover { border-color:var(--accent); color:var(--accent) }
+.p-action.primary {
+  background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(123,97,255,.12));
+  border-color:rgba(0,212,255,.3); color:var(--accent);
+}
+.p-action.primary:hover { background:linear-gradient(135deg,rgba(0,212,255,.2),rgba(123,97,255,.2)) }
+
+/* ── COMING SOON CARD ───────────────────── */
+.proj-card.placeholder {
+  border-style:dashed; min-height:200px;
+  display:flex; align-items:center; justify-content:center;
+  border-color:rgba(0,212,255,.12);
+}
+.placeholder-inner { text-align:center; padding:3rem }
+.placeholder-icon {
+  width:64px; height:64px;
+  border:1.5px dashed rgba(0,212,255,.28); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  margin:0 auto 1.3rem;
+}
+.placeholder-inner h3 {
+  font-family:'Syne',sans-serif; font-size:1.1rem; margin-bottom:.5rem;
+  color:rgba(232,237,245,.6);
+}
+.placeholder-inner p {
+  font-family:'DM Mono',monospace; font-size:.63rem; color:var(--muted);
+}
+
+/* ── FOOTER ─────────────────────────────── */
+footer {
+  padding:1.8rem 4rem; border-top:1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:center;
+  position:relative; z-index:2; background:var(--bg);
+  flex-wrap:wrap; gap:.8rem;
+}
+.ft { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted) }
+.fa { color:var(--accent) }
+.ft-nav { display:flex; align-items:center; gap:.7rem }
+.ft-nav a { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted); text-decoration:none; transition:color .25s }
+.ft-nav a:hover { color:var(--accent) }
+
+/* ── MOBILE ──────────────────────────────── */
+@media(max-width:960px) {
+  nav { padding:1.2rem 1.5rem }
+  .nav-links { display:none }
+  .ph,.filter-bar,.proj-grid { padding-left:1.5rem; padding-right:1.5rem }
+  .ph-back { position:static; margin-top:1.5rem; display:inline-flex; opacity:1; animation:none }
+  .card-body { grid-template-columns:1fr }
+  .media-col { border-right:none; border-bottom:1px solid var(--border) }
+  footer { flex-direction:column; text-align:center; padding:1.5rem }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  * { animation:none !important; transition:none !important }
+}
+</style>
+</head>
+<body>
+
+<!-- Rocket cursor -->
+<div id="rocket-cursor">
+  <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M22 5 C27 10 29 17 29 23 L22 29 L15 23 C15 17 17 10 22 5 Z"
+          stroke="#00d4ff" stroke-width="1.5" fill="rgba(0,212,255,0.07)" stroke-linejoin="round"/>
+    <path d="M15 22 L9 33 L15 28 Z"
+          stroke="#00d4ff" stroke-width="1.3" fill="rgba(0,212,255,0.05)" stroke-linejoin="round"/>
+    <path d="M29 22 L35 33 L29 28 Z"
+          stroke="#00d4ff" stroke-width="1.3" fill="rgba(0,212,255,0.05)" stroke-linejoin="round"/>
+    <path d="M17 28 L17 32 Q22 35 27 32 L27 28"
+          stroke="#00d4ff" stroke-width="1.3" fill="none" stroke-linejoin="round"/>
+    <circle cx="22" cy="17" r="4" stroke="#7b61ff" stroke-width="1.2" fill="rgba(123,97,255,0.12)"/>
+    <path class="flame-path"  d="M18 32 Q22 44 26 32" stroke="#ff6b35" stroke-width="1.8" fill="none" opacity="0"/>
+    <path class="flame-path2" d="M19.5 32 Q22 39 24.5 32" stroke="#ffbd2e" stroke-width="1.1" fill="none" opacity="0"/>
+  </svg>
+</div>
+
+<div id="prog"></div>
+
+<!-- Atmosphere -->
+<div class="bg-grid"></div>
+<div class="orb o1"></div>
+<div class="orb o2"></div>
+<div class="orb o3"></div>
+
+<!-- Nav -->
+<nav>
+  <a href="index.html" class="nav-logo">HM</a>
+  <ul class="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="index.html#projects">Projects</a></li>
+    <li><a href="projects.html" class="active">Gallery</a></li>
+    <li><a href="index.html#education">Education</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<!-- Hero -->
+<section class="ph">
+  <a href="index.html" class="ph-back">Back to home</a>
+  <div class="ph-eyebrow">Project Gallery</div>
+  <h1 class="ph-title">Selected<br/><em>Work.</em></h1>
+  <p class="ph-sub">Four engineering projects where aerospace precision meets machine intelligence. Add your demo videos and screenshots to each project slot below.</p>
+</section>
+
+<!-- Filter bar -->
+<div class="filter-bar">
+  <span class="filter-label">Filter:</span>
+  <button class="f-btn active" data-filter="all">All</button>
+  <button class="f-btn" data-filter="ml">Machine Learning</button>
+  <button class="f-btn" data-filter="aerospace">Aerospace</button>
+  <button class="f-btn" data-filter="hmi">HMI / Software</button>
+  <button class="f-btn" data-filter="mechatronics">Mechatronics</button>
+</div>
+
+<!-- ─────────────── PROJECTS GRID ─────────────── -->
+<div class="proj-grid" id="projGrid">
+
+  <!-- ══ PROJECT 1 — PHM SYSTEM ══ -->
+  <article class="proj-card" data-cats="ml aerospace">
+    <div class="card-body">
+
+      <div class="media-col">
+        <!-- VIDEO SLOT ─────────────────────────────────────────
+             To embed your demo: remove .placeholder-ui and add:
+             <video autoplay muted loop playsinline src="assets/videos/phm-demo.mp4"></video>
+        ───────────────────────────────────────────────────── -->
+        <div class="video-slot">
+          <span class="v-badge">Demo Video</span>
+          <div class="placeholder-ui">
+            <div class="ph-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <div class="ph-text">PHM System Walkthrough</div>
+            <div class="ph-hint">Replace this with your video</div>
+          </div>
+        </div>
+
+        <!-- PHOTO STRIP ─────────────────────────────────────────
+             To add photos: remove .photo-placeholder-ui and add:
+             <img src="assets/images/phm-architecture.png" alt="Architecture" loading="lazy">
+        ───────────────────────────────────────────────────── -->
+        <div class="photo-strip">
+          <div class="photo-slot">
+            <!-- <img src="assets/images/phm-1.png" alt="PHM Architecture"> -->
+            <div class="photo-placeholder-ui">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>Screenshot</span>
+            </div>
+          </div>
+          <div class="photo-slot">
+            <!-- <img src="assets/images/phm-2.png" alt="LSTM Results"> -->
+            <div class="photo-placeholder-ui">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>Screenshot</span>
+            </div>
+          </div>
+          <div class="photo-slot">
+            <!-- <img src="assets/images/phm-3.png" alt="MLflow Dashboard"> -->
+            <div class="photo-placeholder-ui">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>Screenshot</span>
+            </div>
+          </div>
+        </div>
+      </div><!-- /media-col -->
+
+      <div class="info-col">
+        <div class="proj-num">01</div>
+        <h2 class="proj-title">Prognostics &amp; Health Management System</h2>
+        <div class="proj-org">Personal Project · Oct – Dec 2025</div>
+        <p class="proj-desc">End-to-end ML pipeline predicting engine Remaining Useful Life on the NASA C-MAPSS dataset. Custom Asymmetric Loss Function cuts safety violations from 12.4 % to 1.09 %. LSTM model outperforms Random Forest baseline (RMSE 17.17 → 13.32 cycles).</p>
+        <div class="proj-metrics">
+          <div class="pm-row">
+            <span class="pm-label">RMSE reduction</span>
+            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:78%"></div></div>
+            <span class="pm-val">78 %</span>
+          </div>
+          <div class="pm-row">
+            <span class="pm-label">Safety violations</span>
+            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:91%"></div></div>
+            <span class="pm-val">↓ 91 %</span>
+          </div>
+          <div class="pm-row">
+            <span class="pm-label">Model accuracy</span>
+            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:87%"></div></div>
+            <span class="pm-val">87 %</span>
+          </div>
+        </div>
+        <div class="proj-tags">
+          <span class="p-tag">LSTM</span><span class="p-tag">Python</span><span class="p-tag">MLflow</span>
+          <span class="p-tag">DVC</span><span class="p-tag">K-Means</span><span class="p-tag">NASA CMAPSS</span>
+        </div>
+        <div class="proj-actions">
+          <a href="https://github.com/thehardikmadaan" target="_blank" rel="noopener" class="p-action primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            View on GitHub
+          </a>
+          <a href="index.html#projects" class="p-action">Live Code Demo →</a>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ══ PROJECT 2 — SIMULATOR GUI ══ -->
+  <article class="proj-card" data-cats="hmi aerospace">
+    <div class="card-body">
+
+      <div class="media-col">
+        <div class="video-slot">
+          <span class="v-badge">Demo Video</span>
+          <div class="placeholder-ui">
+            <div class="ph-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <div class="ph-text">Cockpit GUI Live Demo</div>
+            <div class="ph-hint">Replace this with your video</div>
+          </div>
+        </div>
+        <div class="photo-strip">
+          <div class="photo-slot">
+            <!-- <img src="assets/images/sim-pfd.png" alt="Primary Flight Display"> -->
+            <div class="photo-placeholder-ui">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>Screenshot</span>
+            </div>
+          </div>
+          <div class="photo-slot">
+            <div class="photo-placeholder-ui">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>Screenshot</span>
+            </div>
+          </div>
+          <div class="photo-slot">
+            <div class="photo-placeholder-ui">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>Screenshot</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-col">
+        <div class="proj-num">02</div>
+        <h2 class="proj-title">Single-Pilot Simulator Displays</h2>
+        <div class="proj-org">FSR — TU Darmstadt · Apr – Sep 2025</div>
+        <p class="proj-desc">Modular GUI for single-pilot cockpit operations built with PySide6. Multi-threaded UDP layer streams real-time telemetry from X-Plane 12 at 50 Hz with sub-20 ms latency. Awarded a 1.3 grade for HMI performance and backend reliability.</p>
+        <div class="proj-metrics">
+          <div class="pm-row">
+            <span class="pm-label">Data rate</span>
+            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:95%"></div></div>
+            <span class="pm-val">50 Hz</span>
+          </div>
+          <div class="pm-row">
+            <span class="pm-label">Grade score</span>
+            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:92%"></div></div>
+            <span class="pm-val">1.3</span>
+          </div>
+          <div class="pm-row">
+            <span class="pm-label">Latency</span>
+            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:85%"></div></div>
+            <span class="pm-val">&lt; 20 ms</span>
+          </div>
+        </div>
+        <div class="proj-tags">
+          <span class="p-tag">PySide6</span><span class="p-tag">X-Plane SDK</span>
+          <span class="p-tag">UDP</span><span class="p-tag">Multi-threading</span><span class="p-tag">HMI</span>
+        </div>
+        <div class="proj-actions">
+          <a href="https://github.com/thehardikmadaan" target="_blank" rel="noopener" class="p-action primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            View on GitHub
+          </a>
+          <a href="index.html#projects" class="p-action">Live Code Demo →</a>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ══ PROJECT 3 — RUNWAY SAFETY ══ -->
+  <article class="proj-card" data-cats="ml aerospace">
+    <div class="card-body">
+
+      <div class="media-col">
+        <div class="video-slot">
+          <span class="v-badge">Demo Video</span>
+          <div class="placeholder-ui">
+            <div class="ph-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <div class="ph-text">Analysis Walkthrough</div>
+            <div class="ph-hint">Replace this with your video</div>
+          </div>
+        </div>
+        <div class="photo-strip">
+          <div class="photo-slot">
+            <div class="photo-placeholder-ui">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>Screenshot</span>
+            </div>
+          </div>
+          <div class="photo-slot">
+            <div class="photo-placeholder-ui">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>Screenshot</span>
+            </div>
+          </div>
+          <div class="photo-slot">
+            <div class="photo-placeholder-ui">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>Screenshot</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-col">
+        <div class="proj-num">03</div>
+        <h2 class="proj-title">Runway Incursion Safety Analysis</h2>
+        <div class="proj-org">Boeing × FSR · Oct 2024 – Mar 2025</div>
+        <p class="proj-desc">Processed 30 years of runway incursion data to find collision avoidance patterns. Safety logic structured to align with RTCA DO-323. Permutation-importance sensitivity analysis delivered directly to Boeing safety engineers.</p>
+        <div class="proj-metrics">
+          <div class="pm-row">
+            <span class="pm-label">Data coverage</span>
+            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:100%"></div></div>
+            <span class="pm-val">30 yrs</span>
+          </div>
+          <div class="pm-row">
+            <span class="pm-label">Pattern accuracy</span>
+            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:82%"></div></div>
+            <span class="pm-val">82 %</span>
+          </div>
+          <div class="pm-row">
+            <span class="pm-label">DO-323 coverage</span>
+            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:94%"></div></div>
+            <span class="pm-val">94 %</span>
+          </div>
+        </div>
+        <div class="proj-tags">
+          <span class="p-tag">Safety Analysis</span><span class="p-tag">RTCA DO-323</span>
+          <span class="p-tag">Pandas</span><span class="p-tag">NumPy</span><span class="p-tag">Boeing</span>
+        </div>
+        <div class="proj-actions">
+          <a href="index.html#projects" class="p-action">Live Code Demo →</a>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ══ PROJECT 4 — MOWER UNIT ══ -->
+  <article class="proj-card" data-cats="mechatronics">
+    <div class="card-body">
+
+      <div class="media-col">
+        <div class="video-slot">
+          <span class="v-badge">Demo Video</span>
+          <div class="placeholder-ui">
+            <div class="ph-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <div class="ph-text">PID Step Response</div>
+            <div class="ph-hint">Replace this with your video</div>
+          </div>
+        </div>
+        <div class="photo-strip">
+          <div class="photo-slot">
+            <div class="photo-placeholder-ui">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>Photo</span>
+            </div>
+          </div>
+          <div class="photo-slot">
+            <div class="photo-placeholder-ui">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>Photo</span>
+            </div>
+          </div>
+          <div class="photo-slot">
+            <div class="photo-placeholder-ui">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>Photo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-col">
+        <div class="proj-num">04</div>
+        <h2 class="proj-title">Height-Adjustable Mower Unit</h2>
+        <div class="proj-org">TU Darmstadt · Apr – Sep 2024</div>
+        <p class="proj-desc">Active stabilisation control logic for a mechatronic mowing system using MATLAB/Simulink. Physical prototypes designed in Fusion 360 and 3D-printed. System integration managed via agile SCRUM. All stability specs met on first hardware test.</p>
+        <div class="proj-metrics">
+          <div class="pm-row">
+            <span class="pm-label">Stability gain</span>
+            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:88%"></div></div>
+            <span class="pm-val">88 %</span>
+          </div>
+          <div class="pm-row">
+            <span class="pm-label">Settle time</span>
+            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:75%"></div></div>
+            <span class="pm-val">↓ 75 %</span>
+          </div>
+          <div class="pm-row">
+            <span class="pm-label">Overshoot</span>
+            <div class="pm-bar-wrap"><div class="pm-bar" style="--target-w:60%"></div></div>
+            <span class="pm-val">&lt; 5 %</span>
+          </div>
+        </div>
+        <div class="proj-tags">
+          <span class="p-tag">MATLAB</span><span class="p-tag">Simulink</span>
+          <span class="p-tag">Fusion 360</span><span class="p-tag">SCRUM</span><span class="p-tag">3D Printing</span>
+        </div>
+        <div class="proj-actions">
+          <a href="index.html#projects" class="p-action">Live Code Demo →</a>
+        </div>
+      </div>
+
+    </div>
+  </article>
+
+  <!-- ══ PLACEHOLDER — COMING NEXT ══ -->
+  <article class="proj-card placeholder">
+    <div class="placeholder-inner">
+      <div class="placeholder-icon">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="rgba(0,212,255,0.45)" stroke-width="1.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </div>
+      <h3>Next Project</h3>
+      <p>Currently in development — check back soon</p>
+    </div>
+  </article>
+
+</div><!-- /proj-grid -->
+
+</main>
+
+<footer>
+  <div class="ft">© 2026 <span class="fa">Hardik Madaan</span> · Darmstadt, Germany</div>
+  <nav class="ft-nav">
+    <a href="index.html" class="ft">Home</a>
+    <span class="ft">·</span>
+    <a href="terms.html" class="ft">Terms &amp; Support</a>
+    <span class="ft">·</span>
+    <a href="privacy.html" class="ft">Privacy</a>
+  </nav>
+  <div class="ft">Aerospace + AI <span class="fa">✦</span></div>
+</footer>
+
+<!-- GSAP for filter animations -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script>
+'use strict';
+
+/* ── Lenis smooth scroll ────────────────── */
+if(typeof Lenis !== 'undefined'){
+  const lenis = new Lenis({ duration:1.2, easing: t=>Math.min(1,1.001-Math.pow(2,-10*t)) });
+  function raf(t){ lenis.raf(t); requestAnimationFrame(raf) }
+  requestAnimationFrame(raf);
+}
+
+/* ── Rocket cursor ──────────────────────── */
+const rocketEl = document.getElementById('rocket-cursor');
+let mx=window.innerWidth/2, my=window.innerHeight/2;
+let cx=mx, cy=my, prevCx=mx, prevCy=my, rAngle=-90;
+document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY });
+(function rocketLoop(){
+  cx+=(mx-cx)*.14; cy+=(my-cy)*.14;
+  const dvx=cx-prevCx, dvy=cy-prevCy, spd=Math.sqrt(dvx*dvx+dvy*dvy);
+  if(spd>.6){
+    let t=Math.atan2(dvy,dvx)*180/Math.PI+90;
+    let d=t-rAngle;
+    while(d>180)d-=360; while(d<-180)d+=360;
+    rAngle+=d*.18;
+  }
+  prevCx=cx; prevCy=cy;
+  rocketEl.style.left=cx+'px'; rocketEl.style.top=cy+'px';
+  rocketEl.style.transform=`rotate(${rAngle}deg)`;
+  requestAnimationFrame(rocketLoop);
+})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>rocketEl.classList.add('ignite'));
+  el.addEventListener('mouseleave',()=>rocketEl.classList.remove('ignite'));
+});
+
+/* ── Scroll progress ────────────────────── */
+const prog = document.getElementById('prog');
+window.addEventListener('scroll',()=>{
+  prog.style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';
+},{passive:true});
+
+/* ── Scroll reveal cards ────────────────── */
+const cards = document.querySelectorAll('.proj-card:not(.placeholder)');
+const cardObs = new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('visible'),i*60);
+      cardObs.unobserve(e.target);
+    }
+  });
+},{threshold:.08});
+cards.forEach(c=>cardObs.observe(c));
+
+/* Placeholder card reveal */
+const phCard = document.querySelector('.proj-card.placeholder');
+if(phCard){
+  new IntersectionObserver(ents=>{
+    if(ents[0].isIntersecting) phCard.classList.add('visible');
+  },{threshold:.1}).observe(phCard);
+}
+
+/* ── Filter ─────────────────────────────── */
+document.querySelectorAll('.f-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f=btn.dataset.filter;
+    document.querySelectorAll('.proj-card:not(.placeholder)').forEach(card=>{
+      const cats=card.dataset.cats||'';
+      const show = f==='all' || cats.includes(f);
+      gsap.to(card,{
+        opacity:show?1:.18, scale:show?1:.975, y:show?0:8,
+        duration:.45, ease:'power2.out'
+      });
+      card.style.pointerEvents = show ? '' : 'none';
+    });
+  });
+});
+
+/* ── Magnetic action buttons ─────────────── */
+document.querySelectorAll('.p-action').forEach(el=>{
+  el.addEventListener('mousemove',e=>{
+    const r=el.getBoundingClientRect();
+    const x=e.clientX-r.left-r.width/2, y=e.clientY-r.top-r.height/2;
+    gsap.to(el,{x:x*.28,y:y*.22,duration:.35,ease:'power2.out'});
+  });
+  el.addEventListener('mouseleave',()=>{
+    gsap.to(el,{x:0,y:0,duration:.8,ease:'elastic.out(1,.35)'});
+  });
+});
+</script>
+</body>
+</html>
