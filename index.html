@@ -1103,6 +1103,7 @@ window.addEventListener('scroll', ()=>{
   const rw = lw.clone();
   rw.scale.z = -1;
   rw.position.z = -0.5;
+  rw.rotation.set(-Math.PI/2, 0, 0.08); // Right wing mirrored properly
   planeGroup.add(rw);
 
   /* 5. Winglets */
