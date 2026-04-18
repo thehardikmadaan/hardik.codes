@@ -1048,19 +1048,17 @@ window.addEventListener('scroll', ()=>{
   rim.position.set(0, -3, 8);
   scene.add(rim);
 
-  /* ── Material factory ──────────────────────────────────── */
+/* ── Material factory ──────────────────────────────────── */
+  /* Added THREE.DoubleSide so wings/engines never disappear on camera turns */
   function mat(color, emissive=0x000000, rough=0.35, metal=0.65){
     return new THREE.MeshStandardMaterial({
       color, emissive, emissiveIntensity: CFG.emissiveInt,
-      roughness:rough, metalness:metal
+      roughness:rough, metalness:metal, side: THREE.DoubleSide
     });
   }
 
   /* ═══════════════════════════════════════════════════════
      BUILD DETAILED AIRPLANE
-     Parts: fuselage, wings (swept), winglets, engines (x2),
-     tail fin, horizontal stab, cockpit canopy, nose cone,
-     propeller disc, landing gear fairings.
   ═══════════════════════════════════════════════════════ */
   const planeGroup = new THREE.Group();
 
@@ -1078,7 +1076,7 @@ window.addEventListener('scroll', ()=>{
   const matFuse  = mat(CFG.planeColor,  0x001a2e, 0.25, 0.75);
   const matWing  = mat(CFG.engineColor, 0x0a0020, 0.35, 0.55);
   const matTail  = mat(CFG.tailColor,   0x200800, 0.40, 0.50);
-  const matGlass = new THREE.MeshStandardMaterial({ color:0x0a1a2e, roughness:0.05, metalness:0.95, transparent:true, opacity:0.85 });
+  const matGlass = new THREE.MeshStandardMaterial({ color:0x0a1a2e, roughness:0.05, metalness:0.95, transparent:true, opacity:0.85, side: THREE.DoubleSide });
   const matEngine= mat(0x1a2030, 0x000511, 0.4, 0.8);
   const matProp  = mat(0xd0d8e8, 0x080808, 0.5, 0.3);
 
@@ -1091,7 +1089,7 @@ window.addEventListener('scroll', ()=>{
   /* 3. Tail cone */
   add(new THREE.ConeGeometry(0.22, 0.7, 10), matFuse, -2.35,0,0, 0,0,Math.PI/2);
 
-  /* 4. Main wings — swept back, built as mirrored pairs */
+  /* 4. Main wings — swept back */
   const wingShape = new THREE.Shape();
   wingShape.moveTo(0,   0);
   wingShape.lineTo(0.28, 2.4);
@@ -1099,71 +1097,66 @@ window.addEventListener('scroll', ()=>{
   wingShape.lineTo(-0.55, 0);
   wingShape.closePath();
   const wingExt = { depth:0.08, bevelEnabled:false };
-  const wingGeo = new THREE.ExtrudeGeometry(wingShape, wingExt);
 
-  /* Left wing — extrudes in +Z from z=0.04 outward */
-  const lw = new THREE.Mesh(wingGeo, matWing); lw.castShadow=true;
+  /* Left wing */
+  const lw = new THREE.Mesh(new THREE.ExtrudeGeometry(wingShape, wingExt), matWing);
+  lw.castShadow=true;
   lw.position.set(-0.15, -0.1, 0.04);
   lw.rotation.set(-Math.PI/2, 0, -0.07);
   planeGroup.add(lw);
 
-  /* Right wing — mirror shape built manually (extrudes in -Z from z=-0.04) */
+  /* Right wing — Fixed vertex drawing order (Counter-Clockwise) so normals render correctly */
   const wingShapeR = new THREE.Shape();
-  wingShapeR.moveTo(0,    0);
-  wingShapeR.lineTo(0.28, -2.4);
-  wingShapeR.lineTo(-0.18,-2.4);
+  wingShapeR.moveTo(0, 0);
   wingShapeR.lineTo(-0.55, 0);
+  wingShapeR.lineTo(-0.18, -2.4);
+  wingShapeR.lineTo(0.28, -2.4);
   wingShapeR.closePath();
-  const wingGeoR = new THREE.ExtrudeGeometry(wingShapeR, { depth:0.08, bevelEnabled:false });
-  const rw = new THREE.Mesh(wingGeoR, matWing); rw.castShadow=true;
+  const rw = new THREE.Mesh(new THREE.ExtrudeGeometry(wingShapeR, wingExt), matWing);
+  rw.castShadow=true;
   rw.position.set(-0.15, -0.1, -0.04);
   rw.rotation.set(-Math.PI/2, 0, -0.07);
   planeGroup.add(rw);
 
-  /* 5. Winglets */
-  add(new THREE.BoxGeometry(0.06, 0.32, 0.16), matTail,  0.1, 0.1,  2.48, 0.28, 0, 0);
-  add(new THREE.BoxGeometry(0.06, 0.32, 0.16), matTail,  0.1, 0.1, -2.48, -0.28,0, 0);
+  /* 5. Winglets — Adjusted to sit exactly at the wing tips */
+  add(new THREE.BoxGeometry(0.16, 0.35, 0.06), matTail, -0.3, 0.05,  2.42,  0.2, 0, 0);
+  add(new THREE.BoxGeometry(0.16, 0.35, 0.06), matTail, -0.3, 0.05, -2.42, -0.2, 0, 0);
 
-  /* 6. Horizontal stabiliser */
-  add(new THREE.BoxGeometry(1.7, 0.06, 0.52), matWing, -1.75, 0.1, 0);
+  /* 6. Horizontal stabiliser (Tail Wings) — Widened to 2.2 span for correct symmetry */
+  add(new THREE.BoxGeometry(0.8, 0.06, 2.2), matWing, -2.0, 0.1, 0);
 
-  /* 7. Vertical tail fin — properly rooted IN the fuselage top, swept profile */
+  /* 7. Vertical tail fin (Rudder) — Cleaned up shape and fixed rotation so it stands straight UP */
   const finShape = new THREE.Shape();
-  finShape.moveTo(-0.06, -0.22);   // root front, sunk into fuselage
-  finShape.lineTo( 0.08, -0.22);   // root rear
-  finShape.lineTo( 0.08,  0.0);
-  finShape.lineTo(-0.42,  0.82);   // leading edge sweep
-  finShape.lineTo(-0.54,  1.05);   // tip
-  finShape.lineTo(-0.54,  1.22);
-  finShape.lineTo( 0.02,  0.30);   // trailing edge
+  finShape.moveTo(-0.5, 0);   // Bottom front
+  finShape.lineTo(0.5, 0);    // Bottom back
+  finShape.lineTo(-0.6, 1.2); // Top back
+  finShape.lineTo(-1.0, 1.2); // Top front
   finShape.closePath();
-  const finGeo = new THREE.ExtrudeGeometry(finShape, { depth:0.065, bevelEnabled:false });
-  const fin = new THREE.Mesh(finGeo, matTail);
-  /* Sit on top of fuselage at tail — rotate so fin stands vertically */
-  fin.position.set(-1.55, 0.22, -0.033);
-  fin.rotation.set(0, Math.PI/2, 0);
+  const fin = new THREE.Mesh(new THREE.ExtrudeGeometry(finShape, { depth:0.06, bevelEnabled:false }), matTail);
+  fin.position.set(-1.8, 0.22, -0.03);
+  fin.rotation.set(0, 0, 0); // FIXED: 0 rotation forces it to stand vertically
   fin.castShadow = true;
   planeGroup.add(fin);
 
   /* 8. Cockpit canopy */
   add(new THREE.CylinderGeometry(0.22, 0.28, 0.7, 10, 1, false, 0, Math.PI), matGlass, 0.7, 0.28, 0, 0,0,Math.PI/2);
 
-  /* 9. Engine nacelles — under wings, one each side at ~40% span */
+  /* 9. Engine nacelles — Shifted backwards to sit properly under the wing mass */
   [ 1.0, -1.0 ].forEach(z => {
     /* Nacelle body */
-    add(new THREE.CylinderGeometry(0.13, 0.13, 0.88, 12), matEngine,  0.05, -0.28, z, 0, 0, Math.PI/2);
+    add(new THREE.CylinderGeometry(0.13, 0.13, 0.88, 12), matEngine,  -0.1, -0.28, z, 0, 0, Math.PI/2);
     /* Intake ring */
-    add(new THREE.TorusGeometry(0.13, 0.02, 8, 16), matTail,  0.50, -0.28, z, 0, Math.PI/2, 0);
+    add(new THREE.TorusGeometry(0.13, 0.02, 8, 16), matTail,  0.34, -0.28, z, 0, Math.PI/2, 0);
     /* Exhaust glow disc */
     const glow = new THREE.Mesh(
       new THREE.CircleGeometry(0.09, 12),
-      new THREE.MeshBasicMaterial({ color:0xff4400, transparent:true, opacity:0.65 })
+      new THREE.MeshBasicMaterial({ color:0xff4400, transparent:true, opacity:0.65, side: THREE.DoubleSide })
     );
-    glow.position.set(-0.39, -0.28, z);
+    glow.position.set(-0.54, -0.28, z);
     glow.rotation.y = Math.PI/2;
     planeGroup.add(glow);
     /* Pylon connecting nacelle to wing */
-    add(new THREE.BoxGeometry(0.06, 0.18, 0.06), matEngine, 0.05, -0.14, z);
+    add(new THREE.BoxGeometry(0.2, 0.18, 0.06), matEngine, -0.1, -0.14, z);
   });
 
   /* 10. Propeller — hub + 3 swept blades */
@@ -1189,7 +1182,8 @@ window.addEventListener('scroll', ()=>{
   const matWindow = new THREE.MeshStandardMaterial({
     color:0x88ccff, roughness:0.05, metalness:0.1,
     transparent:true, opacity:0.82,
-    emissive:0x003355, emissiveIntensity:2.5
+    emissive:0x003355, emissiveIntensity:2.5,
+    side: THREE.DoubleSide
   });
   for(let i=0;i<5;i++){
     const win = new THREE.Mesh(new THREE.BoxGeometry(0.065, 0.1, 0.09), matWindow);
