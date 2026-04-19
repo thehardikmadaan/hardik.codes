@@ -560,8 +560,8 @@ footer {
 
   /* gallery panel: fixed height so g-phase scrolls inside */
   .slide-right { height:auto; min-height:0 }
-  .proj-gallery { height:auto }
-  .gallery-main { height:440px; position:relative; overflow:hidden }
+  .proj-gallery { height:auto; overflow:visible }
+  .gallery-main { flex:none; height:440px; position:relative; overflow:hidden }
 
   /* gallery image rows: collapse 2-col → 1-col */
   .gimg-row.cols-2 { grid-template-columns:1fr }
@@ -610,7 +610,7 @@ footer {
   .s-btn { justify-content:center; text-align:center }
 
   /* gallery */
-  .gallery-main { height:360px }
+  .gallery-main { flex:none; height:360px }
   .gallery-phase-nav { grid-template-columns:repeat(2,1fr) !important }
   .gpn-btn { padding:.4rem .2rem }
   .gpn-lbl { font-size:.4rem }
@@ -626,7 +626,7 @@ footer {
 @media(max-width:400px) {
   .intro-title { font-size:clamp(2.4rem,12vw,4rem) }
   .slide-title { font-size:clamp(1.3rem,7vw,2rem) }
-  .gallery-main { height:300px }
+  .gallery-main { flex:none; height:300px }
 }
 
 @media(prefers-reduced-motion:reduce) {
