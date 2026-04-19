@@ -543,6 +543,7 @@ footer {
   .side-nav  { display:none }
   .top-nav   { padding:1.2rem 1.5rem }
   .nav-links { display:none }
+  .menu-btn  { display:flex }
 
   /* intro slide */
   .intro-slide { padding:0 2rem }
@@ -629,6 +630,17 @@ footer {
   .gallery-main { flex:none; height:300px }
 }
 
+/* ── HAMBURGER / MOBILE MENU ─────────────── */
+.menu-btn { display:none; flex-direction:column; justify-content:center; gap:5px; background:none; border:none; cursor:pointer; padding:6px }
+.menu-btn span { display:block; width:22px; height:2px; background:var(--accent); border-radius:2px; transition:transform .3s,opacity .3s }
+.menu-btn.open span:nth-child(1) { transform:translateY(7px) rotate(45deg) }
+.menu-btn.open span:nth-child(2) { opacity:0 }
+.menu-btn.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg) }
+.mobile-menu { display:none; position:fixed; top:0; left:0; right:0; bottom:0; z-index:390; background:rgba(1,2,5,.97); backdrop-filter:blur(20px); flex-direction:column; align-items:center; justify-content:center; gap:2.5rem }
+.mobile-menu.open { display:flex }
+.mobile-menu a { color:rgba(232,237,245,.6); text-decoration:none; font-family:'DM Mono',monospace; font-size:1rem; letter-spacing:.15em; text-transform:uppercase; transition:color .3s }
+.mobile-menu a:hover,.mobile-menu a.active { color:var(--accent) }
+
 @media(prefers-reduced-motion:reduce) {
   *, *::before, *::after { animation:none!important; transition:none!important }
 }
@@ -694,7 +706,18 @@ footer {
     <li><a href="index.html#education">Education</a></li>
     <li><a href="index.html#contact">Contact</a></li>
   </ul>
+  <button class="menu-btn" id="menuBtn" aria-label="Toggle navigation" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <a href="index.html#about">About</a>
+  <a href="index.html#skills">Skills</a>
+  <a href="index.html#projects">Projects</a>
+  <a href="projects.html" class="active">Gallery</a>
+  <a href="index.html#education">Education</a>
+  <a href="index.html#contact">Contact</a>
+</div>
 
 <!-- ══════════════════════════════════════════════════════════
      INTRO — FULL SCREEN
@@ -1887,6 +1910,28 @@ document.querySelectorAll('.s-btn, .o-btn').forEach(el => {
     gsap.to(el, { x:0, y:0, duration:.65, ease:'elastic.out(1,.55)' });
   });
 });
+</script>
+<script>
+(function(){
+  var btn=document.getElementById('menuBtn'),menu=document.getElementById('mobileMenu');
+  if(!btn||!menu)return;
+  btn.addEventListener('click',function(){
+    var open=menu.classList.toggle('open');
+    btn.classList.toggle('open',open);
+    btn.setAttribute('aria-expanded',String(open));
+    menu.setAttribute('aria-hidden',String(!open));
+    document.body.style.overflow=open?'hidden':'';
+  });
+  menu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click',function(){
+      btn.classList.remove('open');
+      menu.classList.remove('open');
+      btn.setAttribute('aria-expanded','false');
+      menu.setAttribute('aria-hidden','true');
+      document.body.style.overflow='';
+    });
+  });
+})();
 </script>
 </body>
 </html>
