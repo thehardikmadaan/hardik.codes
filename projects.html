@@ -692,14 +692,14 @@ footer {
         <div class="g-phase active" data-gphase="0">
           <div class="gimg-row cols-2">
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1762781923171.jpeg" alt="Sensor 7 Degradation Trend" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1762781923171.jpeg" alt="Sensor 7 Degradation Trend" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Sensor 7 Degradation Trend</div>
                 <div class="gimg-cap-text">The first proof: plotting sensor values against time-in-cycles reveals a clear noisy downward trend across all engines — the degradation signal the model must learn.</div>
               </div>
             </div>
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1762781922692.jpeg" alt="Feature Correlation with RUL" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1762781922692.jpeg" alt="Feature Correlation with RUL" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Feature Correlation with RUL</div>
                 <div class="gimg-cap-text">All 21 sensors ranked by predictive power. Top predictors (sensor_12, sensor_7) are physically linked to the HPC fault mode — the exact failure in this dataset. Six zero-correlation sensors dropped.</div>
@@ -708,14 +708,14 @@ footer {
           </div>
           <div class="gimg-row cols-2">
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1762781923697.jpeg" alt="RUL vs Sensor 7 Relationship" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1762781923697.jpeg" alt="RUL vs Sensor 7 Relationship" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">RUL vs. Sensor 7</div>
                 <div class="gimg-cap-text">Piecewise linear scatter confirms the data engineering strategy: clipping RUL at 125 cycles simplifies the healthy phase, letting the model focus on the critical degradation zone.</div>
               </div>
             </div>
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1762781923716.jpeg" alt="RUL vs Sensor 12 Relationship" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1762781923716.jpeg" alt="RUL vs Sensor 12 Relationship" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">RUL vs. Sensor 12</div>
                 <div class="gimg-cap-text">Sensor 12 mirrors sensor 7 — both are HPC-linked indicators. Their near-identical shapes reveal strong multicollinearity: no issue for LSTM, but fatal for linear models.</div>
@@ -724,7 +724,7 @@ footer {
           </div>
           <div class="gimg-row cols-1">
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1762781925240.jpeg" alt="Scatter Matrix of Key Features vs RUL" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1762781925240.jpeg" alt="Scatter Matrix of Key Features vs RUL" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Scatter Matrix — Important Features vs. RUL</div>
                 <div class="gimg-cap-text">The full picture: top sensors are tightly correlated with each other and with RUL. This multicollinearity rules out linear regression and motivates the LSTM + cluster similarity approach.</div>
@@ -737,14 +737,14 @@ footer {
         <div class="g-phase" data-gphase="1">
           <div class="gimg-row cols-2">
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1765029250405.jpeg" alt="K-Means Cluster Similarity" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1765029250405.jpeg" alt="K-Means Cluster Similarity" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">K-Means Operating Modes</div>
                 <div class="gimg-cap-text">Engines behave differently at different altitudes and throttles. K-Means on sensors 7 & 12 discovers these regimes automatically. Each point's similarity to cluster centers (X) becomes a "Health Signature" feature.</div>
               </div>
             </div>
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1765029250406.jpeg" alt="ColumnTransformer Pipeline Architecture" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1765029250406.jpeg" alt="ColumnTransformer Pipeline Architecture" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Master Pipeline — ColumnTransformer</div>
                 <div class="gimg-cap-text">The full preprocessing architecture: log-transforms for exponential decay sensors, K-Means similarity injection, and automatic unit ID stripping. A Group Split by Engine ID prevents data leakage across time.</div>
@@ -753,14 +753,14 @@ footer {
           </div>
           <div class="gimg-row cols-2">
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1765029250430.jpeg" alt="Linear Regression Baseline Performance" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1765029250430.jpeg" alt="Linear Regression Baseline Performance" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Linear Regression — RMSE 17.17</div>
                 <div class="gimg-cap-text">The baseline "smear": predictions scatter widely around the perfect line. Engine degradation is exponential and non-linear — a straight line cannot capture the failure curve.</div>
               </div>
             </div>
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1765029250332.jpeg" alt="Random Forest Baseline Performance" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1765029250332.jpeg" alt="Random Forest Baseline Performance" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Random Forest — RMSE 16.05</div>
                 <div class="gimg-cap-text">A tighter fit to the perfect prediction line, but still with overgeneralisation at the extremes. Random Forest lacks "memory" — it sees one row at a time with no sense of degradation velocity.</div>
@@ -773,14 +773,14 @@ footer {
         <div class="g-phase" data-gphase="2">
           <div class="gimg-row cols-2">
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1765030831882.jpeg" alt="LSTM Model Architecture" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1765030831882.jpeg" alt="LSTM Model Architecture" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">LSTM Architecture</div>
                 <div class="gimg-cap-text">Two stacked LSTM layers (64 → 32 units) with Dropout(0.2). Input: (Samples, 30 TimeSteps, Features) — feeding the last 30 flight cycles so the model learns velocity and acceleration of degradation, not just absolute values.</div>
               </div>
             </div>
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1765030831863.jpeg" alt="LSTM Training History" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1765030831863.jpeg" alt="LSTM Training History" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">LSTM Training History</div>
                 <div class="gimg-cap-text">Training and validation loss converge cleanly. No divergence between curves confirms the Dropout regularisation is working — the model generalises rather than memorising.</div>
@@ -789,14 +789,14 @@ footer {
           </div>
           <div class="gimg-row cols-2">
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1765030831839.jpeg" alt="Random Forest Safety Analysis — Baseline" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1765030831839.jpeg" alt="Random Forest Safety Analysis — Baseline" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">RF Safety Baseline — 12.41% Risk</div>
                 <div class="gimg-cap-text">Safety analysis of the Random Forest baseline. A tail of predictions falls in the Dangerous Zone (overestimation). A 1-in-8 chance of predicting a safe engine that is actually failing is unacceptable for safety-critical operations.</div>
               </div>
             </div>
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1765030831794.jpeg" alt="LSTM Error Distribution 10.26% Risk" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1765030831794.jpeg" alt="LSTM Error Distribution 10.26% Risk" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">LSTM Error Distribution — 10.26% Risk</div>
                 <div class="gimg-cap-text">The standard LSTM reduces dangerous overestimations from 12.41% to 10.26% — a genuine improvement. But 1 in 10 is still too high. Accuracy alone is not enough for safety-critical maintenance.</div>
@@ -805,7 +805,7 @@ footer {
           </div>
           <div class="gimg-row cols-1">
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1765030831937.jpeg" alt="Random Forest Feature Importance" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1765030831937.jpeg" alt="Random Forest Feature Importance" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Random Forest Feature Importance</div>
                 <div class="gimg-cap-text">The K-Means cluster similarity features dominate importance — validating the pipeline design decision. "Cluster_0_similarity" alone accounts for ~37% of predictive power, confirming operating-mode awareness is the key engineered signal.</div>
@@ -818,14 +818,14 @@ footer {
         <div class="g-phase" data-gphase="3">
           <div class="gimg-row cols-2">
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1767977171265.jpeg" alt="Keras Tuner Hyperparameter Distributions" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1767977171265.jpeg" alt="Keras Tuner Hyperparameter Distributions" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Keras Tuner — Hyperparameter Search</div>
                 <div class="gimg-cap-text">Keras Tuner mathematically optimises the LSTM architecture across layers, units, and dropout. Loguniform distributions efficiently explore learning rates across orders of magnitude, bringing RMSE to 13.32 cycles.</div>
               </div>
             </div>
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1765032329452.jpeg" alt="Tuned LSTM Training History" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1765032329452.jpeg" alt="Tuned LSTM Training History" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Tuned LSTM Training History</div>
                 <div class="gimg-cap-text">The optimised model converges faster and to a lower loss floor. Training and validation curves remain tightly coupled across all 22 epochs — no overfitting despite the increased model capacity.</div>
@@ -834,14 +834,14 @@ footer {
           </div>
           <div class="gimg-row cols-2">
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1765032329507.jpeg" alt="Tuned LSTM Performance RMSE 13.32" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1765032329507.jpeg" alt="Tuned LSTM Performance RMSE 13.32" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Tuned LSTM — RMSE 13.32</div>
                 <div class="gimg-cap-text">The tuned model is more accurate than the baseline LSTM, but standard MSE loss still treats overestimation and underestimation equally. The risk factor stays at 9.60% — accuracy and safety are separate problems.</div>
               </div>
             </div>
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1765032329298.jpeg" alt="Asymmetric Loss Impact — Risk 1.09%" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1765032329298.jpeg" alt="Asymmetric Loss Impact — Risk 1.09%" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Asymmetric Loss — Risk Drops to 1.09%</div>
                 <div class="gimg-cap-text">A custom TensorFlow loss applies a 10× penalty to overestimation errors. Gradient Descent is mathematically forced to "fear the danger zone." Risk collapses from 9.60% → 1.09% — a safety breakthrough.</div>
@@ -850,14 +850,14 @@ footer {
           </div>
           <div class="gimg-row cols-2">
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1765032329536.jpeg" alt="Safety-First Model Scatter" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1765032329536.jpeg" alt="Safety-First Model Scatter" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Safety-First Model — Conservative Estimates</div>
                 <div class="gimg-cap-text">Green predictions have shifted below the diagonal — the model now systematically errs on the side of caution. Maintenance crews will always be alerted before a failure becomes critical, not after.</div>
               </div>
             </div>
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1765032329379.jpeg" alt="Engine 1 Lifecycle Tracking" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1765032329379.jpeg" alt="Engine 1 Lifecycle Tracking" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Engine #1 — Full Lifecycle Tracked</div>
                 <div class="gimg-cap-text">The AI (green) tracks the ground truth (black dashed) closely across all 160 flight cycles, but stays slightly below — safe conservatism in action. This is the ideal human-machine interaction signature for predictive maintenance.</div>
@@ -870,7 +870,7 @@ footer {
         <div class="g-phase" data-gphase="4">
           <div class="gimg-row cols-1">
             <div class="gimg-cell">
-              <img src=".github/assets/images/gas-turbine-prognostics/1765032329444.jpeg" alt="Final Test Set Performance RMSE 18.79" loading="eager">
+              <img src="assets/images/gas-turbine-prognostics/1765032329444.jpeg" alt="Final Test Set Performance RMSE 18.79" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Final Exam — Unseen Test Engines, RMSE 18.79</div>
                 <div class="gimg-cap-text">Testing on a completely held-out set of engines never seen during training or validation. RMSE of 18.79 cycles reflects real-world generalisation cost — but the safety profile holds: predictions consistently avoid dangerous overestimation zones.</div>
@@ -921,7 +921,7 @@ footer {
       <!-- Phase label bar -->
       <div class="gallery-phase-bar">
         <span class="gpb-label">Section</span>
-        <span class="gpb-title" id="g2PhaseTitle">01 — PFD / MFD Displays</span>
+        <span class="gpb-title" id="g2PhaseTitle">01 — Simulator Rig</span>
       </div>
 
       <!-- NDA notice -->
@@ -930,127 +930,145 @@ footer {
         <span class="nda-text">Blurred images are reference only — project is under NDA</span>
       </div>
 
-      <!-- ── Scrollable image area ─────────────────── -->
+      <!-- ── Image area ──────────────────────────── -->
       <div class="gallery-main">
 
-        <!-- SECTION 0 — PFD / MFD DISPLAYS -->
+        <!-- TAB 0 — SIMULATOR RIG (eager, no GIFs = fast initial load) -->
         <div class="g-phase active" data-gphase="0">
           <div class="gimg-row cols-1">
             <div class="gimg-cell">
-              <img src=".github/assets/images/SPO/me.jpeg" alt="Developer in the simulator rig" loading="eager">
+              <img src="assets/images/SPO/me.jpeg" alt="Developer in the simulator rig" loading="eager">
               <div class="gimg-cap">
-                <div class="gimg-cap-title">Live in the Simulator Rig</div>
-                <div class="gimg-cap-text">Real deployment: all three monitors running the PySide6 GUI in the FSR single-pilot sim dome. Left screen shows the Flight Controls Panel, centre displays the aircraft synoptic, right shows backup system pages — every panel driven by live X-Plane 12 telemetry over UDP at 50 Hz.</div>
+                <div class="gimg-cap-title">Inside the Simulator Dome — FSR TU Darmstadt</div>
+                <div class="gimg-cap-text">All three monitors running the PySide6 GUI live in the FSR dome. Left: Flight Controls Panel; centre: aircraft synoptic; right: backup systems. Every panel driven by real X-Plane 12 telemetry streamed over UDP at 50 Hz.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell" style="display:flex;flex-direction:column;justify-content:center;gap:.5rem;padding:1.1rem 1rem;background:#020609;cursor:default">
+              <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase">Stack</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.7rem;color:rgba(232,237,245,.6);line-height:1.7">PySide6 · X-Plane 12<br>XHSI Plugin · UDP / Multi-threading<br>Python 3 · QTimer sync</div>
+            </div>
+            <div class="gimg-cell" style="display:flex;flex-direction:column;justify-content:center;gap:.5rem;padding:1.1rem 1rem;background:#020609;cursor:default">
+              <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase">Key Numbers</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.7rem;color:rgba(232,237,245,.6);line-height:1.7">50 Hz data rate<br>&lt; 20 ms end-to-end latency<br>Grade 1.3 awarded</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 1 — PFD / MFD DISPLAYS (deferred) -->
+        <div class="g-phase" data-gphase="1">
+          <div class="gimg-row cols-1" style="background:#010508">
+            <div class="gimg-cell" style="aspect-ratio:19/6">
+              <img data-src="assets/images/SPO/PFD_mfd.png" src="" alt="PFD and MFD Display" style="object-fit:contain;width:100%;height:100%">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Primary Flight Display + MFD — XHSI Plugin</div>
+                <div class="gimg-cap-text">Left: ND (Navigation Display / HSI) with heading rose and traffic advisory. Centre: PFD with attitude indicator, speed tape, altitude tape, and FD bars. Right: dual-engine instruments. All rendered via the XHSI (X-Plane HSI) 3rd-party plugin, fed by live X-Plane 12 datarefs over UDP.</div>
               </div>
             </div>
           </div>
           <div class="gimg-row cols-1">
             <div class="gimg-cell">
-              <img src=".github/assets/images/SPO/me_flying_sim.gif" alt="Flying the simulator with GUI active" loading="eager">
+              <img data-src="assets/images/SPO/me_flying_sim.gif" src="" alt="Live flight test with GUI active">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">GUI Active — Live Flight Test</div>
-                <div class="gimg-cap-text">The GUI responding in real time during an active sim session. All panels update simultaneously as the aircraft state changes, demonstrating sub-20 ms end-to-end latency from X-Plane dataref to on-screen display.</div>
+                <div class="gimg-cap-text">All panels updating simultaneously during an active sim session. Demonstrates the sub-20 ms latency from X-Plane dataref change to on-screen display refresh across every concurrent widget.</div>
               </div>
             </div>
           </div>
           <div class="gimg-row cols-1">
             <div class="gimg-cell">
-              <img src=".github/assets/images/SPO/PFD_mfd.png" alt="PFD and MFD Display" loading="eager">
-              <div class="gimg-cap">
-                <div class="gimg-cap-title">Primary Flight Display + Multi-Function Display</div>
-                <div class="gimg-cap-text">Full cockpit display layout: left panel shows the ND (Navigation Display / HSI) with heading and traffic advisory; centre shows the PFD with attitude indicator, speed tape, and altitude tape; right shows dual-engine instruments. MFD/PFD rendered via the XHSI (X-Plane HSI) third-party plugin, streamed live from X-Plane 12 over UDP at 50 Hz.</div>
-              </div>
-            </div>
-          </div>
-          <div class="gimg-row cols-1">
-            <div class="gimg-cell">
-              <img src=".github/assets/images/SPO/1761608637937.jpeg" alt="Single Pilot Cockpit Overview — NDA blurred" loading="eager">
+              <img data-src="assets/images/SPO/1761608637937.jpeg" src="" alt="Single Pilot Cockpit Overview — NDA blurred">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Cockpit Layout Overview <span style="color:var(--a3);font-size:.9em">[NDA]</span></div>
-                <div class="gimg-cap-text">Full single-pilot cockpit window layout: top row displays ND + PFD attitude + engine column; bottom row shows additional systems and aircraft synoptic pages. Multiple PySide6 panels tiled into one unified operator view, each receiving independent UDP telemetry streams.</div>
+                <div class="gimg-cap-text">Full single-pilot window arrangement: ND + PFD + engine column on top, additional systems and synoptic pages below. Multiple independent PySide6 widgets tiled into one unified operator view.</div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- SECTION 1 — ECAM SYSTEMS PAGES -->
-        <div class="g-phase" data-gphase="1">
-          <div class="gimg-row cols-1">
-            <div class="gimg-cell">
-              <img src=".github/assets/images/SPO/1761608641351.gif" alt="HYD/FUEL and ELEC/AIR systems live testing" loading="eager">
-              <div class="gimg-cap">
-                <div class="gimg-cap-title">HYD &amp; Fuel / ELEC &amp; Air — Live Test</div>
-                <div class="gimg-cap-text">Real-time systems page streaming from X-Plane during a live development session. The bleed air logic (ENG 1 / APU / ENG 2 BLEED, XFEED AUTO, HOT AIR) responds directly to X-Plane dataref values, updating the button states and labels over the multi-threaded UDP connection.</div>
-              </div>
-            </div>
-          </div>
-          <div class="gimg-row cols-1">
-            <div class="gimg-cell">
-              <img src=".github/assets/images/SPO/1761608637668.jpeg" alt="ECAM Systems Pages — NDA blurred" loading="eager">
-              <div class="gimg-cap">
-                <div class="gimg-cap-title">ECAM Systems Pages Grid <span style="color:var(--a3);font-size:.9em">[NDA]</span></div>
-                <div class="gimg-cap-text">Four ECAM-style synoptic pages displayed simultaneously: electrical bus diagram (top-left), system data table (top-right), hydraulics schematic (bottom-left), and flight controls surface page with blue/yellow/green actuation colour-coding (bottom-right). Each page is a separate PySide6 widget subscribing to its own dataref set.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- SECTION 2 — FLIGHT CONTROLS PANEL -->
+        <!-- TAB 2 — ECAM SYSTEMS (deferred) -->
         <div class="g-phase" data-gphase="2">
           <div class="gimg-row cols-1">
             <div class="gimg-cell">
-              <img src=".github/assets/images/SPO/1761608637716.gif" alt="Flight Controls Panel UI with source code" loading="eager">
+              <img data-src="assets/images/SPO/1761608641351.gif" src="" alt="HYD/FUEL and ELEC/AIR systems live testing">
               <div class="gimg-cap">
-                <div class="gimg-cap-title">Flight Controls Panel — PySide6 + Code</div>
-                <div class="gimg-cap-text">Side-by-side view of the Flight Controls Panel UI and the underlying PySide6 source (FCPmain.py). The panel handles elevator trim (animated slider with ±3° limits), rudder trim, gear & brakes, speed brakes, and flaps — each writing back to X-Plane datarefs via the XPlane UDP layer. A QTimer syncs control state from the sim every 30 s on startup.</div>
+                <div class="gimg-cap-title">HYD &amp; Fuel / ELEC &amp; Air — Live Test</div>
+                <div class="gimg-cap-text">Bleed air system page streaming live from X-Plane. ENG 1/APU/ENG 2 BLEED states, XFEED AUTO, and HOT AIR buttons all respond directly to X-Plane datarefs over the multi-threaded UDP connection.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img data-src="assets/images/SPO/1761608637668.jpeg" src="" alt="ECAM Systems Pages — NDA blurred">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">ECAM Systems Pages Grid <span style="color:var(--a3);font-size:.9em">[NDA]</span></div>
+                <div class="gimg-cap-text">Four synoptic pages displayed at once: electrical bus diagram, system data table, hydraulics schematic, and flight controls surface page with blue/yellow/green actuation colour-coding. Each page is a separate PySide6 widget on its own dataref set.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3 — FLIGHT CONTROLS (deferred) -->
+        <div class="g-phase" data-gphase="3">
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img data-src="assets/images/SPO/1761608637716.gif" src="" alt="Flight Controls Panel UI with source code">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Flight Controls Panel — PySide6 + Source</div>
+                <div class="gimg-cap-text">Side-by-side: FCP UI and FCPmain.py. Handles elevator trim (±3° animated slider), rudder trim, gear &amp; brakes, speed brakes, and flaps — each writing back to X-Plane datarefs. QTimer syncs control state from the sim every 30 s on startup.</div>
               </div>
             </div>
           </div>
           <div class="gimg-row cols-2">
             <div class="gimg-cell">
-              <img src=".github/assets/images/SPO/1761608639601.gif" alt="Flight Controls Panel — NDA blurred" loading="eager">
+              <img data-src="assets/images/SPO/1761608639601.gif" src="" alt="Flight Controls Panel — NDA blurred">
               <div class="gimg-cap">
-                <div class="gimg-cap-title">Flight Controls Panel <span style="color:var(--a3);font-size:.9em">[NDA]</span></div>
-                <div class="gimg-cap-text">Full operational view of the FCP: elevator trim indicator, gear & brakes status lights, speed brake and flap sliders with discrete positions (Low / Med / Max). All controls bi-directionally linked — moving a physical inceptor in X-Plane updates the GUI in real time.</div>
+                <div class="gimg-cap-title">FCP Operational View <span style="color:var(--a3);font-size:.9em">[NDA]</span></div>
+                <div class="gimg-cap-text">Elevator trim indicator, gear &amp; brakes lights, speed brake and flap sliders (Low / Med / Max). All controls bi-directionally linked — physical inceptor movement in X-Plane updates the GUI in real time.</div>
               </div>
             </div>
             <div class="gimg-cell">
-              <img src=".github/assets/images/SPO/1761608639155.gif" alt="ATC and Backup Controls panel — NDA blurred" loading="eager">
+              <img data-src="assets/images/SPO/1761608639155.gif" src="" alt="ATC and Backup Controls — NDA blurred">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">ATC + Backup Controls <span style="color:var(--a3);font-size:.9em">[NDA]</span></div>
-                <div class="gimg-cap-text">ATC radio management page showing active/standby frequency fields, VHF1/VHF2 select buttons, and a live command-history log. Adjacent Backup Controls panel provides a fallback interface if primary displays fail — fulfilling the single-pilot redundancy requirement.</div>
+                <div class="gimg-cap-text">ATC radio management: active/standby frequency, VHF1/VHF2 select, and live command-history log. Backup Controls provide a fallback interface if primary displays fail — fulfilling the single-pilot redundancy requirement.</div>
               </div>
             </div>
           </div>
           <div class="gimg-row cols-2">
             <div class="gimg-cell" style="background:#010508">
-              <img src=".github/assets/images/SPO/nose_light_slider_gif.gif" alt="Nose light slider widget" loading="eager" style="width:100%;height:100%;object-fit:contain">
+              <img data-src="assets/images/SPO/nose_light_slider_gif.gif" src="" alt="Nose light slider widget" style="width:100%;height:100%;object-fit:contain">
               <div class="gimg-cap">
-                <div class="gimg-cap-title">Nose Light Slider Widget</div>
+                <div class="gimg-cap-title">Nose Light — AnimatedSlider</div>
                 <div class="gimg-cap-text">Custom PySide6 AnimatedSlider with discrete T.O / TAXI detents for nose landing-light control.</div>
               </div>
             </div>
-            <div class="gimg-cell" style="display:flex;flex-direction:column;justify-content:center;padding:1.2rem 1rem;background:#020609">
-              <div style="font-family:'DM Mono',monospace;font-size:.5rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem">Reusable Component</div>
-              <div style="font-family:'Outfit',sans-serif;font-size:.72rem;color:rgba(232,237,245,.65);line-height:1.65">The same AnimatedSlider class drives speed brakes, flap levers, and all other slider-based cockpit controls across the GUI — write once, use everywhere.</div>
+            <div class="gimg-cell" style="display:flex;flex-direction:column;justify-content:center;padding:1.1rem 1rem;background:#020609;cursor:default">
+              <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.55rem">Reusable Component</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.7rem;color:rgba(232,237,245,.6);line-height:1.65">The same AnimatedSlider class drives speed brakes, flap levers, and all other slider-based controls — write once, deploy everywhere across the GUI.</div>
             </div>
           </div>
         </div>
 
       </div><!-- /gallery-main -->
 
-      <!-- ── Section navigation strip ─────────── -->
-      <nav class="gallery-phase-nav" id="g2PhaseNav" aria-label="Project sections" style="grid-template-columns:repeat(3,1fr)">
+      <!-- ── Section navigation — 4 tabs ──────── -->
+      <nav class="gallery-phase-nav" id="g2PhaseNav" aria-label="Project sections" style="grid-template-columns:repeat(4,1fr)">
         <button class="gpn-btn active" data-gphase="0">
           <span class="gpn-num">01</span>
-          <span class="gpn-lbl">PFD/MFD</span>
+          <span class="gpn-lbl">Rig</span>
         </button>
         <button class="gpn-btn" data-gphase="1">
           <span class="gpn-num">02</span>
-          <span class="gpn-lbl">Systems</span>
+          <span class="gpn-lbl">PFD/MFD</span>
         </button>
         <button class="gpn-btn" data-gphase="2">
           <span class="gpn-num">03</span>
+          <span class="gpn-lbl">Systems</span>
+        </button>
+        <button class="gpn-btn" data-gphase="3">
+          <span class="gpn-num">04</span>
           <span class="gpn-lbl">Controls</span>
         </button>
       </nav>
@@ -1429,35 +1447,44 @@ document.querySelectorAll('a, button').forEach(el => {
     btn.addEventListener('click', () => {
       const phase = btn.dataset.gphase;
       nav.querySelectorAll('.gpn-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.g-phase').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('#s1 .g-phase').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
-      const target = document.querySelector(`.g-phase[data-gphase="${phase}"]`);
+      const target = document.querySelector(`#s1 .g-phase[data-gphase="${phase}"]`);
       if (target) { target.classList.add('active'); target.scrollTop = 0; }
       if (title) title.textContent = titles[+phase] || '';
     });
   });
 })();
 
-/* ── Project 02 section gallery ────────────────────── */
+/* ── Project 02 section gallery — deferred loading ── */
 (function() {
   const nav    = document.getElementById('g2PhaseNav');
   const title  = document.getElementById('g2PhaseTitle');
   const titles = [
-    '01 — PFD / MFD Displays',
-    '02 — ECAM Systems Pages',
-    '03 — Flight Controls Panel'
+    '01 — Simulator Rig',
+    '02 — PFD / MFD Displays',
+    '03 — ECAM Systems',
+    '04 — Flight Controls'
   ];
   if (!nav) return;
   const phases = document.querySelectorAll('#s2 .g-phase');
+
+  function loadPhase(phase) {
+    phase.querySelectorAll('img[data-src]').forEach(img => {
+      img.src = img.dataset.src;
+      img.removeAttribute('data-src');
+    });
+  }
+
   nav.querySelectorAll('.gpn-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      const phase = btn.dataset.gphase;
+      const idx = btn.dataset.gphase;
       nav.querySelectorAll('.gpn-btn').forEach(b => b.classList.remove('active'));
       phases.forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
-      const target = document.querySelector(`#s2 .g-phase[data-gphase="${phase}"]`);
-      if (target) { target.classList.add('active'); target.scrollTop = 0; }
-      if (title) title.textContent = titles[+phase] || '';
+      const target = document.querySelector(`#s2 .g-phase[data-gphase="${idx}"]`);
+      if (target) { loadPhase(target); target.classList.add('active'); target.scrollTop = 0; }
+      if (title) title.textContent = titles[+idx] || '';
     });
   });
 })();
