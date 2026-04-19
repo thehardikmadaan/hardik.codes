@@ -524,7 +524,7 @@ footer {
   footer { flex-direction:column; gap:.8rem; text-align:center; padding:1.5rem }
 
   /* bg */
-  #three-canvas { opacity:.3 }
+  #three-canvas { opacity:.55 }
 }
 
 @media(max-width:600px) {
@@ -1125,7 +1125,7 @@ window.addEventListener('scroll', ()=>{
 ═══════════════════════════════════════════════════════════ */
 (function initThree(){
   const canvas = document.getElementById('three-canvas');
-  if (!canvas || window.innerWidth < 600) return;
+  if (!canvas) return;
 
   /* ── Renderer ──────────────────────────────────────────── */
   const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
