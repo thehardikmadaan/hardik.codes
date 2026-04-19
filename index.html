@@ -639,20 +639,20 @@ footer {
     <h2 class="s-title rv d1">Interactive<br/><span class="grad-text">code &amp; results.</span></h2>
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem">
       <div class="proj-tabs rv d2" id="projTabs" style="margin-bottom:0">
-      <button class="p-tab active" data-proj="0">PHM System</button>
+      <button class="p-tab active" data-proj="4">Orbital Mechanics</button>
+      <button class="p-tab" data-proj="0">PHM System</button>
       <button class="p-tab" data-proj="1">Simulator GUI</button>
       <button class="p-tab" data-proj="2">Runway Safety</button>
       <button class="p-tab" data-proj="3">Mower Control</button>
-      <button class="p-tab" data-proj="4">Orbital Mechanics</button>
     </div>
       <a href="projects.html" class="btn-o rv d2" style="font-size:.75rem;padding:.6rem 1.4rem;white-space:nowrap">View Full Gallery →</a>
     </div>
     <div class="proj-showcase rv d3">
 
       <!-- PANEL 0 -->
-      <div class="proj-panel active" id="panel-0">
+      <div class="proj-panel" id="panel-0">
         <div class="proj-info">
-          <div class="proj-num-big">01</div>
+          <div class="proj-num-big">02</div>
           <div class="proj-title-big">Prognostics &amp; Health Management System</div>
           <div class="proj-org-badge">Personal Project · Oct – Dec 2025</div>
           <p class="proj-desc-full">End-to-end ML pipeline predicting engine Remaining Useful Life (RUL) on the NASA C-MAPSS dataset. Custom Asymmetric Loss Function reduces safety violations from 12.4% to 1.09%. LSTM outperforms Random Forest baseline (RMSE 17.17 → 13.32 cycles).</p>
@@ -699,7 +699,7 @@ footer {
       <!-- PANEL 1 -->
       <div class="proj-panel" id="panel-1">
         <div class="proj-info">
-          <div class="proj-num-big">02</div>
+          <div class="proj-num-big">03</div>
           <div class="proj-title-big">Single-Pilot Simulator Displays</div>
           <div class="proj-org-badge">FSR — TU Darmstadt · Apr – Sep 2025</div>
           <p class="proj-desc-full">Modular GUI for single-pilot cockpit operations built with PySide6. Multi-threaded UDP network layer streams real-time telemetry from X-Plane 12 at 50 Hz. Earned a 1.3 grade for HMI performance and backend reliability.</p>
@@ -753,7 +753,7 @@ footer {
       <!-- PANEL 2 -->
       <div class="proj-panel" id="panel-2">
         <div class="proj-info">
-          <div class="proj-num-big">03</div>
+          <div class="proj-num-big">04</div>
           <div class="proj-title-big">Runway Incursion Analysis</div>
           <div class="proj-org-badge">Boeing × FSR · Oct 2024 – Mar 2025</div>
           <p class="proj-desc-full">Processed 30 years of runway incursion data to find collision avoidance patterns. Structured safety logic aligned with RTCA DO-323. Sensitivity analysis delivered recommendations directly to Boeing engineers.</p>
@@ -800,7 +800,7 @@ footer {
       <!-- PANEL 3 -->
       <div class="proj-panel" id="panel-3">
         <div class="proj-info">
-          <div class="proj-num-big">04</div>
+          <div class="proj-num-big">05</div>
           <div class="proj-title-big">Height-Adjustable Mower Unit</div>
           <div class="proj-org-badge">TU Darmstadt · Apr – Sep 2024</div>
           <p class="proj-desc-full">Active stabilisation control logic for a mechatronic mowing system using MATLAB/Simulink. Physical prototypes designed in Fusion 360 and 3D-printed. System integration managed via agile SCRUM.</p>
@@ -845,11 +845,11 @@ footer {
       </div>
 
       <!-- PANEL 4 -->
-      <div class="proj-panel" id="panel-4">
+      <div class="proj-panel active" id="panel-4">
         <div class="proj-info">
-          <div class="proj-num-big">05</div>
+          <div class="proj-num-big">01</div>
           <div class="proj-title-big">Orbital Mechanics Tools &amp; AI Surrogate</div>
-          <div class="proj-org-badge">Personal Project · 2026</div>
+          <div class="proj-org-badge">Personal Project · Mar – Apr 2026</div>
           <p class="proj-desc-full">Full-stack Python astrodynamics dashboard — Hohmann, Bi-Elliptic &amp; Phasing maneuvers computed analytically, with a trained MLP surrogate achieving R²&nbsp;=&nbsp;0.9993 on 40 k held-out mission scenarios. PySide6 HMI embeds live Matplotlib orbital visualisations.</p>
           <div class="proj-metrics">
             <div class="metric-row"><span class="metric-label">R² Score</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="99"></div></div><span class="metric-val">0.9993</span></div>
@@ -1579,7 +1579,7 @@ function closeTerm(idx){
 }
 
 /* ── First panel metric bars ───────────────────────────── */
-setTimeout(()=>{ document.querySelectorAll('#panel-0 .metric-bar').forEach(b=>{ b.style.width=b.dataset.w+'%' }) },900);
+setTimeout(()=>{ document.querySelectorAll('#panel-4 .metric-bar').forEach(b=>{ b.style.width=b.dataset.w+'%' }) },900);
 
 /* ═══════════════════════════════════════════════════════════
    6. LENIS SMOOTH SCROLL — inertia-based premium feel.
