@@ -1266,43 +1266,63 @@ footer {
 ══════════════════════════════════════════════════════════ -->
 <section class="proj-slide alt" id="s4" data-index="04">
   <div class="slide-right">
-    <!--
-    HOW TO ADD YOUR DEMO VIDEO  (Project 04 — Mower Unit)
-    <video autoplay muted loop playsinline src="assets/videos/mower-demo.mp4"></video>
-    -->
-    <div class="s-video">
-      <span class="v-badge">PID Step Response</span>
-      <div class="s-video-ph">
-        <div class="s-play-ring">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.3"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        </div>
-        <div class="s-vid-label">Mower Unit Demo</div>
-        <div class="s-vid-hint">Replace this placeholder with your video</div>
+    <div class="proj-gallery">
+
+      <!-- Phase label bar -->
+      <div class="gallery-phase-bar">
+        <span class="gpb-label">Phase</span>
+        <span class="gpb-title" id="g4PhaseTitle">01 — Design</span>
       </div>
-    </div>
-    <div class="s-photos">
-      <div class="s-photo">
-        <!-- <img src="assets/images/mower-cad.png" alt="CAD Design" loading="eager"> -->
-        <div class="s-photo-ph">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span>Photo</span>
+
+      <div class="gallery-main">
+
+        <!-- TAB 0 — DESIGN (eager) -->
+        <div class="g-phase active" data-gphase="0">
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src="assets/images/Height-Adjustable-Mower-Unit/CAD.jpeg" alt="CAD design of height-adjustable mower unit" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">CAD Design — Fusion 360</div>
+                <div class="gimg-cap-text">Lead-screw driven height-adjustment mechanism with stepper motor mount and dual guide rails. Designed for full integration with the mowing deck assembly.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src="assets/images/Height-Adjustable-Mower-Unit/SImulink_model.jpeg" alt="Simulink PID control model" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Simulink — PID Control Model</div>
+                <div class="gimg-cap-text">Full closed-loop simulation: PID controller driving a stepper motor model with position, velocity, and acceleration feedback. Gains tuned in simulation before hardware deployment.</div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="s-photo">
-        <!-- <img src="assets/images/mower-proto.png" alt="Prototype" loading="eager"> -->
-        <div class="s-photo-ph">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span>Photo</span>
+
+        <!-- TAB 1 — PROTOTYPE (lazy) -->
+        <div class="g-phase" data-gphase="1">
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img src="assets/images/Height-Adjustable-Mower-Unit/1771847835219.jpeg" alt="3D printing prototype parts on Prusa i3 MK3" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Prototype — Prusa i3 MK3 Print</div>
+                <div class="gimg-cap-text">Physical prototype components printed on a Prusa i3 MK3. Motor mounts and structural brackets iterated through multiple print cycles until all stability specs were met on first hardware test.</div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="s-photo">
-        <!-- <img src="assets/images/mower-test.png" alt="Test Results" loading="eager"> -->
-        <div class="s-photo-ph">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span>Photo</span>
-        </div>
-      </div>
-    </div>
+
+      </div><!-- /gallery-main -->
+
+      <nav class="gallery-phase-nav" id="g4PhaseNav" aria-label="Project phases" style="grid-template-columns:repeat(2,1fr)">
+        <button class="gpn-btn active" data-gphase="0">
+          <span class="gpn-num">01</span>
+          <span class="gpn-lbl">Design</span>
+        </button>
+        <button class="gpn-btn" data-gphase="1">
+          <span class="gpn-num">02</span>
+          <span class="gpn-lbl">Prototype</span>
+        </button>
+      </nav>
+
+    </div><!-- /proj-gallery -->
   </div>
 
   <div class="slide-left">
@@ -1567,6 +1587,26 @@ document.querySelectorAll('a, button').forEach(el => {
       phases.forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
       const target = document.querySelector(`#s3 .g-phase[data-gphase="${idx}"]`);
+      if (target) { target.classList.add('active'); target.scrollTop = 0; }
+      if (title) title.textContent = titles[+idx] || '';
+    });
+  });
+})();
+
+/* ── Project 04 section gallery ────────────────────── */
+(function() {
+  const nav   = document.getElementById('g4PhaseNav');
+  const title = document.getElementById('g4PhaseTitle');
+  const titles = ['01 — Design', '02 — Prototype'];
+  if (!nav) return;
+  const phases = document.querySelectorAll('#s4 .g-phase');
+  nav.querySelectorAll('.gpn-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = btn.dataset.gphase;
+      nav.querySelectorAll('.gpn-btn').forEach(b => b.classList.remove('active'));
+      phases.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const target = document.querySelector(`#s4 .g-phase[data-gphase="${idx}"]`);
       if (target) { target.classList.add('active'); target.scrollTop = 0; }
       if (title) title.textContent = titles[+idx] || '';
     });
