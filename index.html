@@ -605,7 +605,7 @@ footer {
           <div class="sc"><div class="sc-n">99%</div><div class="sc-l">Safety violation reduction</div></div>
           <div class="sc"><div class="sc-n">1.3</div><div class="sc-l">Grade — HMI Simulator</div></div>
           <div class="sc"><div class="sc-n">30yr</div><div class="sc-l">Aviation data analysed</div></div>
-          <div class="sc"><div class="sc-n">4+</div><div class="sc-l">Major projects delivered</div></div>
+          <div class="sc"><div class="sc-n">5+</div><div class="sc-l">Major projects delivered</div></div>
         </div>
       </div>
     </div>
@@ -643,6 +643,7 @@ footer {
       <button class="p-tab" data-proj="1">Simulator GUI</button>
       <button class="p-tab" data-proj="2">Runway Safety</button>
       <button class="p-tab" data-proj="3">Mower Control</button>
+      <button class="p-tab" data-proj="4">Orbital Mechanics</button>
     </div>
       <a href="projects.html" class="btn-o rv d2" style="font-size:.75rem;padding:.6rem 1.4rem;white-space:nowrap">View Full Gallery →</a>
     </div>
@@ -840,6 +841,49 @@ footer {
     <span class="ck">return</span> <span class="cv">t</span>, <span class="cv">np</span>.array(<span class="cv">history</span>)</pre></div>
           <div class="code-footer"><span class="code-footer-l">Python 3.11 · NumPy · SciPy · Simulink export</span><button class="code-run" onclick="runSim(3)">▶ Run Simulation</button></div>
           <div class="term-overlay" id="term-3"><div class="term-bar"><span class="term-title">Terminal Output</span><button class="term-close" onclick="closeTerm(3)">✕</button></div><div class="term-out" id="tout-3"></div></div>
+        </div>
+      </div>
+
+      <!-- PANEL 4 -->
+      <div class="proj-panel" id="panel-4">
+        <div class="proj-info">
+          <div class="proj-num-big">05</div>
+          <div class="proj-title-big">Orbital Mechanics Tools &amp; AI Surrogate</div>
+          <div class="proj-org-badge">Personal Project · 2026</div>
+          <p class="proj-desc-full">Full-stack Python astrodynamics dashboard — Hohmann, Bi-Elliptic &amp; Phasing maneuvers computed analytically, with a trained MLP surrogate achieving R²&nbsp;=&nbsp;0.9993 on 40 k held-out mission scenarios. PySide6 HMI embeds live Matplotlib orbital visualisations.</p>
+          <div class="proj-metrics">
+            <div class="metric-row"><span class="metric-label">R² Score</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="99"></div></div><span class="metric-val">0.9993</span></div>
+            <div class="metric-row"><span class="metric-label">MAPE</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="97"></div></div><span class="metric-val">2.88 %</span></div>
+            <div class="metric-row"><span class="metric-label">Training samples</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="80"></div></div><span class="metric-val">200 k</span></div>
+          </div>
+          <div class="proj-tags-row"><span class="pt">Python</span><span class="pt">PySide6</span><span class="pt">NumPy</span><span class="pt">scikit-learn</span><span class="pt">Matplotlib</span><span class="pt">Joblib</span></div>
+        </div>
+        <div class="proj-code-side">
+          <div class="code-topbar"><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div><span class="code-fname">astrodynamics.py</span></div>
+          <div class="code-body"><pre><span class="ck">import</span> <span class="cv">numpy</span> <span class="ck">as</span> <span class="cv">np</span>
+<span class="ck">import</span> <span class="cv">joblib</span>
+
+<span class="cv">GM</span> = <span class="cn">3.986e14</span>  <span class="cc"># Earth μ  m³/s²</span>
+
+<span class="ck">def</span> <span class="cf">hohmann</span>(<span class="cv">r1</span>, <span class="cv">r2</span>):
+    <span class="cv">a_t</span> = (<span class="cv">r1</span> + <span class="cv">r2</span>) / <span class="cn">2</span>
+    <span class="cv">dv1</span> = <span class="cv">np</span>.sqrt(<span class="cv">GM</span>/<span class="cv">r1</span>) * (<span class="cv">np</span>.sqrt(<span class="cn">2</span>*<span class="cv">r2</span>/(<span class="cv">r1</span>+<span class="cv">r2</span>)) - <span class="cn">1</span>)
+    <span class="cv">dv2</span> = <span class="cv">np</span>.sqrt(<span class="cv">GM</span>/<span class="cv">r2</span>) * (<span class="cn">1</span> - <span class="cv">np</span>.sqrt(<span class="cn">2</span>*<span class="cv">r1</span>/(<span class="cv">r1</span>+<span class="cv">r2</span>)))
+    <span class="cv">t</span>   = <span class="cv">np</span>.pi * <span class="cv">np</span>.sqrt(<span class="cv">a_t</span>**<span class="cn">3</span>/<span class="cv">GM</span>)
+    <span class="ck">return</span> <span class="cv">dv1</span>+<span class="cv">dv2</span>, <span class="cv">t</span>
+
+<span class="ck">def</span> <span class="cf">fuel_mass</span>(<span class="cv">dv</span>, <span class="cv">isp</span>, <span class="cv">m_dry</span>):
+    <span class="ck">return</span> <span class="cv">m_dry</span> * (<span class="cv">np</span>.exp(<span class="cv">dv</span>/(<span class="cv">isp</span>*<span class="cn">9.80665</span>)) - <span class="cn">1</span>)
+
+<span class="cc"># AI surrogate — 200 k synthetic scenarios</span>
+<span class="cv">model</span>  = <span class="cv">joblib</span>.load(<span class="cs">'ml/surrogate.pkl'</span>)
+<span class="cv">scaler</span> = <span class="cv">joblib</span>.load(<span class="cs">'ml/scaler.pkl'</span>)
+
+<span class="ck">def</span> <span class="cf">predict_dv</span>(<span class="cv">vc1</span>, <span class="cv">vc2</span>, <span class="cv">m_dry</span>, <span class="cv">isp</span>):
+    <span class="cv">X</span> = <span class="cv">scaler</span>.transform([[<span class="cv">vc1</span>, <span class="cv">vc2</span>, <span class="cv">m_dry</span>, <span class="cv">isp</span>]])
+    <span class="ck">return</span> <span class="cv">model</span>.predict(<span class="cv">X</span>)[<span class="cn">0</span>]</pre></div>
+          <div class="code-footer"><span class="code-footer-l">Python 3.10 · scikit-learn · NumPy · PySide6</span><button class="code-run" onclick="runSim(4)">▶ Run Simulation</button></div>
+          <div class="term-overlay" id="term-4"><div class="term-bar"><span class="term-title">Terminal Output</span><button class="term-close" onclick="closeTerm(4)">✕</button></div><div class="term-out" id="tout-4"></div></div>
         </div>
       </div>
 
@@ -1505,7 +1549,7 @@ document.querySelectorAll('.p-tab').forEach(tab=>{
     document.querySelectorAll('.proj-panel').forEach(p=>p.classList.remove('active'));
     tab.classList.add('active');
     document.getElementById('panel-'+idx).classList.add('active');
-    [0,1,2,3].forEach(i=>closeTerm(i));
+    [0,1,2,3,4].forEach(i=>closeTerm(i));
     setTimeout(()=>{
       document.querySelectorAll('#panel-'+idx+' .metric-bar').forEach(b=>{
         b.style.width='0'; setTimeout(()=>{ b.style.width=b.dataset.w+'%' },100);
@@ -1518,7 +1562,8 @@ const termData=[
   [{t:'t-head',v:'$ python phm_rul_predictor.py'},{t:'',v:'Loading NASA C-MAPSS FD001 dataset...'},{t:'t-ok',v:'✓ 20,631 training sequences loaded'},{t:'',v:'Running K-Means clustering (k=6)...'},{t:'t-ok',v:'✓ Operating modes identified'},{t:'',v:'Building LSTM(128→64)...'},{t:'',v:'  Epoch 01/50 — loss: 18.42 — val: 16.91'},{t:'',v:'  Epoch 25/50 — loss: 13.89 — val: 13.55'},{t:'',v:'  Epoch 50/50 — loss: 13.11 — val: 13.32'},{t:'t-val',v:'► Test RMSE        : 13.32  (was: 17.17)'},{t:'t-val',v:'► Safety violations: 1.09%  (was: 12.4%)'},{t:'t-ok',v:'✓ MLflow run logged → run_id: a4f2c9b1'},{t:'t-ok',v:'✓ Model saved to phm_lstm artifact'}],
   [{t:'t-head',v:'$ python udp_interface.py'},{t:'',v:'Binding socket to 0.0.0.0:49001...'},{t:'t-ok',v:'✓ Socket bound'},{t:'t-ok',v:'✓ Thread active — awaiting X-Plane 12'},{t:'',v:'Connection established'},{t:'t-val',v:'  [idx=3]  airspeed = 142.8 kt'},{t:'t-val',v:'  [idx=17] altitude = 3420.0 ft'},{t:'t-val',v:'  [idx=18] vertical = +480 fpm'},{t:'t-val',v:'  [idx=20] heading  = 274.3°'},{t:'',v:'Packet rate: 50 Hz — latency: 8ms'},{t:'t-ok',v:'✓ PFD / ND / EICAS nominal'},{t:'t-warn',v:'⚠ Terrain proximity alert (demo mode)'},{t:'t-ok',v:'✓ Alert rendered within 12ms'}],
   [{t:'t-head',v:'$ python runway_analysis.py'},{t:'',v:'Loading 30-year incursion database...'},{t:'t-ok',v:'✓ 14,382 runway events (1994–2024)'},{t:'',v:'Mapping DO-323 severity...'},{t:'t-ok',v:'✓ A:312  B:1847  C:6201  D:6022'},{t:'',v:'Training Random Forest (200 trees)...'},{t:'t-ok',v:'✓ OOB accuracy: 82.4%'},{t:'t-val',v:'  traffic_density : 0.312 ± 0.018'},{t:'t-val',v:'  visibility      : 0.287 ± 0.022'},{t:'t-val',v:'  time_of_day     : 0.201 ± 0.015'},{t:'t-ok',v:'✓ CRITICAL alerts flagged: 94.2%'},{t:'t-ok',v:'✓ Report → boeing_safety_report.pdf'}],
-  [{t:'t-head',v:'$ python pid_stabiliser.py'},{t:'',v:'PID: Kp=8.5  Ki=2.1  Kd=0.4'},{t:'t-ok',v:'✓ Plant TF: 1/(0.08s²+1.2s+1)'},{t:'',v:'Simulating step response...'},{t:'',v:'  t=0.00s  h=0.0mm  u=42.5'},{t:'',v:'  t=0.25s  h=22.1mm u=21.4'},{t:'',v:'  t=0.50s  h=43.8mm u=5.2'},{t:'',v:'  t=1.00s  h=50.1mm u=-0.1'},{t:'t-val',v:'► Rise time     : 0.48 s'},{t:'t-val',v:'► Settling time : 0.92 s (spec: <2.0s ✓)'},{t:'t-val',v:'► Overshoot     : 3.8%  (spec: <5%  ✓)'},{t:'t-ok',v:'✓ All stability specs met'}]
+  [{t:'t-head',v:'$ python pid_stabiliser.py'},{t:'',v:'PID: Kp=8.5  Ki=2.1  Kd=0.4'},{t:'t-ok',v:'✓ Plant TF: 1/(0.08s²+1.2s+1)'},{t:'',v:'Simulating step response...'},{t:'',v:'  t=0.00s  h=0.0mm  u=42.5'},{t:'',v:'  t=0.25s  h=22.1mm u=21.4'},{t:'',v:'  t=0.50s  h=43.8mm u=5.2'},{t:'',v:'  t=1.00s  h=50.1mm u=-0.1'},{t:'t-val',v:'► Rise time     : 0.48 s'},{t:'t-val',v:'► Settling time : 0.92 s (spec: <2.0s ✓)'},{t:'t-val',v:'► Overshoot     : 3.8%  (spec: <5%  ✓)'},{t:'t-ok',v:'✓ All stability specs met'}],
+  [{t:'t-head',v:'$ python astrodynamics.py'},{t:'',v:'Hohmann Transfer: LEO → GEO'},{t:'',v:'  r1 = 6,571 km  (300 km alt)'},{t:'',v:'  r2 = 42,164 km (GEO)'},{t:'t-val',v:'► ΔV₁     : 2,422 m/s'},{t:'t-val',v:'► ΔV₂     : 1,478 m/s'},{t:'t-val',v:'► Total ΔV: 3,900 m/s'},{t:'t-val',v:'► TOF     : 5.27 h'},{t:'',v:'Loading AI surrogate...'},{t:'t-ok',v:'✓ MLP loaded (R²=0.9993  MAE=16.47)'},{t:'t-val',v:'► Surrogate ΔV: 3,886 m/s  (err 0.36%)'},{t:'t-ok',v:'✓ Propellant mass: 847.2 kg'},{t:'t-ok',v:'✓ Dashboard ready — 200k training samples'}]
 ];
 function runSim(idx){
   const term=document.getElementById('term-'+idx), out=document.getElementById('tout-'+idx);
