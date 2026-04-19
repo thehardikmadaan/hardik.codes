@@ -428,6 +428,90 @@ footer {
 }
 .ft-nav a:hover { color:var(--accent) }
 
+/* ── PROJECT 01 GALLERY ─────────────────── */
+.proj-gallery {
+  display:flex; flex-direction:column; height:100%; overflow:hidden;
+}
+.gallery-phase-bar {
+  display:flex; align-items:center; gap:.6rem; padding:.55rem 1rem;
+  border-bottom:1px solid var(--border); flex-shrink:0;
+  background:rgba(1,2,5,.6);
+}
+.gpb-label {
+  font-family:'DM Mono',monospace; font-size:.48rem;
+  color:var(--muted); letter-spacing:.14em; text-transform:uppercase;
+}
+.gpb-title {
+  font-family:'DM Mono',monospace; font-size:.58rem;
+  color:var(--accent); letter-spacing:.06em;
+}
+.gallery-main { flex:1; position:relative; overflow:hidden; }
+.g-phase {
+  position:absolute; inset:0; display:none; flex-direction:column;
+  overflow-y:auto; scrollbar-width:none;
+}
+.g-phase::-webkit-scrollbar { display:none }
+.g-phase.active { display:flex }
+.gimg-row {
+  display:grid; flex-shrink:0;
+  border-bottom:1px solid var(--border);
+}
+.gimg-row.cols-2 { grid-template-columns:1fr 1fr }
+.gimg-row.cols-1 { grid-template-columns:1fr }
+.gimg-cell {
+  position:relative; background:#010508;
+  overflow:hidden; cursor:none;
+  aspect-ratio:4/3;
+}
+.gimg-row.cols-1 .gimg-cell { aspect-ratio:16/9 }
+.gimg-cell + .gimg-cell { border-left:1px solid var(--border) }
+.gimg-cell img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .4s ease; display:block;
+}
+.gimg-cell:hover img { transform:scale(1.04) }
+.gimg-cap {
+  position:absolute; bottom:0; left:0; right:0;
+  padding:.55rem .75rem .5rem;
+  background:linear-gradient(to top,rgba(1,2,5,.94) 0%,rgba(1,2,5,.6) 70%,transparent 100%);
+  transform:translateY(100%); transition:transform .3s ease;
+}
+.gimg-cell:hover .gimg-cap { transform:translateY(0) }
+.gimg-cap-title {
+  font-family:'DM Mono',monospace; font-size:.5rem;
+  color:var(--accent); letter-spacing:.1em; text-transform:uppercase; margin-bottom:.22rem;
+}
+.gimg-cap-text {
+  font-family:'Outfit',sans-serif; font-size:.7rem;
+  color:rgba(232,237,245,.72); line-height:1.55;
+}
+.gallery-phase-nav {
+  display:grid; grid-template-columns:repeat(5,1fr);
+  border-top:1px solid var(--border); flex-shrink:0;
+}
+.gpn-btn {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:.18rem; padding:.45rem .3rem; background:none; border:none;
+  border-right:1px solid var(--border); cursor:none; transition:background .25s;
+}
+.gpn-btn:last-child { border-right:none }
+.gpn-btn:hover { background:rgba(0,212,255,.04) }
+.gpn-btn.active {
+  background:rgba(0,212,255,.07);
+  box-shadow:inset 0 -2px 0 var(--accent);
+}
+.gpn-num {
+  font-family:'DM Mono',monospace; font-size:.42rem;
+  color:var(--muted); letter-spacing:.1em; transition:color .25s;
+}
+.gpn-lbl {
+  font-family:'DM Mono',monospace; font-size:.47rem;
+  color:var(--muted); letter-spacing:.07em; text-transform:uppercase; transition:color .25s;
+}
+.gpn-btn.active .gpn-num,
+.gpn-btn.active .gpn-lbl,
+.gpn-btn:hover .gpn-lbl { color:var(--accent) }
+
 /* ── RESPONSIVE ─────────────────────────── */
 @media(max-width:960px) {
   .side-nav  { display:none }
@@ -576,61 +660,235 @@ footer {
   </div>
 
   <div class="slide-right">
-    <!--
-    ══════════════════════════════════════════════════════════════
-    HOW TO ADD YOUR DEMO VIDEO  (Project 01 — PHM System)
+    <div class="proj-gallery">
 
-    Option A — local file:
-      Remove the .s-video-ph div and uncomment:
-      <video autoplay muted loop playsinline src="assets/videos/phm-demo.mp4"></video>
+      <!-- Phase label bar -->
+      <div class="gallery-phase-bar">
+        <span class="gpb-label">Phase</span>
+        <span class="gpb-title" id="g1PhaseTitle">01 — Exploratory Data Analysis</span>
+      </div>
 
-    Option B — YouTube:
-      <iframe src="https://www.youtube.com/embed/VIDEO_ID?autoplay=1&mute=1&loop=1"
-              allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      <!-- ── Scrollable image area ─────────────────── -->
+      <div class="gallery-main">
 
-    Option C — Vimeo:
-      <iframe src="https://player.vimeo.com/video/VIDEO_ID?autoplay=1&muted=1&loop=1"
-              allow="autoplay; fullscreen" allowfullscreen></iframe>
-    ══════════════════════════════════════════════════════════════
-    -->
-    <div class="s-video">
-      <span class="v-badge">Demo Video</span>
-      <div class="s-video-ph">
-        <div class="s-play-ring">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.3"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <!-- PHASE 0 — EDA -->
+        <div class="g-phase active" data-gphase="0">
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1762781923171.jpeg" alt="Sensor 7 Degradation Trend" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Sensor 7 Degradation Trend</div>
+                <div class="gimg-cap-text">The first proof: plotting sensor values against time-in-cycles reveals a clear noisy downward trend across all engines — the degradation signal the model must learn.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1762781922692.jpeg" alt="Feature Correlation with RUL" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Feature Correlation with RUL</div>
+                <div class="gimg-cap-text">All 21 sensors ranked by predictive power. Top predictors (sensor_12, sensor_7) are physically linked to the HPC fault mode — the exact failure in this dataset. Six zero-correlation sensors dropped.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1762781923697.jpeg" alt="RUL vs Sensor 7 Relationship" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">RUL vs. Sensor 7</div>
+                <div class="gimg-cap-text">Piecewise linear scatter confirms the data engineering strategy: clipping RUL at 125 cycles simplifies the healthy phase, letting the model focus on the critical degradation zone.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1762781923716.jpeg" alt="RUL vs Sensor 12 Relationship" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">RUL vs. Sensor 12</div>
+                <div class="gimg-cap-text">Sensor 12 mirrors sensor 7 — both are HPC-linked indicators. Their near-identical shapes reveal strong multicollinearity: no issue for LSTM, but fatal for linear models.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1762781925240.jpeg" alt="Scatter Matrix of Key Features vs RUL" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Scatter Matrix — Important Features vs. RUL</div>
+                <div class="gimg-cap-text">The full picture: top sensors are tightly correlated with each other and with RUL. This multicollinearity rules out linear regression and motivates the LSTM + cluster similarity approach.</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="s-vid-label">PHM System Walkthrough</div>
-        <div class="s-vid-hint">Replace this placeholder with your video</div>
-      </div>
-    </div>
-    <!--
-    HOW TO ADD PHOTOS  (Project 01)
-    For each slot, remove .s-photo-ph and uncomment the img:
-    <img src="assets/images/phm-architecture.png" alt="Architecture" loading="lazy">
-    -->
-    <div class="s-photos">
-      <div class="s-photo">
-        <!-- <img src="assets/images/phm-arch.png" alt="PHM Architecture" loading="lazy"> -->
-        <div class="s-photo-ph">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span>Photo</span>
+
+        <!-- PHASE 1 — FEATURE ENGINEERING & PIPELINE -->
+        <div class="g-phase" data-gphase="1">
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1765029250405.jpeg" alt="K-Means Cluster Similarity" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">K-Means Operating Modes</div>
+                <div class="gimg-cap-text">Engines behave differently at different altitudes and throttles. K-Means on sensors 7 & 12 discovers these regimes automatically. Each point's similarity to cluster centers (X) becomes a "Health Signature" feature.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1765029250406.jpeg" alt="ColumnTransformer Pipeline Architecture" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Master Pipeline — ColumnTransformer</div>
+                <div class="gimg-cap-text">The full preprocessing architecture: log-transforms for exponential decay sensors, K-Means similarity injection, and automatic unit ID stripping. A Group Split by Engine ID prevents data leakage across time.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1765029250430.jpeg" alt="Linear Regression Baseline Performance" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Linear Regression — RMSE 17.17</div>
+                <div class="gimg-cap-text">The baseline "smear": predictions scatter widely around the perfect line. Engine degradation is exponential and non-linear — a straight line cannot capture the failure curve.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1765029250332.jpeg" alt="Random Forest Baseline Performance" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Random Forest — RMSE 16.05</div>
+                <div class="gimg-cap-text">A tighter fit to the perfect prediction line, but still with overgeneralisation at the extremes. Random Forest lacks "memory" — it sees one row at a time with no sense of degradation velocity.</div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="s-photo">
-        <!-- <img src="assets/images/phm-lstm.png" alt="LSTM Results" loading="lazy"> -->
-        <div class="s-photo-ph">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span>Photo</span>
+
+        <!-- PHASE 2 — LSTM DEEP LEARNING -->
+        <div class="g-phase" data-gphase="2">
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1765030831882.jpeg" alt="LSTM Model Architecture" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">LSTM Architecture</div>
+                <div class="gimg-cap-text">Two stacked LSTM layers (64 → 32 units) with Dropout(0.2). Input: (Samples, 30 TimeSteps, Features) — feeding the last 30 flight cycles so the model learns velocity and acceleration of degradation, not just absolute values.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1765030831863.jpeg" alt="LSTM Training History" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">LSTM Training History</div>
+                <div class="gimg-cap-text">Training and validation loss converge cleanly. No divergence between curves confirms the Dropout regularisation is working — the model generalises rather than memorising.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1765030831839.jpeg" alt="Random Forest Safety Analysis — Baseline" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">RF Safety Baseline — 12.41% Risk</div>
+                <div class="gimg-cap-text">Safety analysis of the Random Forest baseline. A tail of predictions falls in the Dangerous Zone (overestimation). A 1-in-8 chance of predicting a safe engine that is actually failing is unacceptable for safety-critical operations.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1765030831794.jpeg" alt="LSTM Error Distribution 10.26% Risk" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">LSTM Error Distribution — 10.26% Risk</div>
+                <div class="gimg-cap-text">The standard LSTM reduces dangerous overestimations from 12.41% to 10.26% — a genuine improvement. But 1 in 10 is still too high. Accuracy alone is not enough for safety-critical maintenance.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1765030831937.jpeg" alt="Random Forest Feature Importance" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Random Forest Feature Importance</div>
+                <div class="gimg-cap-text">The K-Means cluster similarity features dominate importance — validating the pipeline design decision. "Cluster_0_similarity" alone accounts for ~37% of predictive power, confirming operating-mode awareness is the key engineered signal.</div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="s-photo">
-        <!-- <img src="assets/images/phm-mlflow.png" alt="MLflow Dashboard" loading="lazy"> -->
-        <div class="s-photo-ph">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span>Photo</span>
+
+        <!-- PHASE 3 — ASYMMETRIC SAFETY LOSS -->
+        <div class="g-phase" data-gphase="3">
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1767977171265.jpeg" alt="Keras Tuner Hyperparameter Distributions" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Keras Tuner — Hyperparameter Search</div>
+                <div class="gimg-cap-text">Keras Tuner mathematically optimises the LSTM architecture across layers, units, and dropout. Loguniform distributions efficiently explore learning rates across orders of magnitude, bringing RMSE to 13.32 cycles.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1765032329452.jpeg" alt="Tuned LSTM Training History" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Tuned LSTM Training History</div>
+                <div class="gimg-cap-text">The optimised model converges faster and to a lower loss floor. Training and validation curves remain tightly coupled across all 22 epochs — no overfitting despite the increased model capacity.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1765032329507.jpeg" alt="Tuned LSTM Performance RMSE 13.32" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Tuned LSTM — RMSE 13.32</div>
+                <div class="gimg-cap-text">The tuned model is more accurate than the baseline LSTM, but standard MSE loss still treats overestimation and underestimation equally. The risk factor stays at 9.60% — accuracy and safety are separate problems.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1765032329298.jpeg" alt="Asymmetric Loss Impact — Risk 1.09%" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Asymmetric Loss — Risk Drops to 1.09%</div>
+                <div class="gimg-cap-text">A custom TensorFlow loss applies a 10× penalty to overestimation errors. Gradient Descent is mathematically forced to "fear the danger zone." Risk collapses from 9.60% → 1.09% — a safety breakthrough.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1765032329536.jpeg" alt="Safety-First Model Scatter" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Safety-First Model — Conservative Estimates</div>
+                <div class="gimg-cap-text">Green predictions have shifted below the diagonal — the model now systematically errs on the side of caution. Maintenance crews will always be alerted before a failure becomes critical, not after.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1765032329379.jpeg" alt="Engine 1 Lifecycle Tracking" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Engine #1 — Full Lifecycle Tracked</div>
+                <div class="gimg-cap-text">The AI (green) tracks the ground truth (black dashed) closely across all 160 flight cycles, but stays slightly below — safe conservatism in action. This is the ideal human-machine interaction signature for predictive maintenance.</div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+
+        <!-- PHASE 4 — FINAL RESULTS -->
+        <div class="g-phase" data-gphase="4">
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img src=".github/assets/images/gas-turbine-prognostics/1765032329444.jpeg" alt="Final Test Set Performance RMSE 18.79" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Final Exam — Unseen Test Engines, RMSE 18.79</div>
+                <div class="gimg-cap-text">Testing on a completely held-out set of engines never seen during training or validation. RMSE of 18.79 cycles reflects real-world generalisation cost — but the safety profile holds: predictions consistently avoid dangerous overestimation zones.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /gallery-main -->
+
+      <!-- ── Phase navigation strip ───────────── -->
+      <nav class="gallery-phase-nav" id="g1PhaseNav" aria-label="Project phases">
+        <button class="gpn-btn active" data-gphase="0">
+          <span class="gpn-num">01</span>
+          <span class="gpn-lbl">EDA</span>
+        </button>
+        <button class="gpn-btn" data-gphase="1">
+          <span class="gpn-num">02</span>
+          <span class="gpn-lbl">Pipeline</span>
+        </button>
+        <button class="gpn-btn" data-gphase="2">
+          <span class="gpn-num">03</span>
+          <span class="gpn-lbl">LSTM</span>
+        </button>
+        <button class="gpn-btn" data-gphase="3">
+          <span class="gpn-num">04</span>
+          <span class="gpn-lbl">Safety</span>
+        </button>
+        <button class="gpn-btn" data-gphase="4">
+          <span class="gpn-num">05</span>
+          <span class="gpn-lbl">Results</span>
+        </button>
+      </nav>
+
+    </div><!-- /proj-gallery -->
   </div>
 
   <div class="slide-num-bg">01</div>
@@ -1034,6 +1292,31 @@ document.querySelectorAll('a, button').forEach(el => {
   el.addEventListener('mouseenter', () => rocketEl.classList.add('ignite'));
   el.addEventListener('mouseleave', () => rocketEl.classList.remove('ignite'));
 });
+
+/* ── Project 01 phase gallery ───────────────────────── */
+(function() {
+  const nav    = document.getElementById('g1PhaseNav');
+  const title  = document.getElementById('g1PhaseTitle');
+  const titles = [
+    '01 — Exploratory Data Analysis',
+    '02 — Feature Engineering & Pipeline',
+    '03 — LSTM Deep Learning',
+    '04 — Asymmetric Safety Loss',
+    '05 — Final Results'
+  ];
+  if (!nav) return;
+  nav.querySelectorAll('.gpn-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const phase = btn.dataset.gphase;
+      nav.querySelectorAll('.gpn-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.g-phase').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const target = document.querySelector(`.g-phase[data-gphase="${phase}"]`);
+      if (target) { target.classList.add('active'); target.scrollTop = 0; }
+      if (title) title.textContent = titles[+phase] || '';
+    });
+  });
+})();
 
 /* ── Magnetic CTA buttons ───────────────────────────── */
 document.querySelectorAll('.s-btn, .o-btn').forEach(el => {
