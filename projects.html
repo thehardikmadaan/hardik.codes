@@ -1127,7 +1127,7 @@ footer {
     <div class="slide-cat">Safety Analysis · Aerospace · ML</div>
     <h2 class="slide-title">Runway Incursion<br>Safety Analysis</h2>
     <div class="slide-org">Boeing × FSR · Oct 2024 – Mar 2025</div>
-    <p class="slide-desc">Processed 30 years of runway incursion data to uncover collision avoidance patterns. Safety logic structured to align with RTCA DO-323. Permutation-importance sensitivity analysis delivered directly to Boeing safety engineers.</p>
+    <p class="slide-desc">30 years of major runway incursion events analysed, focused on collision-critical scenarios. Sensitivity analysis conducted under the SURFIA framework and structured against RTCA DO-323. Findings presented to Boeing safety engineers and the FSR department at TU Darmstadt. Awarded a 1.7 grade.</p>
     <div class="slide-metrics">
       <div class="sm-row">
         <span class="sm-lbl">Data Coverage</span>
@@ -1135,18 +1135,19 @@ footer {
         <span class="sm-val">30 yrs</span>
       </div>
       <div class="sm-row">
-        <span class="sm-lbl">Pattern Accuracy</span>
-        <div class="sm-track"><div class="sm-fill" style="--tw:82%"></div></div>
-        <span class="sm-val">82 %</span>
-      </div>
-      <div class="sm-row">
         <span class="sm-lbl">DO-323 Coverage</span>
         <div class="sm-track"><div class="sm-fill" style="--tw:94%"></div></div>
         <span class="sm-val">94 %</span>
       </div>
+      <div class="sm-row">
+        <span class="sm-lbl">Grade Score</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:88%"></div></div>
+        <span class="sm-val">1.7</span>
+      </div>
     </div>
     <div class="slide-tags">
       <span class="s-tag">Safety Analysis</span>
+      <span class="s-tag">SURFIA</span>
       <span class="s-tag">RTCA DO-323</span>
       <span class="s-tag">Pandas</span>
       <span class="s-tag">NumPy</span>
@@ -1158,40 +1159,103 @@ footer {
   </div>
 
   <div class="slide-right">
-    <!--
-    HOW TO ADD YOUR DEMO VIDEO  (Project 03 — Runway Safety)
-    <video autoplay muted loop playsinline src="assets/videos/runway-demo.mp4"></video>
-    -->
-    <div class="s-video">
-      <span class="v-badge">Analysis Walkthrough</span>
-      <div class="s-video-ph">
-        <div class="s-play-ring">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.3"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        </div>
-        <div class="s-vid-label">Runway Safety Analysis</div>
-        <div class="s-vid-hint">Replace this placeholder with your video</div>
+    <div class="proj-gallery">
+
+      <!-- Phase label bar -->
+      <div class="gallery-phase-bar">
+        <span class="gpb-label">Section</span>
+        <span class="gpb-title" id="g3PhaseTitle">01 — Boeing Meeting &amp; Dataset</span>
       </div>
-    </div>
-    <div class="s-photos">
-      <div class="s-photo">
-        <div class="s-photo-ph">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span>Photo</span>
-        </div>
+
+      <!-- NDA notice -->
+      <div class="nda-notice">
+        <span class="nda-dot"></span>
+        <span class="nda-text">Data visuals are intentionally obscured — project is under NDA</span>
       </div>
-      <div class="s-photo">
-        <div class="s-photo-ph">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span>Photo</span>
+
+      <div class="gallery-main">
+
+        <!-- TAB 0 — EVIDENCE (eager) -->
+        <div class="g-phase active" data-gphase="0">
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src="assets/images/RI_analysis/boeing_meeting_idcard.jpeg" alt="Boeing meeting visitor badge" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Boeing Meeting — 06 Mar 2025</div>
+                <div class="gimg-cap-text">Visitor badge for the FSR × Boeing safety review at Boeing facilities. Runway incursion sensitivity analysis findings presented directly to Boeing safety engineers.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src="assets/images/RI_analysis/Screenshot_sample_of_data_collected_not_clear_protected_due_to_NDA.png" alt="Sample of RI dataset — NDA protected" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">30-Year RI Dataset <span style="color:var(--a3);font-size:.9em">[NDA]</span></div>
+                <div class="gimg-cap-text">Sample of the runway incursion event database: date, airport, aircraft category, severity, contributing factors, and narrative fields. Major collision-critical events isolated from 30 years of ASRS / FAA records.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell" style="display:flex;flex-direction:column;justify-content:center;gap:.55rem;padding:1.1rem 1rem;background:#020609;cursor:default">
+              <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase">Dataset Scope</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.7rem;color:rgba(232,237,245,.6);line-height:1.75">30 years of major RI events<br>Collision-critical scenarios only<br>ASRS + FAA incident records<br>Multi-column feature extraction</div>
+            </div>
+            <div class="gimg-cell" style="display:flex;flex-direction:column;justify-content:center;gap:.55rem;padding:1.1rem 1rem;background:#020609;cursor:default">
+              <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase">Delivered To</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.7rem;color:rgba(232,237,245,.6);line-height:1.75">Boeing safety engineers<br>FSR — TU Darmstadt dept.<br>Grade awarded: <span style="color:var(--accent)">1.7</span></div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="s-photo">
-        <div class="s-photo-ph">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span>Photo</span>
+
+        <!-- TAB 1 — METHODOLOGY (CSS cards, no images to defer) -->
+        <div class="g-phase" data-gphase="1">
+          <!-- SURFIA -->
+          <div class="gimg-row cols-1" style="background:#020609">
+            <div style="padding:1.1rem 1.2rem;display:flex;flex-direction:column;gap:.4rem;border-bottom:1px solid var(--border)">
+              <div style="display:flex;align-items:center;gap:.7rem">
+                <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--a2);letter-spacing:.14em;text-transform:uppercase;background:rgba(123,97,255,.08);border:1px solid rgba(123,97,255,.2);padding:.18rem .5rem;border-radius:2px">Framework</div>
+                <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--text)">SURFIA</div>
+              </div>
+              <div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted);letter-spacing:.06em">Surface Risk Identification &amp; Assessment</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.72rem;color:rgba(232,237,245,.6);line-height:1.7;margin-top:.2rem">Sensitivity analysis performed under the SURFIA methodology — a structured framework for identifying which contributing factors most influence runway incursion risk. Permutation-importance scoring ranked each feature by its marginal effect on collision probability, isolating the highest-impact variables for Boeing's safety model.</div>
+            </div>
+          </div>
+          <!-- DO-323 -->
+          <div class="gimg-row cols-1" style="background:#020609">
+            <div style="padding:1.1rem 1.2rem;display:flex;flex-direction:column;gap:.4rem;border-bottom:1px solid var(--border)">
+              <div style="display:flex;align-items:center;gap:.7rem">
+                <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--a3);letter-spacing:.14em;text-transform:uppercase;background:rgba(255,107,53,.08);border:1px solid rgba(255,107,53,.2);padding:.18rem .5rem;border-radius:2px">Standard</div>
+                <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--text)">RTCA DO-323</div>
+              </div>
+              <div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted);letter-spacing:.06em">Runway Incursion Safety — Operational Requirements</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.72rem;color:rgba(232,237,245,.6);line-height:1.7;margin-top:.2rem">The entire safety logic and feature classification structure was mapped against RTCA DO-323 — the industry standard governing runway incursion avoidance system requirements. 94 % of the document's operational requirement categories were addressed in the analysis, ensuring the findings were directly actionable for Boeing's certification pipeline.</div>
+            </div>
+          </div>
+          <!-- Pipeline summary -->
+          <div class="gimg-row cols-2" style="background:#020609">
+            <div style="padding:1rem;display:flex;flex-direction:column;gap:.4rem;border-right:1px solid var(--border)">
+              <div style="font-family:'DM Mono',monospace;font-size:.46rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.2rem">Analysis Pipeline</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.68rem;color:rgba(232,237,245,.58);line-height:1.8">Data ingestion → cleaning<br>Feature engineering<br>SURFIA sensitivity scoring<br>DO-323 category mapping<br>Permutation importance<br>Boeing-ready report output</div>
+            </div>
+            <div style="padding:1rem;display:flex;flex-direction:column;gap:.4rem">
+              <div style="font-family:'DM Mono',monospace;font-size:.46rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.2rem">Tech Stack</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.68rem;color:rgba(232,237,245,.58);line-height:1.8">Python · Pandas · NumPy<br>Scikit-learn<br>Permutation importance<br>RTCA DO-323 mapping<br>SURFIA framework</div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+
+      </div><!-- /gallery-main -->
+
+      <nav class="gallery-phase-nav" id="g3PhaseNav" aria-label="Project sections" style="grid-template-columns:repeat(2,1fr)">
+        <button class="gpn-btn active" data-gphase="0">
+          <span class="gpn-num">01</span>
+          <span class="gpn-lbl">Evidence</span>
+        </button>
+        <button class="gpn-btn" data-gphase="1">
+          <span class="gpn-num">02</span>
+          <span class="gpn-lbl">Method</span>
+        </button>
+      </nav>
+
+    </div><!-- /proj-gallery -->
   </div>
 
   <div class="slide-num-bg">03</div>
@@ -1484,6 +1548,26 @@ document.querySelectorAll('a, button').forEach(el => {
       btn.classList.add('active');
       const target = document.querySelector(`#s2 .g-phase[data-gphase="${idx}"]`);
       if (target) { loadPhase(target); target.classList.add('active'); target.scrollTop = 0; }
+      if (title) title.textContent = titles[+idx] || '';
+    });
+  });
+})();
+
+/* ── Project 03 section gallery ────────────────────── */
+(function() {
+  const nav   = document.getElementById('g3PhaseNav');
+  const title = document.getElementById('g3PhaseTitle');
+  const titles = ['01 — Boeing Meeting & Dataset', '02 — Methodology'];
+  if (!nav) return;
+  const phases = document.querySelectorAll('#s3 .g-phase');
+  nav.querySelectorAll('.gpn-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = btn.dataset.gphase;
+      nav.querySelectorAll('.gpn-btn').forEach(b => b.classList.remove('active'));
+      phases.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const target = document.querySelector(`#s3 .g-phase[data-gphase="${idx}"]`);
+      if (target) { target.classList.add('active'); target.scrollTop = 0; }
       if (title) title.textContent = titles[+idx] || '';
     });
   });
