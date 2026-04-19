@@ -534,21 +534,101 @@ footer {
 
 /* ── RESPONSIVE ─────────────────────────── */
 @media(max-width:960px) {
+  /* cursor: no rocket on touch */
+  body { cursor:auto }
+  #rocket-cursor { display:none }
+  a, button { cursor:pointer }
+
+  /* nav */
   .side-nav  { display:none }
   .top-nav   { padding:1.2rem 1.5rem }
   .nav-links { display:none }
+
+  /* intro slide */
   .intro-slide { padding:0 2rem }
   .intro-title { font-size:clamp(3.5rem,16vw,5.5rem) }
+
+  /* project slides: single column */
   .proj-slide  { grid-template-columns:1fr; min-height:auto }
   .proj-slide.alt { grid-template-columns:1fr }
-  .proj-slide.alt .slide-left { order:unset; padding:4rem 1.5rem 2rem; border-left:none; border-right:none }
+  .proj-slide.alt .slide-left {
+    order:unset; padding:4rem 1.5rem 2rem;
+    border-left:none; border-right:none;
+  }
   .proj-slide.alt .slide-right { order:unset }
-  .slide-left  { padding:5rem 1.5rem 3rem; border-right:none }
-  .slide-right { min-height:50vh }
-  .s-photos    { height:88px }
-  footer       { flex-direction:column; text-align:center; padding:1.5rem }
+  .slide-left { padding:5rem 1.5rem 3rem; border-right:none }
+
+  /* gallery panel: fixed height so g-phase scrolls inside */
+  .slide-right { height:auto; min-height:0 }
+  .proj-gallery { height:auto }
+  .gallery-main { height:440px; position:relative; overflow:hidden }
+
+  /* gallery image rows: collapse 2-col → 1-col */
+  .gimg-row.cols-2 { grid-template-columns:1fr }
+  .gimg-cell + .gimg-cell { border-left:none; border-top:1px solid var(--border) }
+  /* change aspect ratio of cols-2 cells so they're not too tall when stacked */
+  .gimg-row.cols-2 .gimg-cell { aspect-ratio:16/9 }
+
+  /* gallery caption: always visible on touch (no hover) */
+  .gimg-cap { transform:translateY(0) }
+  .gimg-cap-text { display:none } /* hide verbose text; keep title only for space */
+
+  /* gallery phase nav: at most 3 per row */
+  .gallery-phase-nav { grid-template-columns:repeat(3,1fr) !important }
+
+  /* misc */
+  .s-photos { height:88px }
+  .nda-text { font-size:.44rem }
+  footer { flex-direction:column; text-align:center; padding:1.5rem }
   .outro-slide { padding:4rem 1.5rem; min-height:auto }
 }
+
+@media(max-width:600px) {
+  /* intro */
+  .intro-slide { padding:0 1.5rem }
+  .intro-title { font-size:clamp(2.8rem,13vw,4.5rem) }
+  .intro-line  { white-space:normal }
+  .intro-bottom { flex-direction:column; gap:1.2rem; align-items:flex-start; margin-top:2rem }
+  .intro-stat strong { font-size:1.8rem }
+  .intro-scroll { display:none }
+
+  /* slide info panel */
+  .slide-left { padding:4rem 1.2rem 2rem }
+  .proj-slide.alt .slide-left { padding:3.5rem 1.2rem 2rem }
+  .slide-title { font-size:clamp(1.5rem,7vw,2.4rem) }
+  .slide-desc  { font-size:.82rem; max-width:none }
+  .slide-num-bg { font-size:clamp(5rem,18vw,9rem) }
+
+  /* metric rows: label on its own line */
+  .sm-row { flex-wrap:wrap; gap:.3rem }
+  .sm-lbl { min-width:auto; width:100%; font-size:.5rem }
+  .sm-track { width:100% }
+
+  /* tags & actions */
+  .s-tag { font-size:.5rem; padding:.15rem .45rem }
+  .slide-actions { flex-direction:column; gap:.5rem }
+  .s-btn { justify-content:center; text-align:center }
+
+  /* gallery */
+  .gallery-main { height:360px }
+  .gallery-phase-nav { grid-template-columns:repeat(2,1fr) !important }
+  .gpn-btn { padding:.4rem .2rem }
+  .gpn-lbl { font-size:.4rem }
+  .gpn-num { font-size:.36rem }
+  .gimg-cap-title { font-size:.46rem }
+
+  /* outro */
+  .outro-title { font-size:clamp(2rem,10vw,3.5rem) }
+  .outro-actions { flex-direction:column; align-items:center; gap:.8rem }
+  .o-btn { text-align:center; width:100%; max-width:220px }
+}
+
+@media(max-width:400px) {
+  .intro-title { font-size:clamp(2.4rem,12vw,4rem) }
+  .slide-title { font-size:clamp(1.3rem,7vw,2rem) }
+  .gallery-main { height:300px }
+}
+
 @media(prefers-reduced-motion:reduce) {
   *, *::before, *::after { animation:none!important; transition:none!important }
 }
