@@ -122,6 +122,14 @@ nav {
 }
 .nav-links a:hover { color:var(--accent) }
 .nav-links a:hover::after { transform:scaleX(1) }
+.lang-btn {
+  font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted);
+  letter-spacing:.1em; text-transform:uppercase; text-decoration:none;
+  padding:.35rem .75rem; border:1px solid var(--border); border-radius:2px;
+  transition:all .3s; white-space:nowrap;
+}
+.lang-btn:hover { border-color:var(--accent); color:var(--accent) }
+.lang-btn.active { border-color:var(--accent2); color:var(--accent2) }
 
 /* ── MAIN / CONTENT LAYER ────────────────── */
 main { position:relative; z-index:2; perspective:1200px; perspective-origin:50% 30% }
@@ -616,6 +624,7 @@ footer {
     <li><a href="#education">Education</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
+  <a href="de/index.html" class="lang-btn" aria-label="Auf Deutsch wechseln">DE</a>
   <button class="menu-btn" id="menuBtn" aria-label="Toggle navigation" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
