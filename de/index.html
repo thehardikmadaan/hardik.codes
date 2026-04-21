@@ -1,0 +1,1774 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';"/>
+<meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin"/>
+<title>Hardik Madaan — Aerospace & AI Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@300;400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════ */
+:root {
+  --bg:      #020408;
+  --surface: #060c14;
+  --card:    #0a111c;
+  --accent:  #00d4ff;
+  --accent2: #7b61ff;
+  --accent3: #ff6b35;
+  --text:    #e8edf5;
+  --muted:   #4a5a70;
+  --border:  rgba(0,212,255,0.1);
+
+  /* Animation tuning knobs */
+  --anim-ease:    cubic-bezier(.16,1,.3,1);
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
+html { scroll-behavior:smooth }
+body {
+  background:var(--bg); color:var(--text);
+  font-family:'Outfit',sans-serif; font-weight:300;
+  overflow-x:hidden; cursor:none;
+}
+
+/* ── ROCKET CURSOR ──────────────────────── */
+/* The SVG nose points UP by default; JS rotates it to face direction of travel */
+#rocket-cursor {
+  position:fixed; width:44px; height:44px;
+  pointer-events:none; z-index:9999;
+  transform-origin:50% 50%;
+  will-change:left,top,transform;
+  margin-left:-22px; margin-top:-22px;
+}
+#rocket-cursor svg {
+  width:100%; height:100%;
+  filter:drop-shadow(0 0 5px rgba(0,212,255,.65));
+  transition:filter .25s,transform .25s;
+}
+#rocket-cursor.ignite svg {
+  filter:drop-shadow(0 0 14px rgba(0,212,255,1)) drop-shadow(0 0 28px rgba(255,107,53,.75));
+  transform:scale(1.22);
+}
+.flame-path  { transition:opacity .2s }
+.flame-path2 { transition:opacity .2s }
+#rocket-cursor.ignite .flame-path  { opacity:1 !important; animation:flicker .12s infinite alternate }
+#rocket-cursor.ignite .flame-path2 { opacity:.85 !important; animation:flicker .18s .06s infinite alternate-reverse }
+@keyframes flicker {
+  from { transform:scaleY(.8) scaleX(1.15); }
+  to   { transform:scaleY(1.12) scaleX(.88); }
+}
+
+/* ── SCROLL PROGRESS ─────────────────────── */
+#prog {
+  position:fixed; top:0; left:0; height:2px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));
+  z-index:400; width:0%;
+}
+
+/* ── THREE.JS CANVAS BACKGROUND ──────────── */
+#three-canvas {
+  position:fixed; inset:0; z-index:1;
+  pointer-events:none;
+  opacity:1;
+}
+
+/* ── ATMOSPHERE ──────────────────────────── */
+.bg-grid {
+  position:fixed; inset:0; z-index:0;
+  background-image:
+    linear-gradient(rgba(0,212,255,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,.022) 1px, transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;
+}
+.orb { position:fixed; border-radius:50%; filter:blur(90px); pointer-events:none; z-index:0; will-change:transform }
+.o1 { width:700px;height:700px; background:radial-gradient(circle,rgba(0,212,255,.08),transparent 70%); top:-200px;left:-200px }
+.o2 { width:500px;height:500px; background:radial-gradient(circle,rgba(123,97,255,.07),transparent 70%); top:35%;right:-100px }
+.o3 { width:450px;height:450px; background:radial-gradient(circle,rgba(255,107,53,.05),transparent 70%); bottom:5%;left:15% }
+
+/* ── NAV ─────────────────────────────────── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:1.4rem 4rem;
+  background:rgba(2,4,8,.8); backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  transform:translateY(-100%);
+  animation:navIn .7s .15s ease forwards;
+}
+@keyframes navIn { to{transform:translateY(0)} }
+.nav-logo {
+  font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  text-decoration:none;
+}
+.nav-links { display:flex; gap:2.5rem; list-style:none }
+.nav-links a {
+  color:var(--muted); text-decoration:none;
+  font-family:'DM Mono',monospace; font-size:.7rem;
+  letter-spacing:.12em; text-transform:uppercase; transition:color .3s;
+  position:relative;
+}
+.nav-links a::after {
+  content:''; position:absolute; bottom:-3px; left:0; right:0;
+  height:1px; background:var(--accent);
+  transform:scaleX(0); transition:transform .3s; transform-origin:left;
+}
+.nav-links a:hover { color:var(--accent) }
+.nav-links a:hover::after { transform:scaleX(1) }
+.lang-btn {
+  font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted);
+  letter-spacing:.1em; text-transform:uppercase; text-decoration:none;
+  padding:.35rem .75rem; border:1px solid var(--border); border-radius:2px;
+  transition:all .3s; white-space:nowrap;
+}
+.lang-btn:hover { border-color:var(--accent); color:var(--accent) }
+.lang-btn.active { border-color:var(--accent2); color:var(--accent2) }
+
+/* ── MAIN / CONTENT LAYER ────────────────── */
+main { position:relative; z-index:2; perspective:1200px; perspective-origin:50% 30% }
+section { min-height:100vh; display:flex; align-items:center }
+
+/* ── HERO ────────────────────────────────── */
+#hero {
+  padding:0 4rem; flex-direction:column; justify-content:center;
+  overflow:hidden; position:relative; min-height:100vh;
+}
+.hero-content { position:relative; z-index:3 }
+.h-eye {
+  font-family:'DM Mono',monospace; font-size:.72rem;
+  color:var(--accent); letter-spacing:.2em; text-transform:uppercase;
+  margin-bottom:1.5rem;
+  display:flex; align-items:center; gap:1rem;
+  opacity:0; animation:fadeUp .7s .5s ease forwards;
+}
+.h-eye::before { content:''; width:36px; height:1px; background:var(--accent) }
+.h-name {
+  font-family:'Syne',sans-serif; font-weight:800;
+  font-size:clamp(3.5rem,11vw,9.5rem);
+  line-height:.9; letter-spacing:-.03em;
+  opacity:0; animation:fadeUp .7s .65s ease forwards;
+}
+.h-name .l1 { display:block; color:var(--text) }
+.h-name .l2 {
+  display:block;
+  background:linear-gradient(135deg,var(--accent),var(--accent2) 50%,var(--accent3));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.h-sub {
+  margin-top:1.8rem; font-size:1rem; color:var(--muted);
+  max-width:520px; line-height:1.8;
+  opacity:0; animation:fadeUp .7s .8s ease forwards;
+}
+.h-ctas {
+  margin-top:2.5rem; display:flex; gap:1.2rem; flex-wrap:wrap;
+  opacity:0; animation:fadeUp .7s .95s ease forwards;
+}
+.btn-p {
+  padding:.85rem 2.2rem;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#000; font-family:'Syne',sans-serif; font-weight:700;
+  font-size:.85rem; letter-spacing:.05em; border:none; border-radius:3px;
+  cursor:none; text-decoration:none; display:inline-block;
+  transition:transform .3s,box-shadow .3s; position:relative; overflow:hidden;
+}
+.btn-p:hover { transform:translateY(-3px); box-shadow:0 16px 50px rgba(0,212,255,.3) }
+.btn-o {
+  padding:.85rem 2.2rem; background:transparent; color:var(--text);
+  font-family:'Syne',sans-serif; font-weight:600; font-size:.85rem;
+  letter-spacing:.05em; border:1px solid var(--border); border-radius:3px;
+  cursor:none; text-decoration:none; display:inline-block;
+  transition:border-color .3s,color .3s,transform .3s;
+}
+.btn-o:hover { border-color:var(--accent); color:var(--accent); transform:translateY(-3px) }
+
+.h-chips {
+  position:absolute; right:4rem; top:50%; transform:translateY(-50%);
+  display:flex; flex-direction:column; gap:.7rem;
+  opacity:0; animation:chipIn .7s 1.1s ease forwards;
+}
+@keyframes chipIn { from{opacity:0;transform:translate(20px,-50%)} to{opacity:1;transform:translate(0,-50%)} }
+.chip {
+  font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted);
+  padding:.45rem .9rem; border:1px solid var(--border); border-radius:2px;
+  white-space:nowrap; transition:all .3s; backdrop-filter:blur(4px);
+}
+.chip:hover { border-color:var(--accent); color:var(--accent); transform:translateX(-5px) }
+
+.scroll-hint {
+  position:absolute; bottom:2.5rem; left:4rem;
+  display:flex; align-items:center; gap:.8rem;
+  font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted);
+  opacity:0; animation:fadeUp .7s 1.3s ease forwards;
+}
+.scroll-line {
+  width:1px; height:45px; background:linear-gradient(var(--accent),transparent);
+  animation:scrollBlink 2s ease-in-out infinite;
+}
+@keyframes scrollBlink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* ── MARQUEE ─────────────────────────────── */
+.marquee-wrap {
+  overflow:hidden; border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:1rem 0; background:var(--surface); position:relative; z-index:2;
+}
+.marquee-track { display:flex; width:max-content; animation:marquee 24s linear infinite }
+.marquee-item {
+  font-family:'Syne',sans-serif; font-weight:700; font-size:.78rem;
+  color:var(--muted); padding:0 2.5rem; letter-spacing:.1em;
+  text-transform:uppercase; white-space:nowrap;
+  display:flex; align-items:center; gap:2.5rem;
+}
+.marquee-item::after { content:'✦'; color:var(--accent); font-size:.55rem }
+@keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* ── SECTION DEPTH LINE ──────────────────── */
+.sdl {
+  width:100%; height:1px; position:relative; z-index:2;
+  background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);
+  opacity:0; transform:scaleX(0); transform-origin:center;
+}
+
+/* ── SECTION COMMON ──────────────────────── */
+.s-inner { width:100%; max-width:1200px; margin:0 auto; padding:7rem 4rem }
+.s-label {
+  font-family:'DM Mono',monospace; font-size:.65rem; color:var(--accent);
+  letter-spacing:.2em; text-transform:uppercase; margin-bottom:.8rem;
+  display:flex; align-items:center; gap:.8rem;
+}
+.s-label::before { content:attr(data-n); color:var(--muted) }
+.s-title {
+  font-family:'Syne',sans-serif; font-weight:800;
+  font-size:clamp(2.2rem,4.5vw,4rem); line-height:1;
+  letter-spacing:-.02em; margin-bottom:3.5rem;
+}
+.grad-text {
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+
+/* Reveal classes (GSAP overrides) */
+.rv,.rv-l,.rv-r { opacity:0 }
+
+/* ── ABOUT ───────────────────────────────── */
+#about { min-height:auto; background:var(--surface); position:relative; overflow:hidden }
+#about::before {
+  content:''; position:absolute; top:-1px; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+}
+.about-grid { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start }
+.about-text p { font-size:1rem; color:rgba(232,237,245,.7); line-height:1.85; margin-bottom:1.4rem }
+.about-text p strong { color:var(--accent); font-weight:500 }
+.stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem }
+.sc {
+  padding:1.5rem; border:1px solid var(--border); border-radius:3px;
+  background:rgba(6,12,20,.55); backdrop-filter:blur(12px);
+  box-shadow:0 8px 32px rgba(0,212,255,.04), inset 0 1px 0 rgba(255,255,255,.03);
+  transition:border-color .35s,transform .35s,background .35s;
+  position:relative; overflow:hidden; will-change:transform;
+}
+.sc::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,var(--accent),transparent);
+  transform:scaleX(0); transition:transform .4s; transform-origin:left;
+}
+.sc:hover { border-color:var(--accent); transform:translateY(-5px); background:rgba(0,212,255,.04) }
+.sc:hover::before { transform:scaleX(1) }
+.sc-n {
+  font-family:'Syne',sans-serif; font-weight:800; font-size:2.2rem;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1;
+}
+.sc-l { font-size:.72rem; color:var(--muted); margin-top:.4rem; font-family:'DM Mono',monospace; letter-spacing:.04em }
+
+/* ── SKILLS ──────────────────────────────── */
+#skills { min-height:auto }
+.sk-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem }
+.sk-cat {
+  padding:1.8rem; border:1px solid var(--border); border-radius:3px;
+  background:rgba(6,12,20,.6); backdrop-filter:blur(14px);
+  box-shadow:0 8px 32px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.03);
+  transition:border-color .35s; transform-style:preserve-3d; will-change:transform;
+}
+.sk-cat:hover { border-color:var(--accent2) }
+.sk-cat-t {
+  font-family:'Syne',sans-serif; font-weight:700; font-size:.8rem;
+  color:var(--accent2); letter-spacing:.07em; text-transform:uppercase;
+  margin-bottom:1rem; display:flex; align-items:center; gap:.6rem;
+}
+.sk-pills { display:flex; flex-wrap:wrap; gap:.45rem }
+.sp {
+  font-family:'DM Mono',monospace; font-size:.65rem; padding:.28rem .7rem;
+  border-radius:2px; background:rgba(123,97,255,.07);
+  border:1px solid rgba(123,97,255,.18); color:rgba(232,237,245,.65);
+  transition:all .25s;
+}
+.sp:hover { background:rgba(123,97,255,.15); border-color:var(--accent2); color:var(--text) }
+
+/* ── PROJECTS ────────────────────────────── */
+#projects { min-height:auto; background:var(--surface) }
+.proj-tabs {
+  display:flex; border:1px solid var(--border); border-radius:4px;
+  overflow:hidden; margin-bottom:2.5rem; width:fit-content;
+}
+.p-tab {
+  font-family:'DM Mono',monospace; font-size:.68rem; letter-spacing:.08em;
+  text-transform:uppercase; padding:.7rem 1.4rem;
+  background:transparent; border:none; color:var(--muted);
+  cursor:none; transition:all .25s; position:relative;
+}
+.p-tab.active { background:rgba(0,212,255,.08); color:var(--accent) }
+.p-tab::after {
+  content:''; position:absolute; bottom:0; left:0; right:0;
+  height:2px; background:var(--accent); transform:scaleX(0); transition:transform .3s;
+}
+.p-tab.active::after { transform:scaleX(1) }
+
+.proj-showcase {
+  border:1px solid var(--border); border-radius:4px;
+  overflow:hidden; min-height:520px;
+  transform-style:preserve-3d; will-change:transform,opacity;
+}
+.proj-panel { display:none; animation:panelIn .4s ease forwards }
+.proj-panel.active { display:grid; grid-template-columns:1fr 1fr }
+@keyframes panelIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+.proj-info {
+  padding:2.5rem; border-right:1px solid var(--border);
+  background:var(--card); display:flex; flex-direction:column;
+}
+.proj-num-big {
+  font-family:'Syne',sans-serif; font-weight:800; font-size:4rem;
+  color:rgba(0,212,255,.06); line-height:1; margin-bottom:-.5rem;
+}
+.proj-title-big {
+  font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem;
+  line-height:1.15; margin-bottom:.5rem; color:var(--text);
+}
+.proj-org-badge { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--accent3); letter-spacing:.07em; margin-bottom:1.2rem }
+.proj-desc-full { font-size:.92rem; color:rgba(232,237,245,.65); line-height:1.8; flex:1 }
+.proj-metrics { margin-top:1.5rem; display:flex; flex-direction:column; gap:.7rem }
+.metric-row { display:flex; align-items:center; gap:.8rem; font-family:'DM Mono',monospace; font-size:.68rem }
+.metric-bar-wrap { flex:1; height:3px; background:rgba(255,255,255,.06); border-radius:2px; overflow:hidden }
+.metric-bar { height:100%; border-radius:2px; background:linear-gradient(90deg,var(--accent),var(--accent2)); width:0; transition:width 1s ease }
+.metric-label { color:var(--muted); min-width:90px }
+.metric-val { color:var(--accent); min-width:42px; text-align:right }
+.proj-tags-row { margin-top:1.5rem; display:flex; flex-wrap:wrap; gap:.4rem }
+.pt {
+  font-family:'DM Mono',monospace; font-size:.6rem; padding:.22rem .6rem;
+  border-radius:2px; background:rgba(0,212,255,.06);
+  border:1px solid rgba(0,212,255,.14); color:var(--accent);
+}
+
+.proj-code-side { display:flex; flex-direction:column; background:#050b12; position:relative }
+.code-topbar { padding:.7rem 1.2rem; background:#070e18; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:.8rem }
+.code-dots { display:flex; gap:.45rem }
+.code-dot { width:10px; height:10px; border-radius:50% }
+.dot-r{background:#ff5f56}.dot-y{background:#ffbd2e}.dot-g{background:#27c93f}
+.code-fname { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted); margin-left:.5rem }
+.code-body { flex:1; overflow-y:auto; padding:1.2rem 1.5rem; scrollbar-width:thin; scrollbar-color:rgba(0,212,255,.15) transparent }
+.code-body::-webkit-scrollbar { width:4px }
+.code-body::-webkit-scrollbar-thumb { background:rgba(0,212,255,.15); border-radius:2px }
+pre { font-family:'DM Mono',monospace; font-size:.68rem; line-height:1.8; color:#8892a4; white-space:pre }
+.ck{color:#7b61ff}.cs{color:#e06c75}.cn{color:#d19a66}.cc{color:#5a6a80;font-style:italic}.cf{color:#61afef}.cv{color:#e5c07b}.co{color:#00d4ff}
+.code-footer { padding:.7rem 1.2rem; background:#070e18; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center }
+.code-footer-l { font-family:'DM Mono',monospace; font-size:.6rem; color:var(--muted) }
+.code-run {
+  font-family:'DM Mono',monospace; font-size:.65rem; padding:.35rem .9rem;
+  border:1px solid rgba(0,212,255,.25); border-radius:2px;
+  background:transparent; color:var(--accent); cursor:none; transition:all .25s;
+  display:flex; align-items:center; gap:.5rem;
+}
+.code-run:hover { background:rgba(0,212,255,.08); border-color:var(--accent) }
+
+.term-overlay {
+  position:absolute; inset:0; background:#020810;
+  display:flex; flex-direction:column;
+  transform:translateY(100%); transition:transform .4s cubic-bezier(.4,0,.2,1); z-index:10;
+}
+.term-overlay.open { transform:translateY(0) }
+.term-bar { padding:.7rem 1.2rem; background:#070e18; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center }
+.term-title { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--accent); display:flex; align-items:center; gap:.5rem }
+.term-title::before { content:''; width:7px; height:7px; border-radius:50%; background:var(--accent); animation:blink 1s step-end infinite }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.term-close { background:none; border:none; color:var(--muted); cursor:none; font-size:1.1rem; transition:color .2s }
+.term-close:hover { color:var(--text) }
+.term-out { flex:1; padding:1.2rem 1.5rem; overflow-y:auto; font-family:'DM Mono',monospace; font-size:.68rem; line-height:1.9; color:#8892a4 }
+.tline { display:block; opacity:0; transform:translateX(-8px); transition:opacity .3s,transform .3s }
+.tline.show { opacity:1; transform:translateX(0) }
+.t-ok{color:#27c93f}.t-val{color:var(--accent)}.t-warn{color:#ffbd2e}.t-head{color:var(--accent2)}
+
+/* ── EDUCATION ───────────────────────────── */
+#education { min-height:auto }
+.edu-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem }
+.edu-card {
+  padding:2.2rem; border:1px solid var(--border); border-radius:3px;
+  position:relative; overflow:hidden;
+  transition:border-color .35s,transform .35s;
+  background:rgba(6,12,20,.55); backdrop-filter:blur(12px);
+  box-shadow:0 8px 32px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.03);
+  transform-style:preserve-3d; will-change:transform;
+}
+.edu-card::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(0,212,255,.03),transparent);
+  opacity:0; transition:opacity .35s;
+}
+.edu-card:hover { border-color:var(--accent); transform:translateY(-5px) }
+.edu-card:hover::before { opacity:1 }
+.edu-badge {
+  font-family:'DM Mono',monospace; font-size:.6rem; color:var(--accent);
+  letter-spacing:.1em; text-transform:uppercase; padding:.28rem .7rem;
+  border:1px solid rgba(0,212,255,.2); display:inline-block; border-radius:2px; margin-bottom:1rem;
+}
+.edu-deg { font-family:'Syne',sans-serif; font-weight:700; font-size:1.25rem; margin-bottom:.4rem; line-height:1.2 }
+.edu-school { color:var(--muted); font-size:.88rem; margin-bottom:.25rem }
+.edu-period { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--accent2); margin-bottom:1rem }
+.edu-focus { font-size:.88rem; color:rgba(232,237,245,.55); line-height:1.75 }
+
+/* ── CONTACT ─────────────────────────────── */
+#contact { min-height:auto; background:var(--surface) }
+.contact-c { text-align:center; max-width:680px; margin:0 auto }
+.contact-c .s-label { justify-content:center }
+.contact-c .s-title { text-align:center }
+.c-desc { font-size:1rem; color:var(--muted); line-height:1.8; margin-bottom:2.5rem }
+.c-links { display:flex; justify-content:center; gap:1.2rem; flex-wrap:wrap; margin-bottom:1.5rem }
+.c-link {
+  display:flex; align-items:center; gap:.7rem;
+  padding:.9rem 1.8rem; border:1px solid var(--border); border-radius:3px;
+  text-decoration:none; color:var(--text); font-family:'DM Mono',monospace;
+  font-size:.72rem; transition:all .3s;
+  background:rgba(6,12,20,.5); backdrop-filter:blur(10px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+}
+.c-link:hover { border-color:var(--accent); color:var(--accent); transform:translateY(-4px) }
+.c-link svg { width:16px; height:16px; flex-shrink:0 }
+
+/* ── FOOTER ──────────────────────────────── */
+footer {
+  padding:1.8rem 4rem; border-top:1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:center;
+  position:relative; z-index:2; background:var(--bg);
+  flex-wrap:wrap; gap:.8rem; overflow:hidden;
+}
+.ft { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted); min-width:0 }
+.fa { color:var(--accent) }
+.ft-nav { display:flex; align-items:center; gap:.7rem; flex-wrap:wrap }
+.ft-nav a { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted); text-decoration:none; transition:color .25s }
+.ft-nav a:hover { color:var(--accent) }
+.ft-sep { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted) }
+
+/* ── GLITCH ON NAME ──────────────────────── */
+@keyframes glitch {
+  0%,91%,100% { clip-path:none; transform:none }
+  92% { clip-path:polygon(0 10%,100% 10%,100% 28%,0 28%); transform:translate(-3px,0) }
+  94% { clip-path:polygon(0 58%,100% 58%,100% 76%,0 76%); transform:translate(3px,0) }
+  96% { clip-path:none; transform:none }
+}
+.h-name .l1 { animation:glitch 7s infinite }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── FLOATING WIREFRAME SHAPES (behind content) ── */
+#bg-shapes-canvas {
+  position:fixed; inset:0; z-index:0;
+  pointer-events:none; opacity:.6;
+}
+
+/* ── MOBILE ──────────────────────────────── */
+@media(max-width:900px) {
+  /* cursor: rocket doesn't work on touch */
+  body { cursor:auto }
+  #rocket-cursor { display:none }
+  a, button { cursor:pointer }
+
+  /* nav */
+  nav { padding:1.2rem 1.5rem }
+  .nav-links { display:none }
+  .menu-btn { display:flex }
+
+  /* hero */
+  #hero { padding:0 1.5rem }
+  .h-chips { display:none }
+  .scroll-hint { display:none }
+
+  /* sections */
+  .s-inner { padding:5rem 1.5rem }
+
+  /* about / edu */
+  .about-grid, .edu-grid { grid-template-columns:1fr; gap:2rem }
+
+  /* skills */
+  .sk-grid { grid-template-columns:1fr 1fr }
+
+  /* project tabs — wrap instead of single overflow row */
+  .proj-tabs {
+    flex-wrap:wrap; gap:.4rem;
+    width:100%; border:none; overflow:visible;
+    border-radius:0; margin-bottom:1.5rem;
+  }
+  .p-tab {
+    font-size:.58rem; padding:.5rem 1rem;
+    border:1px solid var(--border); border-radius:3px;
+    flex-shrink:0;
+  }
+  .p-tab::after { display:none }
+  .p-tab.active { border-color:var(--accent); background:rgba(0,212,255,.06) }
+
+  /* project panel */
+  .proj-panel.active { grid-template-columns:1fr }
+  .proj-info { border-right:none; border-bottom:1px solid var(--border) }
+  .proj-code-side { min-height:300px }
+  .code-body { overflow-x:auto }
+  pre { font-size:.62rem }
+
+  /* footer */
+  footer { flex-direction:column; gap:.8rem; text-align:center; padding:1.5rem }
+
+  /* bg */
+  #three-canvas { opacity:.55 }
+}
+
+@media(max-width:600px) {
+  .s-inner { padding:4rem 1.2rem }
+  .sk-grid { grid-template-columns:1fr }
+  .p-tab { font-size:.52rem; padding:.42rem .75rem }
+  .sc-n { font-size:1.9rem }
+  .proj-title-big { font-size:1.15rem }
+  .proj-num-big { font-size:2.8rem }
+  .proj-desc-full { font-size:.85rem }
+  .proj-code-side { min-height:250px }
+  pre { font-size:.56rem }
+  .code-footer { flex-direction:column; gap:.5rem; align-items:flex-start }
+  .code-footer-l { display:none }
+  .edu-deg { font-size:1.05rem }
+  .c-link { padding:.7rem 1.2rem; font-size:.66rem }
+  .h-ctas { gap:.8rem }
+  .btn-p, .btn-o { padding:.7rem 1.6rem; font-size:.78rem }
+}
+
+@media(max-width:400px) {
+  .h-name { font-size:clamp(2.8rem,11vw,3.5rem) }
+  .p-tab { font-size:.48rem; padding:.38rem .6rem }
+}
+
+/* ── HAMBURGER / MOBILE MENU ─────────────── */
+.menu-btn { display:none; flex-direction:column; justify-content:center; gap:5px; background:none; border:none; cursor:pointer; padding:6px }
+.menu-btn span { display:block; width:22px; height:2px; background:var(--accent); border-radius:2px; transition:transform .3s,opacity .3s }
+.menu-btn.open span:nth-child(1) { transform:translateY(7px) rotate(45deg) }
+.menu-btn.open span:nth-child(2) { opacity:0 }
+.menu-btn.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg) }
+.mobile-menu { display:none; position:fixed; top:0; left:0; right:0; bottom:0; z-index:190; background:rgba(2,4,8,.97); backdrop-filter:blur(20px); flex-direction:column; align-items:center; justify-content:center; gap:2.5rem }
+.mobile-menu.open { display:flex }
+.mobile-menu a { color:rgba(232,237,245,.6); text-decoration:none; font-family:'DM Mono',monospace; font-size:1rem; letter-spacing:.15em; text-transform:uppercase; transition:color .3s }
+.mobile-menu a:hover,.mobile-menu a.active { color:var(--accent) }
+
+@media(prefers-reduced-motion:reduce) {
+  * { animation:none !important; transition:none !important }
+  #three-canvas { display:none }
+}
+</style>
+</head>
+<body>
+
+<!-- Rocket Cursor — SVG nose points UP; JS rotates to face movement direction -->
+<div id="rocket-cursor">
+  <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Body: tapered teardrop from nose (22,5) down to nozzle -->
+    <path d="M22 5 C27 10 29 17 29 23 L22 29 L15 23 C15 17 17 10 22 5 Z"
+          stroke="#00d4ff" stroke-width="1.5" fill="rgba(0,212,255,0.07)" stroke-linejoin="round"/>
+    <!-- Left fin -->
+    <path d="M15 22 L9 33 L15 28 Z"
+          stroke="#00d4ff" stroke-width="1.3" fill="rgba(0,212,255,0.05)" stroke-linejoin="round"/>
+    <!-- Right fin -->
+    <path d="M29 22 L35 33 L29 28 Z"
+          stroke="#00d4ff" stroke-width="1.3" fill="rgba(0,212,255,0.05)" stroke-linejoin="round"/>
+    <!-- Engine nozzle -->
+    <path d="M17 28 L17 32 Q22 35 27 32 L27 28"
+          stroke="#00d4ff" stroke-width="1.3" fill="none" stroke-linejoin="round"/>
+    <!-- Porthole window -->
+    <circle cx="22" cy="17" r="4" stroke="#7b61ff" stroke-width="1.2" fill="rgba(123,97,255,0.12)"/>
+    <!-- Flame: hidden by default, lit by .ignite class -->
+    <path class="flame-path"  d="M18 32 Q22 44 26 32" stroke="#ff6b35" stroke-width="1.8" fill="none" opacity="0"/>
+    <path class="flame-path2" d="M19.5 32 Q22 39 24.5 32" stroke="#ffbd2e" stroke-width="1.1" fill="none" opacity="0"/>
+  </svg>
+</div>
+
+<!-- Scroll Progress Bar -->
+<div id="prog"></div>
+
+<!-- Three.js 3D Background Canvas -->
+<canvas id="three-canvas"></canvas>
+
+<!-- Atmosphere -->
+<div class="bg-grid"></div>
+<div class="orb o1" id="o1"></div>
+<div class="orb o2" id="o2"></div>
+<div class="orb o3" id="o3"></div>
+
+<!-- ── NAV ────────────────────────────────── -->
+<nav>
+  <a href="#hero" class="nav-logo" aria-label="Go to top">HM</a>
+  <ul class="nav-links">
+    <li><a href="#about">Über mich</a></li>
+    <li><a href="#fähigkeiten">Fähigkeiten</a></li>
+    <li><a href="#projekte">Projekte</a></li>
+    <li><a href="projects.html">Galerie</a></li>
+    <li><a href="#ausbildung">Ausbildung</a></li>
+    <li><a href="#kontakt">Kontakt</a></li>
+  </ul>
+  <a href="../index.html" class="lang-btn" aria-label="Switch to English">EN</a>
+  <button class="menu-btn" id="menuBtn" aria-label="Toggle navigation" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <a href="#about">Über mich</a>
+  <a href="#fähigkeiten">Fähigkeiten</a>
+  <a href="#projekte">Projekte</a>
+  <a href="projects.html">Galerie</a>
+  <a href="#ausbildung">Ausbildung</a>
+  <a href="#kontakt">Kontakt</a>
+</div>
+
+<main>
+
+<!-- ── HERO ───────────────────────────────── -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="h-eye">Luft- und Raumfahrt &amp; KI-Ingenieur · Darmstadt, Deutschland</div>
+    <h1 class="h-name"><span class="l1">Hardik</span><span class="l2">Madaan</span></h1>
+    <p class="h-sub">M.Sc. Luft- und Raumfahrttechnik an der TU Darmstadt. Entwicklung sicherheitskritischer KI-Systeme, ML-Pipelines &amp; intelligenter Flugschnittstellen an der Schnittstelle von Luft- und Raumfahrt und maschineller Intelligenz.</p>
+    <div class="h-ctas">
+      <a href="#projekte" class="btn-p">Projekte ansehen</a>
+      <a href="#kontakt" class="btn-o">Kontakt aufnehmen</a>
+    </div>
+  </div>
+  <div class="h-chips">
+    <span class="chip">Python · Advanced</span>
+    <span class="chip">TensorFlow / Keras</span>
+    <span class="chip">MLflow · DVC</span>
+    <span class="chip">PySide6 · Qt</span>
+    <span class="chip">ANSYS CFD</span>
+    <span class="chip">X-Plane SDK</span>
+    <span class="chip">RTCA DO-323</span>
+  </div>
+  <div class="scroll-hint"><div class="scroll-line"></div>Scrollen</div>
+</section>
+
+<!-- ── MARQUEE ─────────────────────────────── -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Maschinelles Lernen</span><span class="marquee-item">Luft- und Raumfahrttechnik</span>
+    <span class="marquee-item">HMI-Design</span><span class="marquee-item">Sicherheitskritische KI</span>
+    <span class="marquee-item">MLOps · DVC · MLflow</span><span class="marquee-item">Flugsysteme</span>
+    <span class="marquee-item">Deep Learning</span><span class="marquee-item">LSTM · Prognostik</span>
+    <span class="marquee-item">Maschinelles Lernen</span><span class="marquee-item">Luft- und Raumfahrttechnik</span>
+    <span class="marquee-item">HMI-Design</span><span class="marquee-item">Sicherheitskritische KI</span>
+    <span class="marquee-item">MLOps · DVC · MLflow</span><span class="marquee-item">Flugsysteme</span>
+    <span class="marquee-item">Deep Learning</span><span class="marquee-item">LSTM · Prognostik</span>
+  </div>
+</div>
+
+<div class="sdl" id="sdl1"></div>
+
+<!-- ── ABOUT ───────────────────────────────── -->
+<section id="about">
+  <div class="s-inner">
+    <div class="s-label rv" data-n="01">Über mich</div>
+    <div class="about-grid">
+      <div class="rv-l">
+        <h2 class="s-title" style="margin-bottom:1.8rem">An der Schnittstelle von<br/><span class="grad-text">Luft- und Raumfahrt<br/>&amp; Intelligenz.</span></h2>
+        <div class="about-text">
+          <p>Ich bin Masterstudent der Luft- und Raumfahrttechnik an der <strong>TU Darmstadt</strong>, spezialisiert auf maschinelle Lernpipelines, sicherheitskritische KI und Mensch-Maschine-Interaktion für die Luftfahrt.</p>
+          <p>Von der Vorhersage der Gasturbinen-Gesundheit mit benutzerdefinierten asymmetrischen Verlustfunktionen bis zum Aufbau von Echtzeit-Simulator-Cockpit-GUIs — ich kombiniere sorgfältige Ingenieursarbeit mit sauberen Softwarepraktiken.</p>
+          <p>Aktuell auf der Suche nach Positionen in <strong>Luft- und Raumfahrt-KI</strong>, MLOps und sicherheitskritischen Systemen, wo Präzision nicht optional ist.</p>
+        </div>
+      </div>
+      <div class="rv-r">
+        <div class="stats-grid">
+          <div class="sc"><div class="sc-n">99%</div><div class="sc-l">Reduzierung von Sicherheitsverstößen</div></div>
+          <div class="sc"><div class="sc-n">1.3</div><div class="sc-l">Note — HMI-Simulator</div></div>
+          <div class="sc"><div class="sc-n">30yr</div><div class="sc-l">Luftfahrtdaten analysiert</div></div>
+          <div class="sc"><div class="sc-n">5+</div><div class="sc-l">Abgeschlossene Großprojekte</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sdl" id="sdl2"></div>
+
+<!-- ── SKILLS ──────────────────────────────── -->
+<section id="fähigkeiten">
+  <div class="s-inner">
+    <div class="s-label rv" data-n="02">Technische Fähigkeiten</div>
+    <h2 class="s-title rv d1">Der komplette Stack.</h2>
+    <div class="sk-grid">
+      <div class="sk-cat"><div class="sk-cat-t">⚡ Programmiersprachen</div><div class="sk-pills"><span class="sp">Python</span><span class="sp">C++</span><span class="sp">C</span><span class="sp">MATLAB</span></div></div>
+      <div class="sk-cat"><div class="sk-cat-t">🧠 Maschinelles Lernen</div><div class="sk-pills"><span class="sp">TensorFlow</span><span class="sp">Keras</span><span class="sp">Scikit-Learn</span><span class="sp">LSTM</span><span class="sp">Random Forest</span><span class="sp">K-Means</span><span class="sp">SVM</span></div></div>
+      <div class="sk-cat"><div class="sk-cat-t">🔧 Entwicklung &amp; MLOps</div><div class="sk-pills"><span class="sp">Git/GitHub</span><span class="sp">MLflow</span><span class="sp">DVC</span><span class="sp">PyTest</span><span class="sp">PySide6</span><span class="sp">UDP</span></div></div>
+      <div class="sk-cat"><div class="sk-cat-t">✈️ Luft- und Raumfahrt</div><div class="sk-pills"><span class="sp">Simulink</span><span class="sp">X-Plane SDK</span><span class="sp">ANSYS CFD</span><span class="sp">RTCA DO-323</span><span class="sp">HMI Design</span></div></div>
+      <div class="sk-cat"><div class="sk-cat-t">🎨 CAD &amp; Design</div><div class="sk-pills"><span class="sp">CATIA V5</span><span class="sp">Fusion 360</span><span class="sp">Blender</span></div></div>
+      <div class="sk-cat"><div class="sk-cat-t">🌐 Sprachen</div><div class="sk-pills"><span class="sp">Englisch — Fließend</span><span class="sp">Deutsch — B2</span><span class="sp">Hindi — Muttersprache</span></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="sdl" id="sdl3"></div>
+
+<!-- ── PROJECTS ─────────────────────────────── -->
+<section id="projekte">
+  <div class="s-inner">
+    <div class="s-label rv" data-n="03">Projektvorstellung</div>
+    <h2 class="s-title rv d1">Interaktiver<br/><span class="grad-text">Code &amp; Ergebnisse.</span></h2>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem">
+      <div class="proj-tabs rv d2" id="projTabs" style="margin-bottom:0">
+      <button class="p-tab active" data-proj="4">Orbitalmechanik</button>
+      <button class="p-tab" data-proj="0">PHM-System</button>
+      <button class="p-tab" data-proj="1">Simulator-GUI</button>
+      <button class="p-tab" data-proj="2">Rollfeld-Sicherheit</button>
+      <button class="p-tab" data-proj="3">Mäher-Steuerung</button>
+    </div>
+      <a href="projects.html" class="btn-o rv d2" style="font-size:.75rem;padding:.6rem 1.4rem;white-space:nowrap">Vollständige Galerie →</a>
+    </div>
+    <div class="proj-showcase rv d3">
+
+      <!-- PANEL 0 -->
+      <div class="proj-panel" id="panel-0">
+        <div class="proj-info">
+          <div class="proj-num-big">02</div>
+          <div class="proj-title-big">Prognostik &amp; Zustandsüberwachungssystem</div>
+          <div class="proj-org-badge">Eigenprojekt · Okt – Dez 2025</div>
+          <p class="proj-desc-full">End-to-End-ML-Pipeline zur Vorhersage der verbleibenden Nutzungsdauer (RUL) von Triebwerken auf dem NASA-C-MAPSS-Datensatz. Eine benutzerdefinierte asymmetrische Verlustfunktion reduziert Sicherheitsverstöße von 12,4 % auf 1,09 %. LSTM übertrifft den Random-Forest-Basiswert (RMSE 17,17 → 13,32 Zyklen).</p>
+          <div class="proj-metrics">
+            <div class="metric-row"><span class="metric-label">RMSE-Reduktion</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="78"></div></div><span class="metric-val">78%</span></div>
+            <div class="metric-row"><span class="metric-label">Sicherheitsverstöße</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="91"></div></div><span class="metric-val">↓91%</span></div>
+            <div class="metric-row"><span class="metric-label">Modellgenauigkeit</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="87"></div></div><span class="metric-val">87%</span></div>
+          </div>
+          <div class="proj-tags-row"><span class="pt">LSTM</span><span class="pt">Python</span><span class="pt">MLflow</span><span class="pt">DVC</span><span class="pt">K-Means</span><span class="pt">NASA CMAPSS</span></div>
+        </div>
+        <div class="proj-code-side">
+          <div class="code-topbar"><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div><span class="code-fname">phm_rul_predictor.py</span></div>
+          <div class="code-body"><pre><span class="cc"># PHM System — RUL Prediction Pipeline</span>
+<span class="ck">import</span> <span class="cv">numpy</span> <span class="ck">as</span> <span class="cv">np</span>
+<span class="ck">import</span> <span class="cv">tensorflow</span> <span class="ck">as</span> <span class="cv">tf</span>
+<span class="ck">from</span> <span class="cv">sklearn.cluster</span> <span class="ck">import</span> <span class="cv">KMeans</span>
+<span class="ck">import</span> <span class="cv">mlflow</span>
+
+<span class="ck">def</span> <span class="cf">asymmetric_loss</span>(<span class="cv">y_true</span>, <span class="cv">y_pred</span>):
+    <span class="cv">diff</span> = <span class="cv">y_pred</span> - <span class="cv">y_true</span>
+    <span class="cv">alpha</span> = <span class="cv">tf</span>.where(<span class="cv">diff</span> &lt; <span class="cn">0</span>, <span class="cn">2.0</span>, <span class="cn">0.5</span>)
+    <span class="ck">return</span> <span class="cv">tf</span>.reduce_mean(<span class="cv">alpha</span> * <span class="cv">tf</span>.square(<span class="cv">diff</span>))
+
+<span class="ck">def</span> <span class="cf">build_lstm</span>(<span class="cv">seq_len</span>=<span class="cn">30</span>, <span class="cv">n_feat</span>=<span class="cn">25</span>):
+    <span class="cv">inp</span> = <span class="cv">tf</span>.keras.Input((<span class="cv">seq_len</span>, <span class="cv">n_feat</span>))
+    <span class="cv">x</span> = <span class="cv">tf</span>.keras.layers.LSTM(<span class="cn">128</span>, <span class="cv">return_sequences</span>=<span class="cv">True</span>)(<span class="cv">inp</span>)
+    <span class="cv">x</span> = <span class="cv">tf</span>.keras.layers.Dropout(<span class="cn">0.2</span>)(<span class="cv">x</span>)
+    <span class="cv">x</span> = <span class="cv">tf</span>.keras.layers.LSTM(<span class="cn">64</span>)(<span class="cv">x</span>)
+    <span class="cv">x</span> = <span class="cv">tf</span>.keras.layers.Dense(<span class="cn">32</span>, <span class="cv">activation</span>=<span class="cs">'relu'</span>)(<span class="cv">x</span>)
+    <span class="cv">out</span> = <span class="cv">tf</span>.keras.layers.Dense(<span class="cn">1</span>)(<span class="cv">x</span>)
+    <span class="cv">model</span> = <span class="cv">tf</span>.keras.Model(<span class="cv">inp</span>, <span class="cv">out</span>)
+    <span class="cv">model</span>.compile(<span class="cv">optimizer</span>=<span class="cs">'adam'</span>, <span class="cv">loss</span>=<span class="cv">asymmetric_loss</span>)
+    <span class="ck">return</span> <span class="cv">model</span>
+
+<span class="ck">with</span> <span class="cv">mlflow</span>.start_run():
+    <span class="cv">model</span> = <span class="cf">build_lstm</span>()
+    <span class="cv">mlflow</span>.log_metric(<span class="cs">"rmse"</span>, <span class="cn">13.32</span>)
+    <span class="cv">mlflow</span>.log_metric(<span class="cs">"safety_violations"</span>, <span class="cn">0.0109</span>)</pre></div>
+          <div class="code-footer"><span class="code-footer-l">Python 3.11 · TF 2.14 · MLflow 2.8</span><button class="code-run" onclick="runSim(0)">▶ Simulation starten</button></div>
+          <div class="term-overlay" id="term-0"><div class="term-bar"><span class="term-title">Terminal-Ausgabe</span><button class="term-close" onclick="closeTerm(0)">✕</button></div><div class="term-out" id="tout-0"></div></div>
+        </div>
+      </div>
+
+      <!-- PANEL 1 -->
+      <div class="proj-panel" id="panel-1">
+        <div class="proj-info">
+          <div class="proj-num-big">03</div>
+          <div class="proj-title-big">Einpiloten-Simulator-Displays</div>
+          <div class="proj-org-badge">FSR — TU Darmstadt · Apr – Sep 2025</div>
+          <p class="proj-desc-full">Modulare GUI für Einpiloten-Cockpit-Betrieb mit PySide6. Mehrfädig-UDP-Netzwerkschicht streamt Echtzeit-Telemetrie von X-Plane 12 mit 50 Hz. Note 1,3 für HMI-Performance und Backend-Zuverlässigkeit.</p>
+          <div class="proj-metrics">
+            <div class="metric-row"><span class="metric-label">Datenrate</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="95"></div></div><span class="metric-val">50 Hz</span></div>
+            <div class="metric-row"><span class="metric-label">Benotung</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="90"></div></div><span class="metric-val">1.3</span></div>
+            <div class="metric-row"><span class="metric-label">Latenz</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="85"></div></div><span class="metric-val">&lt;20ms</span></div>
+          </div>
+          <div class="proj-tags-row"><span class="pt">PySide6</span><span class="pt">X-Plane SDK</span><span class="pt">UDP</span><span class="pt">Multi-threading</span><span class="pt">HMI</span></div>
+        </div>
+        <div class="proj-code-side">
+          <div class="code-topbar"><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div><span class="code-fname">udp_interface.py</span></div>
+          <div class="code-body"><pre><span class="ck">import</span> <span class="cv">socket</span>, <span class="cv">struct</span>, <span class="cv">threading</span>
+<span class="ck">from</span> <span class="cv">PySide6.QtCore</span> <span class="ck">import</span> <span class="cv">QObject</span>, <span class="cv">Signal</span>
+
+<span class="ck">class</span> <span class="cf">XPlaneUDPReader</span>(<span class="cv">QObject</span>):
+    <span class="cv">data_received</span> = <span class="cv">Signal</span>(<span class="cv">dict</span>)
+
+    <span class="ck">def</span> <span class="cf">__init__</span>(<span class="cv">self</span>):
+        <span class="cv">super</span>().__init__()
+        <span class="cv">self</span>.<span class="cv">sock</span> = <span class="cv">socket</span>.socket(
+            <span class="cv">socket</span>.AF_INET, <span class="cv">socket</span>.SOCK_DGRAM
+        )
+        <span class="cv">self</span>.<span class="cv">sock</span>.bind((<span class="cs">""</span>, <span class="cn">49001</span>))
+
+    <span class="ck">def</span> <span class="cf">start</span>(<span class="cv">self</span>):
+        <span class="cv">t</span> = <span class="cv">threading</span>.Thread(
+            <span class="cv">target</span>=<span class="cv">self</span>.<span class="cv">_listen</span>, <span class="cv">daemon</span>=<span class="cv">True</span>
+        )
+        <span class="cv">t</span>.start()
+
+    <span class="ck">def</span> <span class="cf">_listen</span>(<span class="cv">self</span>):
+        <span class="ck">while</span> <span class="cv">True</span>:
+            <span class="cv">raw</span>, _ = <span class="cv">self</span>.<span class="cv">sock</span>.recvfrom(<span class="cn">4096</span>)
+            <span class="cv">parsed</span> = <span class="cv">self</span>.<span class="cf">_parse</span>(<span class="cv">raw</span>)
+            <span class="cv">self</span>.<span class="cv">data_received</span>.emit(<span class="cv">parsed</span>)
+
+    <span class="ck">def</span> <span class="cf">_parse</span>(<span class="cv">self</span>, <span class="cv">raw</span>):
+        <span class="cv">result</span>, <span class="cv">offset</span> = {}, <span class="cn">5</span>
+        <span class="ck">while</span> <span class="cv">offset</span> + <span class="cn">36</span> &lt;= <span class="cv">len</span>(<span class="cv">raw</span>):
+            <span class="cv">idx</span>  = <span class="cv">struct</span>.unpack_from(<span class="cs">'i'</span>, <span class="cv">raw</span>, <span class="cv">offset</span>)[<span class="cn">0</span>]
+            <span class="cv">vals</span> = <span class="cv">struct</span>.unpack_from(<span class="cs">'8f'</span>, <span class="cv">raw</span>, <span class="cv">offset</span>+<span class="cn">4</span>)
+            <span class="cv">result</span>[<span class="cv">idx</span>] = <span class="cv">vals</span>
+            <span class="cv">offset</span> += <span class="cn">36</span>
+        <span class="ck">return</span> <span class="cv">result</span></pre></div>
+          <div class="code-footer"><span class="code-footer-l">Python 3.11 · PySide6 6.5 · X-Plane 12</span><button class="code-run" onclick="runSim(1)">▶ Simulation starten</button></div>
+          <div class="term-overlay" id="term-1"><div class="term-bar"><span class="term-title">Terminal-Ausgabe</span><button class="term-close" onclick="closeTerm(1)">✕</button></div><div class="term-out" id="tout-1"></div></div>
+        </div>
+      </div>
+
+      <!-- PANEL 2 -->
+      <div class="proj-panel" id="panel-2">
+        <div class="proj-info">
+          <div class="proj-num-big">04</div>
+          <div class="proj-title-big">Rollfeld-Eindringungsanalyse</div>
+          <div class="proj-org-badge">Boeing × FSR · Okt 2024 – Mär 2025</div>
+          <p class="proj-desc-full">Analyse von 30 Jahren Rollfeld-Eindringungsdaten zur Erkennung von Kollisionsvermeidungsmustern. Sicherheitslogik nach RTCA DO-323. Sensitivitätsanalyse mit direkten Empfehlungen für Boeing-Ingenieure.</p>
+          <div class="proj-metrics">
+            <div class="metric-row"><span class="metric-label">Datenabdeckung</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="100"></div></div><span class="metric-val">30 yrs</span></div>
+            <div class="metric-row"><span class="metric-label">Mustererkennung</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="82"></div></div><span class="metric-val">82%</span></div>
+            <div class="metric-row"><span class="metric-label">DO-323-Abdeckung</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="94"></div></div><span class="metric-val">94%</span></div>
+          </div>
+          <div class="proj-tags-row"><span class="pt">Safety Analysis</span><span class="pt">RTCA DO-323</span><span class="pt">Pandas</span><span class="pt">NumPy</span><span class="pt">Boeing</span></div>
+        </div>
+        <div class="proj-code-side">
+          <div class="code-topbar"><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div><span class="code-fname">runway_analysis.py</span></div>
+          <div class="code-body"><pre><span class="ck">import</span> <span class="cv">pandas</span> <span class="ck">as</span> <span class="cv">pd</span>
+<span class="ck">from</span> <span class="cv">sklearn.ensemble</span> <span class="ck">import</span> <span class="cv">RandomForestClassifier</span>
+<span class="ck">from</span> <span class="cv">sklearn.inspection</span> <span class="ck">import</span> <span class="cv">permutation_importance</span>
+
+<span class="ck">def</span> <span class="cf">load_incursion_data</span>(<span class="cv">path</span>):
+    <span class="cv">df</span> = <span class="cv">pd</span>.read_csv(<span class="cv">path</span>, <span class="cv">parse_dates</span>=[<span class="cs">'date'</span>])
+    <span class="cv">df</span> = <span class="cv">df</span>.dropna(subset=[<span class="cs">'severity'</span>, <span class="cs">'airport_id'</span>])
+    <span class="cv">sev_map</span> = {<span class="cs">'A'</span>:<span class="cn">4</span>, <span class="cs">'B'</span>:<span class="cn">3</span>, <span class="cs">'C'</span>:<span class="cn">2</span>, <span class="cs">'D'</span>:<span class="cn">1</span>}
+    <span class="cv">df</span>[<span class="cs">'sev_num'</span>] = <span class="cv">df</span>[<span class="cs">'severity'</span>].map(<span class="cv">sev_map</span>)
+    <span class="ck">return</span> <span class="cv">df</span>
+
+<span class="ck">def</span> <span class="cf">run_sensitivity</span>(<span class="cv">df</span>, <span class="cv">feature_cols</span>):
+    <span class="cv">X</span> = <span class="cv">df</span>[<span class="cv">feature_cols</span>].values
+    <span class="cv">y</span> = <span class="cv">df</span>[<span class="cs">'sev_num'</span>].values
+    <span class="cv">rf</span> = <span class="cv">RandomForestClassifier</span>(<span class="cv">n_estimators</span>=<span class="cn">200</span>)
+    <span class="cv">rf</span>.fit(<span class="cv">X</span>, <span class="cv">y</span>)
+    <span class="cv">result</span> = <span class="cv">permutation_importance</span>(<span class="cv">rf</span>, <span class="cv">X</span>, <span class="cv">y</span>, <span class="cv">n_repeats</span>=<span class="cn">10</span>)
+    <span class="ck">return</span> <span class="cv">pd</span>.Series(
+        <span class="cv">result</span>.importances_mean, <span class="cv">index</span>=<span class="cv">feature_cols</span>
+    ).sort_values(<span class="cv">ascending</span>=<span class="cv">False</span>)
+
+<span class="ck">def</span> <span class="cf">assess_do323</span>(<span class="cv">event</span>):
+    <span class="cv">risk</span> = <span class="cv">event</span>[<span class="cs">'sev_num'</span>] * <span class="cv">event</span>[<span class="cs">'traffic_density'</span>]
+    <span class="ck">if</span> <span class="cv">risk</span> &gt; <span class="cn">8</span>: <span class="ck">return</span> <span class="cs">"CRITICAL"</span>
+    <span class="ck">elif</span> <span class="cv">risk</span> &gt; <span class="cn">4</span>: <span class="ck">return</span> <span class="cs">"WARNING"</span>
+    <span class="ck">return</span> <span class="cs">"NOMINAL"</span></pre></div>
+          <div class="code-footer"><span class="code-footer-l">Python 3.11 · Pandas 2.0 · Scikit-Learn 1.3</span><button class="code-run" onclick="runSim(2)">▶ Simulation starten</button></div>
+          <div class="term-overlay" id="term-2"><div class="term-bar"><span class="term-title">Terminal-Ausgabe</span><button class="term-close" onclick="closeTerm(2)">✕</button></div><div class="term-out" id="tout-2"></div></div>
+        </div>
+      </div>
+
+      <!-- PANEL 3 -->
+      <div class="proj-panel" id="panel-3">
+        <div class="proj-info">
+          <div class="proj-num-big">05</div>
+          <div class="proj-title-big">Höhenverstellbare Mäheinheit</div>
+          <div class="proj-org-badge">TU Darmstadt · Apr – Sep 2024</div>
+          <p class="proj-desc-full">Aktive Stabilisierungssteuerungslogik für ein mechatronisches Mähsystem in MATLAB/Simulink. Physische Prototypen in Fusion 360 entworfen und 3D-gedruckt. Systemintegration mittels agilen SCRUMs.</p>
+          <div class="proj-metrics">
+            <div class="metric-row"><span class="metric-label">Stabilitätszuwachs</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="88"></div></div><span class="metric-val">88%</span></div>
+            <div class="metric-row"><span class="metric-label">Einschwingzeit</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="75"></div></div><span class="metric-val">↓75%</span></div>
+            <div class="metric-row"><span class="metric-label">Überschwingen</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="60"></div></div><span class="metric-val">&lt;5%</span></div>
+          </div>
+          <div class="proj-tags-row"><span class="pt">MATLAB</span><span class="pt">Simulink</span><span class="pt">Fusion 360</span><span class="pt">SCRUM</span><span class="pt">3D Printing</span></div>
+        </div>
+        <div class="proj-code-side">
+          <div class="code-topbar"><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div><span class="code-fname">pid_stabiliser.py</span></div>
+          <div class="code-body"><pre><span class="ck">import</span> <span class="cv">numpy</span> <span class="ck">as</span> <span class="cv">np</span>
+<span class="ck">from</span> <span class="cv">scipy</span> <span class="ck">import</span> <span class="cv">signal</span>
+
+<span class="ck">class</span> <span class="cf">PIDController</span>:
+    <span class="ck">def</span> <span class="cf">__init__</span>(<span class="cv">self</span>, <span class="cv">Kp</span>, <span class="cv">Ki</span>, <span class="cv">Kd</span>, <span class="cv">dt</span>=<span class="cn">0.01</span>):
+        <span class="cv">self</span>.<span class="cv">Kp</span>,<span class="cv">self</span>.<span class="cv">Ki</span>,<span class="cv">self</span>.<span class="cv">Kd</span> = <span class="cv">Kp</span>,<span class="cv">Ki</span>,<span class="cv">Kd</span>
+        <span class="cv">self</span>.<span class="cv">dt</span> = <span class="cv">dt</span>
+        <span class="cv">self</span>.<span class="cv">integral</span> = <span class="cv">self</span>.<span class="cv">prev_err</span> = <span class="cn">0.0</span>
+
+    <span class="ck">def</span> <span class="cf">step</span>(<span class="cv">self</span>, <span class="cv">setpoint</span>, <span class="cv">measured</span>):
+        <span class="cv">err</span> = <span class="cv">setpoint</span> - <span class="cv">measured</span>
+        <span class="cv">self</span>.<span class="cv">integral</span> += <span class="cv">err</span> * <span class="cv">self</span>.<span class="cv">dt</span>
+        <span class="cv">deriv</span> = (<span class="cv">err</span> - <span class="cv">self</span>.<span class="cv">prev_err</span>) / <span class="cv">self</span>.<span class="cv">dt</span>
+        <span class="cv">self</span>.<span class="cv">prev_err</span> = <span class="cv">err</span>
+        <span class="ck">return</span> <span class="cv">self</span>.<span class="cv">Kp</span>*<span class="cv">err</span>+<span class="cv">self</span>.<span class="cv">Ki</span>*<span class="cv">self</span>.<span class="cv">integral</span>+<span class="cv">self</span>.<span class="cv">Kd</span>*<span class="cv">deriv</span>
+
+<span class="ck">def</span> <span class="cf">simulate</span>(<span class="cv">target_h</span>=<span class="cn">0.05</span>, <span class="cv">duration</span>=<span class="cn">2.0</span>):
+    <span class="cv">pid</span> = <span class="cf">PIDController</span>(<span class="cv">Kp</span>=<span class="cn">8.5</span>, <span class="cv">Ki</span>=<span class="cn">2.1</span>, <span class="cv">Kd</span>=<span class="cn">0.4</span>)
+    <span class="cv">t</span>   = <span class="cv">np</span>.arange(<span class="cn">0</span>, <span class="cv">duration</span>, <span class="cn">0.01</span>)
+    <span class="cv">h</span>   = <span class="cn">0.0</span>
+    <span class="cv">history</span> = []
+    <span class="ck">for</span> <span class="cv">_</span> <span class="ck">in</span> <span class="cv">t</span>:
+        <span class="cv">u</span> = <span class="cv">pid</span>.step(<span class="cv">target_h</span>, <span class="cv">h</span>)
+        <span class="cv">h</span> += (<span class="cv">u</span> - <span class="cv">h</span>) * <span class="cn">0.01</span> / <span class="cn">0.08</span>
+        <span class="cv">history</span>.append(<span class="cv">h</span>)
+    <span class="ck">return</span> <span class="cv">t</span>, <span class="cv">np</span>.array(<span class="cv">history</span>)</pre></div>
+          <div class="code-footer"><span class="code-footer-l">Python 3.11 · NumPy · SciPy · Simulink export</span><button class="code-run" onclick="runSim(3)">▶ Simulation starten</button></div>
+          <div class="term-overlay" id="term-3"><div class="term-bar"><span class="term-title">Terminal-Ausgabe</span><button class="term-close" onclick="closeTerm(3)">✕</button></div><div class="term-out" id="tout-3"></div></div>
+        </div>
+      </div>
+
+      <!-- PANEL 4 -->
+      <div class="proj-panel active" id="panel-4">
+        <div class="proj-info">
+          <div class="proj-num-big">01</div>
+          <div class="proj-title-big">Orbitalmechanik-Werkzeuge &amp; KI-Surrogatmodell</div>
+          <div class="proj-org-badge">Eigenprojekt · Mär – Apr 2026</div>
+          <p class="proj-desc-full">Full-Stack-Python-Astrodynamik-Dashboard — Hohmann-, bielliptische &amp; Phasierungsmanöver analytisch berechnet, mit einem trainierten MLP-Surrogatmodell (R²&nbsp;=&nbsp;0,9993 auf 40.000 Testszenarien). PySide6 HMI mit eingebetteten Live-Matplotlib-Orbitalvisualisierungen.</p>
+          <div class="proj-metrics">
+            <div class="metric-row"><span class="metric-label">R²-Wert</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="99"></div></div><span class="metric-val">0.9993</span></div>
+            <div class="metric-row"><span class="metric-label">MAPE</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="97"></div></div><span class="metric-val">2.88 %</span></div>
+            <div class="metric-row"><span class="metric-label">Trainingsszenarien</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="80"></div></div><span class="metric-val">200 k</span></div>
+          </div>
+          <div class="proj-tags-row"><span class="pt">Python</span><span class="pt">PySide6</span><span class="pt">NumPy</span><span class="pt">scikit-learn</span><span class="pt">Matplotlib</span><span class="pt">Joblib</span></div>
+        </div>
+        <div class="proj-code-side">
+          <div class="code-topbar"><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div><span class="code-fname">astrodynamics.py</span></div>
+          <div class="code-body"><pre><span class="ck">import</span> <span class="cv">numpy</span> <span class="ck">as</span> <span class="cv">np</span>
+<span class="ck">import</span> <span class="cv">joblib</span>
+
+<span class="cv">GM</span> = <span class="cn">3.986e14</span>  <span class="cc"># Earth μ  m³/s²</span>
+
+<span class="ck">def</span> <span class="cf">hohmann</span>(<span class="cv">r1</span>, <span class="cv">r2</span>):
+    <span class="cv">a_t</span> = (<span class="cv">r1</span> + <span class="cv">r2</span>) / <span class="cn">2</span>
+    <span class="cv">dv1</span> = <span class="cv">np</span>.sqrt(<span class="cv">GM</span>/<span class="cv">r1</span>) * (<span class="cv">np</span>.sqrt(<span class="cn">2</span>*<span class="cv">r2</span>/(<span class="cv">r1</span>+<span class="cv">r2</span>)) - <span class="cn">1</span>)
+    <span class="cv">dv2</span> = <span class="cv">np</span>.sqrt(<span class="cv">GM</span>/<span class="cv">r2</span>) * (<span class="cn">1</span> - <span class="cv">np</span>.sqrt(<span class="cn">2</span>*<span class="cv">r1</span>/(<span class="cv">r1</span>+<span class="cv">r2</span>)))
+    <span class="cv">t</span>   = <span class="cv">np</span>.pi * <span class="cv">np</span>.sqrt(<span class="cv">a_t</span>**<span class="cn">3</span>/<span class="cv">GM</span>)
+    <span class="ck">return</span> <span class="cv">dv1</span>+<span class="cv">dv2</span>, <span class="cv">t</span>
+
+<span class="ck">def</span> <span class="cf">fuel_mass</span>(<span class="cv">dv</span>, <span class="cv">isp</span>, <span class="cv">m_dry</span>):
+    <span class="ck">return</span> <span class="cv">m_dry</span> * (<span class="cv">np</span>.exp(<span class="cv">dv</span>/(<span class="cv">isp</span>*<span class="cn">9.80665</span>)) - <span class="cn">1</span>)
+
+<span class="cc"># AI surrogate — 200 k synthetic scenarios</span>
+<span class="cv">model</span>  = <span class="cv">joblib</span>.load(<span class="cs">'ml/surrogate.pkl'</span>)
+<span class="cv">scaler</span> = <span class="cv">joblib</span>.load(<span class="cs">'ml/scaler.pkl'</span>)
+
+<span class="ck">def</span> <span class="cf">predict_dv</span>(<span class="cv">vc1</span>, <span class="cv">vc2</span>, <span class="cv">m_dry</span>, <span class="cv">isp</span>):
+    <span class="cv">X</span> = <span class="cv">scaler</span>.transform([[<span class="cv">vc1</span>, <span class="cv">vc2</span>, <span class="cv">m_dry</span>, <span class="cv">isp</span>]])
+    <span class="ck">return</span> <span class="cv">model</span>.predict(<span class="cv">X</span>)[<span class="cn">0</span>]</pre></div>
+          <div class="code-footer"><span class="code-footer-l">Python 3.10 · scikit-learn · NumPy · PySide6</span><button class="code-run" onclick="runSim(4)">▶ Simulation starten</button></div>
+          <div class="term-overlay" id="term-4"><div class="term-bar"><span class="term-title">Terminal-Ausgabe</span><button class="term-close" onclick="closeTerm(4)">✕</button></div><div class="term-out" id="tout-4"></div></div>
+        </div>
+      </div>
+
+    </div><!-- /proj-showcase -->
+  </div>
+</section>
+
+<div class="sdl" id="sdl4"></div>
+
+<!-- ── EDUCATION ────────────────────────────── -->
+<section id="ausbildung">
+  <div class="s-inner">
+    <div class="s-label rv" data-n="04">Ausbildung</div>
+    <h2 class="s-title rv d1">Akademisches Fundament.</h2>
+    <div class="edu-grid">
+      <div class="edu-card">
+        <div class="edu-badge">Aktuell · 2023 – heute</div>
+        <div class="edu-deg">M.Sc. Luft- und Raumfahrttechnik</div>
+        <div class="edu-school">Technische Universität Darmstadt</div>
+        <div class="edu-period">Darmstadt, Deutschland</div>
+        <div class="edu-focus">Schwerpunkt: Maschinelles Lernen, HMI, Flugsysteme, Automatisierung — KI für sicherheitskritische Umgebungen.</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-badge">Abgeschlossen · 2017 – 2021</div>
+        <div class="edu-deg">B.E. Luft- und Raumfahrttechnik</div>
+        <div class="edu-school">Lovely Professional University</div>
+        <div class="edu-period">Phagwara, Indien</div>
+        <div class="edu-focus">Grundlagen in Aerodynamik, Antrieb, Strukturen und eingebetteten Systemen — starkes analytisches und praktisches Ingenieurdenken.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sdl" id="sdl5"></div>
+
+<!-- ── CONTACT ──────────────────────────────── -->
+<section id="kontakt">
+  <div class="s-inner">
+    <div class="contact-c">
+      <div class="s-label rv" data-n="05">Kontakt</div>
+      <h2 class="s-title rv d1">Lass uns etwas<br/><span class="grad-text">Großartiges bauen.</span></h2>
+      <p class="c-desc rv d2">Offen für Forschungskooperationen, Praktika und Vollzeitstellen in der Luft- und Raumfahrt-KI, MLOps und sicherheitskritischen Systemen.</p>
+      <div class="c-links rv d3">
+        <a href="mailto:Hardik.madaan5@gmail.com" class="c-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          E-Mail
+        </a>
+        <a href="https://linkedin.com/in/thehardikmadaan" target="_blank" rel="noopener noreferrer" class="c-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+        <a href="https://github.com/thehardikmadaan" target="_blank" rel="noopener noreferrer" class="c-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub
+        </a>
+        <a href="tel:+4917637746371" class="c-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9.64a16 16 0 0 0 6.29 6.29l1.8-1.84a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          Telefon
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="ft">© 2026 <span class="fa">Hardik Madaan</span> · Darmstadt, Germany</div>
+  <div class="ft-nav">
+    <span class="ft" style="color:var(--accent)">Startseite</span>
+    <span class="ft">·</span>
+    <a href="projects.html">Galerie</a>
+    <span class="ft">·</span>
+    <a href="../terms.html">Nutzungsbedingungen</a>
+    <span class="ft">·</span>
+    <a href="../privacy.html">Datenschutz</a>
+  </div>
+  <div class="ft">Luft- und Raumfahrt + KI-Ingenieur <span class="fa">✦</span> Präzise gebaut</div>
+</footer>
+
+</main>
+
+<!-- ═══════════════════════════════════════════
+     LIBRARIES  (CDN, no build step needed)
+═══════════════════════════════════════════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha384-CI3ELBVUz9XQO+97x6nwMDPosPR5XvsxW2ua7N1Xeygeh1IxtgqtCkGfQY9WWdHu" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous"></script>
+<!-- Lenis smooth scroll — inertia-based premium feel -->
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js" integrity="sha384-li4UtcFCH6QeUqR4JyV58/VgTprMuz9aauj+oWtew7V4Y7ZVjnvz5px9Y3UCG0Ea" crossorigin="anonymous"></script>
+
+<script>
+'use strict';
+gsap.registerPlugin(ScrollTrigger);
+
+/* ═══════════════════════════════════════════════════════════
+   TUNING — change these to adjust any animation globally
+═══════════════════════════════════════════════════════════ */
+const CFG = {
+  /* Three.js airplane */
+  planeColor:    0x00d4ff,
+  engineColor:   0x7b61ff,
+  tailColor:     0xff6b35,
+  windowColor:   0x0a1a2e,
+  emissiveInt:   0.4,
+  bgShapeColor:  0x7b61ff,
+
+  /* Scroll path */
+  pathAmplitude: 3.5,   // lateral swing width
+  pathDescent:   14,    // total Y drop across page
+  bankAmplitude: 0.45,  // roll banking on turns
+
+  /* Idle float */
+  floatAmp:  0.08,
+  floatFreq: 0.6,
+
+  /* GSAP animations */
+  sectionTiltX:   5,
+  cardStagger:    0.07,
+  projFlipDeg:    50,
+};
+
+/* ═══════════════════════════════════════════════════════════
+   1. ROCKET CURSOR
+   SVG nose points UP by default; we rotate it to face the
+   direction of travel using atan2 of the velocity vector.
+   Hovering interactive elements adds class .ignite which
+   triggers the CSS flame animation at the tail.
+═══════════════════════════════════════════════════════════ */
+const rocketEl = document.getElementById('rocket-cursor');
+let mx=window.innerWidth/2, my=window.innerHeight/2;
+let cx=mx, cy=my;          /* smoothed (current) position */
+let prevCx=mx, prevCy=my;  /* previous frame, used to compute velocity */
+let rAngle=-90;             /* degrees — nose-up default */
+
+document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY });
+
+(function rocketLoop(){
+  /* Smooth-follow the raw mouse */
+  cx += (mx-cx) * 0.14;
+  cy += (my-cy) * 0.14;
+
+  /* Direction vector from velocity */
+  const dvx=cx-prevCx, dvy=cy-prevCy;
+  const spd=Math.sqrt(dvx*dvx+dvy*dvy);
+  if(spd > 0.6){
+    /* atan2 angle from +X axis; rocket SVG points up so +90° offset */
+    let target = Math.atan2(dvy, dvx) * 180/Math.PI + 90;
+    let diff = target - rAngle;
+    while(diff >  180) diff -= 360;
+    while(diff < -180) diff += 360;
+    rAngle += diff * 0.18; /* smooth angular lerp */
+  }
+
+  prevCx=cx; prevCy=cy;
+  rocketEl.style.left = cx + 'px';
+  rocketEl.style.top  = cy + 'px';
+  rocketEl.style.transform = `rotate(${rAngle}deg)`;
+  requestAnimationFrame(rocketLoop);
+})();
+
+/* Ignition effect on interactive elements */
+document.querySelectorAll('a,button,.p-tab,.chip,.sp,.sc,.sk-cat').forEach(el=>{
+  el.addEventListener('mouseenter', ()=> rocketEl.classList.add('ignite'));
+  el.addEventListener('mouseleave', ()=> rocketEl.classList.remove('ignite'));
+});
+
+/* ═══════════════════════════════════════════════════════════
+   2. SCROLL PROGRESS BAR
+═══════════════════════════════════════════════════════════ */
+const prog = document.getElementById('prog');
+window.addEventListener('scroll', ()=>{
+  prog.style.width = (window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%';
+},{ passive:true });
+
+/* ═══════════════════════════════════════════════════════════
+   3. THREE.JS — FULL 3D AIRPLANE + BACKGROUND SHAPES
+   Architecture: fixed canvas behind everything.
+   The airplane follows a sine scroll-path as user scrolls.
+   Background: wireframe icosahedron + octahedron float.
+═══════════════════════════════════════════════════════════ */
+(function initThree(){
+  const canvas = document.getElementById('three-canvas');
+  if (!canvas) return;
+
+  /* ── Renderer ──────────────────────────────────────────── */
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
+
+  /* ── Scene ─────────────────────────────────────────────── */
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 0.1, 200);
+  camera.position.set(0, 2, 11);
+
+  /* ── Lights ─────────────────────────────────────────────── */
+  scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+
+  const sun = new THREE.DirectionalLight(0xffffff, 2.5);
+  sun.position.set(8, 12, 6);
+  sun.castShadow = true;
+  scene.add(sun);
+
+  const fill = new THREE.PointLight(0x7b61ff, 1.8, 40);
+  fill.position.set(-6, 4, 4);
+  scene.add(fill);
+
+  const rim = new THREE.PointLight(0x00d4ff, 1.4, 30);
+  rim.position.set(0, -3, 8);
+  scene.add(rim);
+
+/* ── Material factory ──────────────────────────────────── */
+  /* Added THREE.DoubleSide so wings/engines never disappear on camera turns */
+  function mat(color, emissive=0x000000, rough=0.35, metal=0.65){
+    return new THREE.MeshStandardMaterial({
+      color, emissive, emissiveIntensity: CFG.emissiveInt,
+      roughness:rough, metalness:metal, side: THREE.DoubleSide
+    });
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     BUILD DETAILED AIRPLANE
+  ═══════════════════════════════════════════════════════ */
+  const planeGroup = new THREE.Group();
+
+  /* Helper: add a mesh to group */
+  const add = (geo, material, x=0,y=0,z=0, rx=0,ry=0,rz=0) => {
+    const m = new THREE.Mesh(geo, material);
+    m.position.set(x,y,z);
+    m.rotation.set(rx,ry,rz);
+    m.castShadow = true;
+    planeGroup.add(m);
+    return m;
+  };
+
+  /* Shared materials */
+  const matFuse  = mat(CFG.planeColor,  0x001a2e, 0.25, 0.75);
+  const matWing  = mat(CFG.engineColor, 0x0a0020, 0.35, 0.55);
+  const matTail  = mat(CFG.tailColor,   0x200800, 0.40, 0.50);
+  const matGlass = new THREE.MeshStandardMaterial({ color:0x0a1a2e, roughness:0.05, metalness:0.95, transparent:true, opacity:0.85, side: THREE.DoubleSide });
+  const matEngine= mat(0x1a2030, 0x000511, 0.4, 0.8);
+  const matProp  = mat(0xd0d8e8, 0x080808, 0.5, 0.3);
+
+  /* 1. Main fuselage */
+  add(new THREE.CylinderGeometry(0.28, 0.22, 4.0, 12), matFuse, 0,0,0, 0,0,Math.PI/2);
+
+  /* 2. Nose cone */
+  add(new THREE.ConeGeometry(0.28, 0.9, 10), matTail, 2.45,0,0, 0,0,-Math.PI/2);
+
+  /* 3. Tail cone */
+  add(new THREE.ConeGeometry(0.22, 0.7, 10), matFuse, -2.35,0,0, 0,0,Math.PI/2);
+
+  /* 4. Main wings — swept back */
+  const wingShape = new THREE.Shape();
+  wingShape.moveTo(0,   0);
+  wingShape.lineTo(0.28, 2.4);
+  wingShape.lineTo(-0.18, 2.4);
+  wingShape.lineTo(-0.55, 0);
+  wingShape.closePath();
+  const wingExt = { depth:0.08, bevelEnabled:false };
+
+  /* Left wing */
+  const lw = new THREE.Mesh(new THREE.ExtrudeGeometry(wingShape, wingExt), matWing);
+  lw.castShadow=true;
+  lw.position.set(-0.15, -0.1, 0.04);
+  lw.rotation.set(-Math.PI/2, 0, -0.07);
+  planeGroup.add(lw);
+
+  /* Right wing — Fixed vertex drawing order (Counter-Clockwise) so normals render correctly */
+  const wingShapeR = new THREE.Shape();
+  wingShapeR.moveTo(0, 0);
+  wingShapeR.lineTo(-0.55, 0);
+  wingShapeR.lineTo(-0.18, -2.4);
+  wingShapeR.lineTo(0.28, -2.4);
+  wingShapeR.closePath();
+  const rw = new THREE.Mesh(new THREE.ExtrudeGeometry(wingShapeR, wingExt), matWing);
+  rw.castShadow=true;
+  rw.position.set(-0.15, -0.1, -0.04);
+  rw.rotation.set(-Math.PI/2, 0, -0.07);
+  planeGroup.add(rw);
+
+  /* 5. Winglets — Adjusted to sit exactly at the wing tips */
+  add(new THREE.BoxGeometry(0.16, 0.35, 0.06), matTail, -0.3, 0.05,  2.42,  0.2, 0, 0);
+  add(new THREE.BoxGeometry(0.16, 0.35, 0.06), matTail, -0.3, 0.05, -2.42, -0.2, 0, 0);
+
+  /* 6. Horizontal stabiliser (Tail Wings) — Widened to 2.2 span for correct symmetry */
+  add(new THREE.BoxGeometry(0.8, 0.06, 2.2), matWing, -2.0, 0.1, 0);
+
+  /* 7. Vertical tail fin (Rudder) — Cleaned up shape and fixed rotation so it stands straight UP */
+  const finShape = new THREE.Shape();
+  finShape.moveTo(-0.5, 0);   // Bottom front
+  finShape.lineTo(0.5, 0);    // Bottom back
+  finShape.lineTo(-0.6, 1.2); // Top back
+  finShape.lineTo(-1.0, 1.2); // Top front
+  finShape.closePath();
+  const fin = new THREE.Mesh(new THREE.ExtrudeGeometry(finShape, { depth:0.06, bevelEnabled:false }), matTail);
+  fin.position.set(-1.8, 0.22, -0.03);
+  fin.rotation.set(0, 0, 0); // FIXED: 0 rotation forces it to stand vertically
+  fin.castShadow = true;
+  planeGroup.add(fin);
+
+  /* 8. Cockpit canopy */
+  add(new THREE.CylinderGeometry(0.22, 0.28, 0.7, 10, 1, false, 0, Math.PI), matGlass, 0.7, 0.28, 0, 0,0,Math.PI/2);
+
+  /* 9. Engine nacelles — Shifted backwards to sit properly under the wing mass */
+  [ 1.0, -1.0 ].forEach(z => {
+    /* Nacelle body */
+    add(new THREE.CylinderGeometry(0.13, 0.13, 0.88, 12), matEngine,  -0.1, -0.28, z, 0, 0, Math.PI/2);
+    /* Intake ring */
+    add(new THREE.TorusGeometry(0.13, 0.02, 8, 16), matTail,  0.34, -0.28, z, 0, Math.PI/2, 0);
+    /* Exhaust glow disc */
+    const glow = new THREE.Mesh(
+      new THREE.CircleGeometry(0.09, 12),
+      new THREE.MeshBasicMaterial({ color:0xff4400, transparent:true, opacity:0.65, side: THREE.DoubleSide })
+    );
+    glow.position.set(-0.54, -0.28, z);
+    glow.rotation.y = Math.PI/2;
+    planeGroup.add(glow);
+    /* Pylon connecting nacelle to wing */
+    add(new THREE.BoxGeometry(0.2, 0.18, 0.06), matEngine, -0.1, -0.14, z);
+  });
+
+  /* 10. Propeller — hub + 3 swept blades */
+  const propGroup = new THREE.Group();
+  propGroup.position.set(2.93, 0, 0);
+  propGroup.add(new THREE.Mesh(new THREE.SphereGeometry(0.075, 8, 6), matProp));
+  for(let i = 0; i < 3; i++){
+    const pivot = new THREE.Object3D();
+    pivot.rotation.x = (i / 3) * Math.PI * 2;
+    const blade = new THREE.Mesh(new THREE.BoxGeometry(0.055, 1.15, 0.065), matProp);
+    blade.position.y = 0.575;
+    blade.rotation.z = 0.14;
+    pivot.add(blade);
+    propGroup.add(pivot);
+  }
+  planeGroup.add(propGroup);
+
+  /* 11. Landing gear fairings */
+  add(new THREE.CylinderGeometry(0.06,0.06,0.25,8), matEngine, 0,-0.32, 0.3, 0,0,0);
+  add(new THREE.CylinderGeometry(0.06,0.06,0.25,8), matEngine, 0,-0.32,-0.3, 0,0,0);
+
+  /* 12. Fuselage windows strip — visible lit glass */
+  const matWindow = new THREE.MeshStandardMaterial({
+    color:0x88ccff, roughness:0.05, metalness:0.1,
+    transparent:true, opacity:0.82,
+    emissive:0x003355, emissiveIntensity:2.5,
+    side: THREE.DoubleSide
+  });
+  for(let i=0;i<5;i++){
+    const win = new THREE.Mesh(new THREE.BoxGeometry(0.065, 0.1, 0.09), matWindow);
+    win.position.set(0.3, 0.06, -1.0 + i*0.42);
+    planeGroup.add(win);
+  }
+
+  /* Overall scale + initial pose */
+  planeGroup.scale.setScalar(0.7);
+  planeGroup.position.set(0, 2.5, 0);
+  planeGroup.rotation.set(0.08, -Math.PI/5, 0);
+  scene.add(planeGroup);
+
+  /* ── Background wireframe shapes ──────────────────────── */
+  const bgGroup = new THREE.Group();
+  const wireMat = c => new THREE.MeshBasicMaterial({ color:c, wireframe:true, transparent:true, opacity:0.15 });
+
+  const iso = new THREE.Mesh(new THREE.IcosahedronGeometry(2, 0), wireMat(0x7b61ff));
+  iso.position.set(-7, 3, -12); bgGroup.add(iso);
+
+  const oct = new THREE.Mesh(new THREE.OctahedronGeometry(2.5, 0), wireMat(0x00d4ff));
+  oct.position.set(8, -2, -14); bgGroup.add(oct);
+
+  const tet = new THREE.Mesh(new THREE.TetrahedronGeometry(2, 0), wireMat(0xff6b35));
+  tet.position.set(-7, -7, -8); bgGroup.add(tet);
+
+  const tor = new THREE.Mesh(new THREE.TorusGeometry(2.5, 0.4, 6, 12), wireMat(0x00d4ff));
+  tor.position.set(6, 6, -10); bgGroup.add(tor);
+
+  scene.add(bgGroup);
+
+  /* ── Constellation particle field ──────────────────────────
+     Particles move slowly, lines form between neighbours.
+     AdditiveBlending makes overlapping lines glow like neon.
+  ─────────────────────────────────────────────────────────── */
+  const CON_N    = 160;   // particle count
+  const CON_DIST = 5.5;   // max connection distance (world units)
+  const MAX_SEGS = 800;   // pre-allocated line segment slots
+
+  /* Particle state (plain objects are faster to mutate than buffers) */
+  const cPos = [], cVel = [];
+  for(let i=0; i<CON_N; i++){
+    cPos.push({ x:(Math.random()-.5)*32, y:(Math.random()-.5)*22, z:(Math.random()-.5)*18-6 });
+    cVel.push({ x:(Math.random()-.5)*.007, y:(Math.random()-.5)*.005 });
+  }
+
+  /* Glowing point sprites */
+  const conGeo = new THREE.BufferGeometry();
+  const conBuf = new Float32Array(CON_N*3);
+  conGeo.setAttribute('position', new THREE.BufferAttribute(conBuf,3).setUsage(THREE.DynamicDrawUsage));
+  scene.add(new THREE.Points(conGeo, new THREE.PointsMaterial({
+    color:0x00d4ff, size:0.12, transparent:true, opacity:0.85,
+    blending:THREE.AdditiveBlending, depthWrite:false
+  })));
+
+  /* Cyan neon lines (thin, additive = glow where they cross) */
+  const lineBuf = new Float32Array(MAX_SEGS*6);
+  const lineGeo = new THREE.BufferGeometry();
+  const linePosAttr = new THREE.BufferAttribute(lineBuf,3).setUsage(THREE.DynamicDrawUsage);
+  lineGeo.setAttribute('position', linePosAttr);
+  const conLines = new THREE.LineSegments(lineGeo,
+    new THREE.LineBasicMaterial({ color:0x00d4ff, transparent:true, opacity:0.22,
+      blending:THREE.AdditiveBlending, depthWrite:false }));
+  scene.add(conLines);
+
+  /* White inner-core bloom layer: only the closest connections */
+  const lineBuf2 = new Float32Array(MAX_SEGS*6);
+  const lineGeo2 = new THREE.BufferGeometry();
+  const linePosAttr2 = new THREE.BufferAttribute(lineBuf2,3).setUsage(THREE.DynamicDrawUsage);
+  lineGeo2.setAttribute('position', linePosAttr2);
+  const conLines2 = new THREE.LineSegments(lineGeo2,
+    new THREE.LineBasicMaterial({ color:0xffffff, transparent:true, opacity:0.07,
+      blending:THREE.AdditiveBlending, depthWrite:false }));
+  scene.add(conLines2);
+
+  /* Mouse world position (projected onto z = -6 plane) */
+  let mouseNDC = { x:0, y:0 };
+  document.addEventListener('mousemove', e=>{
+    mouseNDC.x = (e.clientX/window.innerWidth)*2-1;
+    mouseNDC.y = -(e.clientY/window.innerHeight)*2+1;
+  });
+
+  /* ── Scroll state proxy (GSAP animates this) ─────────── */
+  const scrollState = { progress:0 };
+  let propAngle = 0;
+
+  ScrollTrigger.create({
+    trigger: 'main',
+    start:  'top top',
+    end:    'bottom bottom',
+    scrub:   1.8,
+    onUpdate: self => { scrollState.progress = self.progress; },
+  });
+
+  /* ── RAF loop ─────────────────────────────────────────── */
+  let t0 = performance.now();
+  function render(){
+    const now  = performance.now();
+    const dt   = (now - t0) / 1000; t0 = now;
+    const elapsed = now / 1000;
+    const p    = scrollState.progress;
+
+    /* Airplane scroll path — sine curve left/right */
+    const targetX  = Math.sin(p * Math.PI * 3.5) * CFG.pathAmplitude;
+    const targetY  = 2.5 - p * CFG.pathDescent;
+    const targetZ  = Math.cos(p * Math.PI * 1.5) * 1.5 - 1;
+
+    /* Lazy lerp for smooth follow */
+    planeGroup.position.x += (targetX - planeGroup.position.x) * 0.04;
+    planeGroup.position.y += (targetY - planeGroup.position.y) * 0.035;
+    planeGroup.position.z += (targetZ - planeGroup.position.z) * 0.04;
+
+    /* Banking: roll into turns */
+    const bankTarget = -Math.cos(p * Math.PI * 3.5) * CFG.bankAmplitude;
+    planeGroup.rotation.z += (bankTarget - planeGroup.rotation.z) * 0.06;
+
+    /* Pitch forward on descent */
+    const pitchTarget = 0.08 + p * 0.25;
+    planeGroup.rotation.x += (pitchTarget - planeGroup.rotation.x) * 0.04;
+
+    /* Yaw follows lateral velocity */
+    const yawTarget = -Math.PI/5 + Math.sin(p * Math.PI * 3.5) * 0.4;
+    planeGroup.rotation.y += (yawTarget - planeGroup.rotation.y) * 0.04;
+
+    /* Idle float overlay */
+    planeGroup.position.y += Math.sin(elapsed * CFG.floatFreq * Math.PI * 2) * CFG.floatAmp;
+
+    /* Propeller spin */
+    propAngle += 0.06;
+    propGroup.rotation.x = propAngle;
+
+    /* ── Constellation update: move particles + rebuild lines ── */
+    const mxW = mouseNDC.x * 16, myW = mouseNDC.y * 11;
+    let segIdx = 0, segIdx2 = 0;
+    for(let i=0; i<CON_N; i++){
+      const p=cPos[i], v=cVel[i];
+      /* Mouse repulsion */
+      const dx=p.x-mxW, dy=p.y-myW;
+      const md=Math.sqrt(dx*dx+dy*dy)||0.01;
+      if(md<5){ const f=(5-md)/5*.0025; v.x+=dx/md*f; v.y+=dy/md*f }
+      v.x*=.994; v.y*=.994;
+      p.x+=v.x; p.y+=v.y;
+      /* Wrap to bounds */
+      if(p.x<-16)p.x=16; if(p.x>16)p.x=-16;
+      if(p.y<-11)p.y=11; if(p.y>11)p.y=-11;
+      /* Write to points buffer */
+      conBuf[i*3]=p.x; conBuf[i*3+1]=p.y; conBuf[i*3+2]=p.z;
+      /* Connect to later particles within CON_DIST */
+      for(let j=i+1; j<CON_N && segIdx<MAX_SEGS; j++){
+        const q=cPos[j];
+        const cx=p.x-q.x, cy=p.y-q.y, cz=p.z-q.z;
+        const cd=Math.sqrt(cx*cx+cy*cy+cz*cz);
+        if(cd<CON_DIST){
+          const b=segIdx*6;
+          lineBuf[b]=p.x;lineBuf[b+1]=p.y;lineBuf[b+2]=p.z;
+          lineBuf[b+3]=q.x;lineBuf[b+4]=q.y;lineBuf[b+5]=q.z;
+          segIdx++;
+          /* Bright inner bloom for very-close pairs */
+          if(cd<CON_DIST*.4 && segIdx2<MAX_SEGS){
+            const b2=segIdx2*6;
+            lineBuf2[b2]=p.x;lineBuf2[b2+1]=p.y;lineBuf2[b2+2]=p.z;
+            lineBuf2[b2+3]=q.x;lineBuf2[b2+4]=q.y;lineBuf2[b2+5]=q.z;
+            segIdx2++;
+          }
+        }
+      }
+    }
+    conGeo.attributes.position.needsUpdate=true;
+    lineGeo.setDrawRange(0,segIdx*2); linePosAttr.needsUpdate=true;
+    lineGeo2.setDrawRange(0,segIdx2*2); linePosAttr2.needsUpdate=true;
+
+    /* Background shapes slow rotation */
+    iso.rotation.x += 0.003; iso.rotation.y += 0.005;
+    oct.rotation.y += 0.004; oct.rotation.z += 0.003;
+    tet.rotation.x += 0.005; tet.rotation.z += 0.004;
+    tor.rotation.x += 0.004; tor.rotation.y += 0.006;
+
+    /* Subtle camera drift */
+    camera.position.x = Math.sin(elapsed * 0.1) * 0.4;
+    camera.position.y = 2 + Math.cos(elapsed * 0.08) * 0.3;
+
+    /* Engine glow pulse */
+    fill.intensity = 1.6 + Math.sin(elapsed * 2.5) * 0.4;
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+  }
+  render();
+
+  /* ── Resize ───────────────────────────────────────────── */
+  window.addEventListener('resize', ()=>{
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+  },{ passive:true });
+})();
+
+/* ═══════════════════════════════════════════════════════════
+   4. GSAP SCROLL ANIMATIONS
+═══════════════════════════════════════════════════════════ */
+
+/* ── Parallax orbs ─────────────────────────────────────── */
+const o1=document.getElementById('o1'), o2=document.getElementById('o2'), o3=document.getElementById('o3');
+let lastSY=0, tick=false;
+window.addEventListener('scroll',()=>{
+  lastSY=window.scrollY;
+  if(!tick){ requestAnimationFrame(()=>{ o1.style.transform=`translateY(${lastSY*.06}px)`; o2.style.transform=`translateY(${-lastSY*.04}px)`; o3.style.transform=`translateY(${lastSY*.03}px)`; tick=false }); tick=true }
+},{ passive:true });
+
+/* ── Section depth separators ──────────────────────────── */
+document.querySelectorAll('.sdl').forEach(el=>{
+  gsap.to(el,{
+    opacity:.9, scaleX:1, duration:.7, ease:'power3.out',
+    scrollTrigger:{ trigger:el, start:'top 90%', toggleActions:'play none none reverse' }
+  });
+});
+
+/* ── Generic reveals ───────────────────────────────────── */
+document.querySelectorAll('.rv').forEach(el=>{
+  const delay = parseFloat(el.className.match(/d(\d+)/)?.[1]??0)*0.1;
+  gsap.fromTo(el,
+    { opacity:0, y:40 },
+    { opacity:1, y:0, duration:.85, delay, ease:'power3.out',
+      scrollTrigger:{ trigger:el, start:'top 85%', toggleActions:'play none none reverse' } }
+  );
+});
+document.querySelectorAll('.rv-l').forEach(el=>{
+  gsap.fromTo(el, { opacity:0,x:-50 }, { opacity:1,x:0, duration:.9, ease:'power3.out',
+    scrollTrigger:{ trigger:el, start:'top 82%', toggleActions:'play none none reverse' } });
+});
+document.querySelectorAll('.rv-r').forEach(el=>{
+  gsap.fromTo(el, { opacity:0,x:50 }, { opacity:1,x:0, duration:.9, ease:'power3.out',
+    scrollTrigger:{ trigger:el, start:'top 82%', toggleActions:'play none none reverse' } });
+});
+
+/* ── Stat cards parallax depth ─────────────────────────── */
+document.querySelectorAll('.sc').forEach((card,i)=>{
+  const dir = i%2===0 ? 1 : -1;
+  gsap.fromTo(card, {z:dir*-20},{z:dir*20, ease:'none',
+    scrollTrigger:{ trigger:'#about', start:'top bottom', end:'bottom top', scrub:1.5 }});
+});
+
+/* ── Skill cards 3D scatter entrance ───────────────────── */
+(function(){
+  const cards = document.querySelectorAll('.sk-cat');
+  if(!cards.length) return;
+  const tilts = [
+    {rx:-14,ry: 9},{rx:-14,ry:0},{rx:-14,ry:-9},
+    {rx:  7,ry:14},{rx:  7,ry:0},{rx:  7,ry:-14},
+  ];
+  cards.forEach((c,i)=>{
+    const t = tilts[i%tilts.length];
+    gsap.set(c,{ rotateX:t.rx, rotateY:t.ry, opacity:0, scale:.86, z:-70 });
+  });
+  ScrollTrigger.create({
+    trigger:'#skills .sk-grid', start:'top 76%',
+    onEnter:()=> gsap.to(cards,{ rotateX:0,rotateY:0,opacity:1,scale:1,z:0, duration:.8, stagger:CFG.cardStagger, ease:'back.out(1.5)' }),
+    onLeaveBack:()=> cards.forEach((c,i)=>{ const t=tilts[i%tilts.length]; gsap.to(c,{rotateX:t.rx,rotateY:t.ry,opacity:0,scale:.86,z:-70,duration:.4})}),
+    once:false
+  });
+  /* Mouse tilt */
+  cards.forEach(c=>{
+    c.addEventListener('mousemove',e=>{
+      const r=c.getBoundingClientRect();
+      const nx=(e.clientX-r.left)/r.width*2-1, ny=(e.clientY-r.top)/r.height*2-1;
+      gsap.to(c,{ rotateY:nx*9, rotateX:-ny*7, scale:1.04, duration:.3, ease:'power2.out', overwrite:'auto' });
+    });
+    c.addEventListener('mouseleave',()=> gsap.to(c,{ rotateX:0,rotateY:0,scale:1, duration:.55, ease:'elastic.out(1,.5)', overwrite:'auto' }));
+  });
+})();
+
+/* ── Project showcase 3D flip ──────────────────────────── */
+(function(){
+  const s = document.querySelector('.proj-showcase');
+  if(!s) return;
+  gsap.fromTo(s, { rotateY:CFG.projFlipDeg, opacity:0, scale:.93 },
+    { rotateY:0, opacity:1, scale:1, duration:.9, ease:'power3.out',
+      scrollTrigger:{ trigger:s, start:'top 78%', toggleActions:'play none none reverse' } });
+})();
+
+/* ── Education cards ───────────────────────────────────── */
+gsap.fromTo('.edu-card',
+  { rotateX:-22, opacity:0, y:45 },
+  { rotateX:0, opacity:1, y:0, duration:.85, stagger:.18, ease:'power2.out',
+    scrollTrigger:{ trigger:'#education .edu-grid', start:'top 78%', toggleActions:'play none none reverse' } }
+);
+
+/* ── Contact entrance ──────────────────────────────────── */
+gsap.fromTo('.contact-c',
+  { scale:.86, rotateX:14, opacity:0 },
+  { scale:1, rotateX:0, opacity:1, duration:1.1, ease:'power3.out',
+    scrollTrigger:{ trigger:'#contact', start:'top 76%', toggleActions:'play none none reverse' } }
+);
+
+/* ── Hero text exit depth ──────────────────────────────── */
+gsap.to('.hero-content',{
+  z:-100, opacity:0, ease:'none',
+  scrollTrigger:{ trigger:'#hero', start:'top top', end:'65% top', scrub:.9 }
+});
+
+/* ── Section tilt entrance ─────────────────────────────── */
+document.querySelectorAll('section:not(#hero)').forEach(sec=>{
+  gsap.fromTo(sec, { rotateX:CFG.sectionTiltX, opacity:.5 },
+    { rotateX:0, opacity:1, duration:.95, ease:'power2.out',
+      scrollTrigger:{ trigger:sec, start:'top 82%', toggleActions:'play none none reverse' } }
+  );
+});
+
+/* ═══════════════════════════════════════════════════════════
+   5. PROJECT TABS & TERMINAL
+═══════════════════════════════════════════════════════════ */
+document.querySelectorAll('.p-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    const idx = tab.dataset.proj;
+    document.querySelectorAll('.p-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.proj-panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-'+idx).classList.add('active');
+    [0,1,2,3,4].forEach(i=>closeTerm(i));
+    setTimeout(()=>{
+      document.querySelectorAll('#panel-'+idx+' .metric-bar').forEach(b=>{
+        b.style.width='0'; setTimeout(()=>{ b.style.width=b.dataset.w+'%' },100);
+      });
+    },100);
+  });
+});
+
+const termData=[
+  [{t:'t-head',v:'$ python phm_rul_predictor.py'},{t:'',v:'Loading NASA C-MAPSS FD001 dataset...'},{t:'t-ok',v:'✓ 20,631 training sequences loaded'},{t:'',v:'Running K-Means clustering (k=6)...'},{t:'t-ok',v:'✓ Operating modes identified'},{t:'',v:'Building LSTM(128→64)...'},{t:'',v:'  Epoch 01/50 — loss: 18.42 — val: 16.91'},{t:'',v:'  Epoch 25/50 — loss: 13.89 — val: 13.55'},{t:'',v:'  Epoch 50/50 — loss: 13.11 — val: 13.32'},{t:'t-val',v:'► Test RMSE        : 13.32  (was: 17.17)'},{t:'t-val',v:'► Safety violations: 1.09%  (was: 12.4%)'},{t:'t-ok',v:'✓ MLflow run logged → run_id: a4f2c9b1'},{t:'t-ok',v:'✓ Model saved to phm_lstm artifact'}],
+  [{t:'t-head',v:'$ python udp_interface.py'},{t:'',v:'Binding socket to 0.0.0.0:49001...'},{t:'t-ok',v:'✓ Socket bound'},{t:'t-ok',v:'✓ Thread active — awaiting X-Plane 12'},{t:'',v:'Connection established'},{t:'t-val',v:'  [idx=3]  airspeed = 142.8 kt'},{t:'t-val',v:'  [idx=17] altitude = 3420.0 ft'},{t:'t-val',v:'  [idx=18] vertical = +480 fpm'},{t:'t-val',v:'  [idx=20] heading  = 274.3°'},{t:'',v:'Packet rate: 50 Hz — latency: 8ms'},{t:'t-ok',v:'✓ PFD / ND / EICAS nominal'},{t:'t-warn',v:'⚠ Terrain proximity alert (demo mode)'},{t:'t-ok',v:'✓ Alert rendered within 12ms'}],
+  [{t:'t-head',v:'$ python runway_analysis.py'},{t:'',v:'Loading 30-year incursion database...'},{t:'t-ok',v:'✓ 14,382 runway events (1994–2024)'},{t:'',v:'Mapping DO-323 severity...'},{t:'t-ok',v:'✓ A:312  B:1847  C:6201  D:6022'},{t:'',v:'Training Random Forest (200 trees)...'},{t:'t-ok',v:'✓ OOB accuracy: 82.4%'},{t:'t-val',v:'  traffic_density : 0.312 ± 0.018'},{t:'t-val',v:'  visibility      : 0.287 ± 0.022'},{t:'t-val',v:'  time_of_day     : 0.201 ± 0.015'},{t:'t-ok',v:'✓ CRITICAL alerts flagged: 94.2%'},{t:'t-ok',v:'✓ Report → boeing_safety_report.pdf'}],
+  [{t:'t-head',v:'$ python pid_stabiliser.py'},{t:'',v:'PID: Kp=8.5  Ki=2.1  Kd=0.4'},{t:'t-ok',v:'✓ Plant TF: 1/(0.08s²+1.2s+1)'},{t:'',v:'Simulating step response...'},{t:'',v:'  t=0.00s  h=0.0mm  u=42.5'},{t:'',v:'  t=0.25s  h=22.1mm u=21.4'},{t:'',v:'  t=0.50s  h=43.8mm u=5.2'},{t:'',v:'  t=1.00s  h=50.1mm u=-0.1'},{t:'t-val',v:'► Rise time     : 0.48 s'},{t:'t-val',v:'► Settling time : 0.92 s (spec: <2.0s ✓)'},{t:'t-val',v:'► Overshoot     : 3.8%  (spec: <5%  ✓)'},{t:'t-ok',v:'✓ All stability specs met'}],
+  [{t:'t-head',v:'$ python astrodynamics.py'},{t:'',v:'Hohmann Transfer: LEO → GEO'},{t:'',v:'  r1 = 6,571 km  (300 km alt)'},{t:'',v:'  r2 = 42,164 km (GEO)'},{t:'t-val',v:'► ΔV₁     : 2,422 m/s'},{t:'t-val',v:'► ΔV₂     : 1,478 m/s'},{t:'t-val',v:'► Total ΔV: 3,900 m/s'},{t:'t-val',v:'► TOF     : 5.27 h'},{t:'',v:'Loading AI surrogate...'},{t:'t-ok',v:'✓ MLP loaded (R²=0.9993  MAE=16.47)'},{t:'t-val',v:'► Surrogate ΔV: 3,886 m/s  (err 0.36%)'},{t:'t-ok',v:'✓ Propellant mass: 847.2 kg'},{t:'t-ok',v:'✓ Dashboard ready — 200k training samples'}]
+];
+function runSim(idx){
+  const term=document.getElementById('term-'+idx), out=document.getElementById('tout-'+idx);
+  out.innerHTML=''; term.classList.add('open');
+  termData[idx].forEach((l,i)=>{
+    const s=document.createElement('span');
+    s.className='tline '+(l.t||''); s.textContent=l.v; out.appendChild(s);
+    setTimeout(()=>s.classList.add('show'), i*85+50);
+  });
+}
+function closeTerm(idx){
+  const t=document.getElementById('term-'+idx); if(t) t.classList.remove('open');
+}
+
+/* ── First panel metric bars ───────────────────────────── */
+setTimeout(()=>{ document.querySelectorAll('#panel-4 .metric-bar').forEach(b=>{ b.style.width=b.dataset.w+'%' }) },900);
+
+/* ═══════════════════════════════════════════════════════════
+   6. LENIS SMOOTH SCROLL — inertia-based premium feel.
+   Synced with GSAP ticker so ScrollTrigger stays accurate.
+═══════════════════════════════════════════════════════════ */
+(function initLenis(){
+  if(typeof Lenis === 'undefined') return;
+  const lenis = new Lenis({
+    duration:   1.25,
+    easing:     t => Math.min(1, 1.001 - Math.pow(2, -10*t)),
+    smoothWheel: true,
+  });
+  /* Sync Lenis → GSAP ticker so ScrollTrigger positions stay correct */
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(time => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  /* Scroll-velocity content skew — subtle "momentum" feel on sections */
+  ScrollTrigger.create({
+    onUpdate: self => {
+      const skew = gsap.utils.clamp(-2.8, 2.8)(self.getVelocity() / -450);
+      gsap.to('.s-inner, .hero-content', {
+        skewY: skew, duration: 0.9, ease: 'power3',
+        overwrite: 'auto'
+      });
+    }
+  });
+})();
+
+/* ═══════════════════════════════════════════════════════════
+   7. MAGNETIC BUTTONS — CTAs feel physically attracted to cursor.
+   Works by shifting the button toward the cursor as it hovers.
+═══════════════════════════════════════════════════════════ */
+document.querySelectorAll('.btn-p,.btn-o').forEach(btn=>{
+  btn.addEventListener('mousemove', e=>{
+    const r=btn.getBoundingClientRect();
+    const x=e.clientX-r.left-r.width/2, y=e.clientY-r.top-r.height/2;
+    gsap.to(btn,{ x:x*.32, y:y*.28, duration:.4, ease:'power2.out' });
+  });
+  btn.addEventListener('mouseleave',()=>{
+    gsap.to(btn,{ x:0, y:0, duration:.9, ease:'elastic.out(1,.35)' });
+  });
+});
+
+/* ═══════════════════════════════════════════════════════════
+   8. HERO NAME CHAR-SPLIT — each character of "Madaan" flies in
+   with a 3D rotateX flip, staggered. Runs once after CSS fadeUp.
+═══════════════════════════════════════════════════════════ */
+(function heroCharSplit(){
+  const l2 = document.querySelector('.h-name .l2');
+  if(!l2) return;
+  /* Split existing text into individual <span> elements */
+  const chars = [...l2.textContent].map(ch=>{
+    const s=document.createElement('span');
+    s.textContent = ch===' ' ? '\u00a0' : ch;
+    s.style.display='inline-block';
+    s.style.willChange='transform,opacity';
+    return s;
+  });
+  l2.textContent='';
+  chars.forEach(s=>l2.appendChild(s));
+
+  /* Animate after the parent's CSS opacity:0 → 1 has already fired */
+  gsap.fromTo(chars,
+    { opacity:0, y:72, rotateX:-80 },
+    { opacity:1, y:0,  rotateX:0,
+      stagger:.048, duration:.85, ease:'back.out(2.8)',
+      delay:.65, /* matches the CSS .h-name fadeUp delay — in sync with l1 */
+      clearProps:'all'
+    }
+  );
+})();
+
+/* ── Refresh after load ────────────────────────────────── */
+window.addEventListener('load', ()=>{ ScrollTrigger.refresh() });
+</script>
+<script>
+(function(){
+  var btn=document.getElementById('menuBtn'),menu=document.getElementById('mobileMenu');
+  if(!btn||!menu)return;
+  btn.addEventListener('click',function(){
+    var open=menu.classList.toggle('open');
+    btn.classList.toggle('open',open);
+    btn.setAttribute('aria-expanded',String(open));
+    menu.setAttribute('aria-hidden',String(!open));
+    document.body.style.overflow=open?'hidden':'';
+  });
+  menu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click',function(){
+      btn.classList.remove('open');
+      menu.classList.remove('open');
+      btn.setAttribute('aria-expanded','false');
+      menu.setAttribute('aria-hidden','true');
+      document.body.style.overflow='';
+    });
+  });
+})();
+</script>
+</body>
+</html>

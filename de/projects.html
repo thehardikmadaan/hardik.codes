@@ -1,0 +1,1946 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';"/>
+<meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin"/>
+<title>Projekte — Hardik Madaan</title>
+<meta name="description" content="Ausgewählte Ingenieursprojekte — Luft- und Raumfahrt, KI, HMI und Mechatronik von Hardik Madaan."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════ */
+:root {
+  --bg:     #010205;
+  --accent: #00d4ff;
+  --a2:     #7b61ff;
+  --a3:     #ff6b35;
+  --text:   #e8edf5;
+  --muted:  #4a5a70;
+  --border: rgba(0,212,255,.08);
+}
+
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0 }
+html { overflow-x:hidden }
+body {
+  background:var(--bg); color:var(--text);
+  font-family:'Outfit',sans-serif; font-weight:300;
+  overflow-x:hidden; cursor:none;
+}
+
+/* ── ROCKET CURSOR ──────────────────────── */
+#rocket-cursor {
+  position:fixed; width:44px; height:44px;
+  pointer-events:none; z-index:9999;
+  transform-origin:50% 50%;
+  will-change:left,top,transform;
+  margin-left:-22px; margin-top:-22px;
+}
+#rocket-cursor svg {
+  width:100%; height:100%;
+  filter:drop-shadow(0 0 5px rgba(0,212,255,.65));
+  transition:filter .25s, transform .25s;
+}
+#rocket-cursor.ignite svg {
+  filter:drop-shadow(0 0 14px rgba(0,212,255,1)) drop-shadow(0 0 28px rgba(255,107,53,.75));
+  transform:scale(1.22);
+}
+.flame-path  { transition:opacity .2s }
+.flame-path2 { transition:opacity .2s }
+#rocket-cursor.ignite .flame-path  { opacity:1!important; animation:flicker .12s infinite alternate }
+#rocket-cursor.ignite .flame-path2 { opacity:.85!important; animation:flicker .18s .06s infinite alternate-reverse }
+@keyframes flicker {
+  from { transform:scaleY(.8) scaleX(1.15) }
+  to   { transform:scaleY(1.12) scaleX(.88) }
+}
+
+/* ── SCROLL PROGRESS ────────────────────── */
+#prog {
+  position:fixed; top:0; left:0; height:2px;
+  background:linear-gradient(90deg,var(--accent),var(--a2),var(--a3));
+  z-index:600; width:0%;
+}
+
+/* ── TOP NAV ────────────────────────────── */
+.top-nav {
+  position:fixed; top:0; left:0; right:0; z-index:400;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:1.4rem 4rem;
+  background:linear-gradient(180deg,rgba(1,2,5,.92) 0%,transparent 100%);
+}
+.nav-logo {
+  font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem;
+  background:linear-gradient(135deg,var(--accent),var(--a2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  text-decoration:none;
+}
+.nav-links { display:flex; gap:2.5rem; list-style:none }
+.nav-links a {
+  color:rgba(232,237,245,.45); text-decoration:none;
+  font-family:'DM Mono',monospace; font-size:.68rem;
+  letter-spacing:.12em; text-transform:uppercase; transition:color .3s;
+}
+.nav-links a:hover, .nav-links a.active { color:var(--accent) }
+.lang-btn {
+  font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted);
+  letter-spacing:.1em; text-transform:uppercase; text-decoration:none;
+  padding:.35rem .75rem; border:1px solid var(--border); border-radius:2px;
+  transition:all .3s; white-space:nowrap;
+}
+.lang-btn:hover { border-color:var(--accent); color:var(--accent) }
+.lang-btn.active { border-color:var(--accent2); color:var(--accent2) }
+
+/* ── SIDE NAV ───────────────────────────── */
+.side-nav {
+  position:fixed; left:1.8rem; top:50%;
+  transform:translateY(-50%); z-index:500;
+  display:flex; flex-direction:column; gap:1.6rem; align-items:center;
+}
+.sn-item {
+  display:flex; flex-direction:column; align-items:center; gap:.4rem;
+  text-decoration:none; cursor:none;
+}
+.sn-num {
+  font-family:'DM Mono',monospace; font-size:.5rem;
+  letter-spacing:.08em; color:rgba(74,90,112,.5); transition:color .4s;
+}
+.sn-bar {
+  width:1.5px; height:22px;
+  background:rgba(74,90,112,.25); border-radius:2px; transition:all .45s;
+}
+.sn-item.active .sn-num  { color:var(--accent) }
+.sn-item.active .sn-bar  { background:var(--accent); height:38px }
+.sn-item:hover .sn-num   { color:var(--text) }
+.sn-item:hover .sn-bar   { background:rgba(232,237,245,.35) }
+
+/* ── INTRO SLIDE ────────────────────────── */
+.intro-slide {
+  height:100vh; position:relative; overflow:hidden;
+  display:flex; flex-direction:column;
+  justify-content:center; padding:0 6.5rem 0 5.5rem;
+}
+.intro-slide::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse 55% 65% at 75% 55%, rgba(0,212,255,.04), transparent);
+  pointer-events:none;
+}
+.intro-grid-bg {
+  position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,212,255,.016) 1px, transparent 1px),
+    linear-gradient(90deg,rgba(0,212,255,.016) 1px, transparent 1px);
+  background-size:64px 64px;
+}
+.intro-eyebrow {
+  font-family:'DM Mono',monospace; font-size:.68rem; color:var(--accent);
+  letter-spacing:.22em; text-transform:uppercase;
+  display:flex; align-items:center; gap:1rem; margin-bottom:2.2rem;
+  opacity:0;
+}
+.intro-eyebrow::before { content:''; width:32px; height:1px; background:var(--accent) }
+.intro-title {
+  font-family:'Syne',sans-serif; font-weight:800;
+  /* Reduced from 10vw / 10rem to 7vw / 7rem to keep it manageable */
+  font-size:clamp(2.5rem, 7vw, 7rem);
+  line-height:.95;
+  letter-spacing:-.03em;
+  overflow:hidden;
+}
+
+.intro-line {
+  overflow: hidden;
+  /* This prevents the word from EVER breaking in half */
+  white-space: nowrap;
+  display: block;
+}
+.intro-line span {
+  display: block;
+  transform: translateY(100%);
+  will-change: transform;
+}
+.it-solid { color:var(--text) }
+.it-outline {
+  -webkit-text-stroke:1.5px rgba(0,212,255,.4);
+  color:transparent;
+}
+.intro-bottom {
+  margin-top:3.8rem;
+  display:flex; align-items:flex-end; gap:4.5rem;
+}
+.intro-stat {
+  font-family:'DM Mono',monospace; font-size:.65rem;
+  color:var(--muted); letter-spacing:.1em; text-transform:uppercase; line-height:2;
+}
+.intro-stat strong {
+  display:block; font-family:'Syne',sans-serif;
+  font-size:2.4rem; font-weight:800; color:var(--text);
+  line-height:1; letter-spacing:-.03em;
+}
+.intro-scroll {
+  font-family:'DM Mono',monospace; font-size:.6rem; color:var(--muted);
+  letter-spacing:.12em; text-transform:uppercase;
+  display:flex; align-items:center; gap:.7rem; opacity:0;
+}
+.intro-scroll::before {
+  content:''; width:1px; height:52px;
+  background:linear-gradient(to bottom,transparent,var(--accent));
+  animation:scrollLine 2.2s ease infinite;
+}
+@keyframes scrollLine { 0%,100%{opacity:.25} 50%{opacity:1} }
+
+/* ── PROJECT SLIDE ──────────────────────── */
+.proj-slide {
+  min-height:100vh; position:relative; overflow:hidden;
+  display:grid; grid-template-columns:46% 54%;
+  border-top:1px solid var(--border);
+}
+.proj-slide.alt { grid-template-columns:54% 46% }
+.proj-slide.alt .slide-left { order:2; padding-left:3.5rem; padding-right:6rem; border-left:1px solid var(--border); border-right:none }
+.proj-slide.alt .slide-right { order:1 }
+
+/* Gradient separators per project */
+.proj-slide::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,212,255,.1),transparent);
+  pointer-events:none;
+}
+
+/* Left info panel */
+.slide-left {
+  position:relative; z-index:2;
+  padding:8rem 3.5rem 5rem 6.5rem;
+  display:flex; flex-direction:column; justify-content:center;
+  border-right:1px solid var(--border);
+  background:linear-gradient(90deg,var(--bg) 0%,rgba(1,2,5,.95) 100%);
+}
+
+/* Animated-in children start hidden */
+.slide-idx,
+.slide-cat,
+.slide-title,
+.slide-org,
+.slide-desc,
+.slide-metrics,
+.slide-tags,
+.slide-actions {
+  opacity:0; transform:translateX(-28px);
+}
+.proj-slide.alt .slide-idx,
+.proj-slide.alt .slide-cat,
+.proj-slide.alt .slide-title,
+.proj-slide.alt .slide-org,
+.proj-slide.alt .slide-desc,
+.proj-slide.alt .slide-metrics,
+.proj-slide.alt .slide-tags,
+.proj-slide.alt .slide-actions {
+  transform:translateX(28px);
+}
+
+.slide-idx {
+  font-family:'DM Mono',monospace; font-size:.65rem; color:var(--accent);
+  letter-spacing:.2em; text-transform:uppercase;
+  display:flex; align-items:center; gap:.8rem; margin-bottom:1rem;
+}
+.slide-idx::before { content:''; width:24px; height:1px; background:var(--accent) }
+.slide-cat {
+  font-family:'DM Mono',monospace; font-size:.6rem; color:var(--muted);
+  letter-spacing:.14em; text-transform:uppercase; margin-bottom:1.5rem;
+}
+.slide-title {
+  font-family:'Syne',sans-serif; font-weight:800;
+  font-size:clamp(1.6rem,2.8vw,2.6rem); line-height:1.1; letter-spacing:-.02em;
+  margin-bottom:.7rem;
+}
+.slide-org {
+  font-family:'DM Mono',monospace; font-size:.6rem; color:var(--a3);
+  letter-spacing:.06em; margin-bottom:1.4rem;
+}
+.slide-desc {
+  font-size:.87rem; color:rgba(232,237,245,.52); line-height:1.95;
+  max-width:400px; margin-bottom:2rem;
+}
+
+/* Metric bars */
+.slide-metrics { display:flex; flex-direction:column; gap:.65rem; margin-bottom:1.8rem }
+.sm-row {
+  display:flex; align-items:center; gap:.8rem;
+  font-family:'DM Mono',monospace; font-size:.58rem;
+}
+.sm-lbl { color:var(--muted); min-width:95px }
+.sm-track {
+  flex:1; height:1.5px; background:rgba(255,255,255,.05);
+  overflow:hidden;
+}
+.sm-fill {
+  height:100%;
+  background:linear-gradient(90deg,var(--accent),var(--a2));
+  width:0; transition:width 1.5s .2s ease;
+}
+.proj-slide.in-view .sm-fill { width:var(--tw) }
+.sm-val { color:var(--accent); min-width:44px; text-align:right }
+
+/* Tags */
+.slide-tags { display:flex; flex-wrap:wrap; gap:.3rem; margin-bottom:1.6rem }
+.s-tag {
+  font-family:'DM Mono',monospace; font-size:.53rem; padding:.18rem .5rem;
+  border:1px solid rgba(0,212,255,.12); border-radius:2px; color:rgba(74,90,112,.85);
+}
+
+/* CTA buttons */
+.slide-actions { display:flex; gap:.65rem; flex-wrap:wrap }
+.s-btn {
+  font-family:'DM Mono',monospace; font-size:.6rem; padding:.48rem .95rem;
+  border:1px solid var(--border); border-radius:2px; text-decoration:none;
+  color:var(--muted); cursor:none; transition:all .25s;
+  display:inline-flex; align-items:center; gap:.4rem;
+}
+.s-btn svg { width:10px; height:10px; flex-shrink:0 }
+.s-btn:hover { border-color:var(--accent); color:var(--accent) }
+.s-btn.pri {
+  background:rgba(0,212,255,.07); border-color:rgba(0,212,255,.28); color:var(--accent);
+}
+.s-btn.pri:hover { background:rgba(0,212,255,.14) }
+
+/* Big watermark number */
+.slide-num-bg {
+  position:absolute; z-index:0; pointer-events:none; user-select:none;
+  font-family:'Syne',sans-serif; font-weight:800; letter-spacing:-.07em;
+  font-size:clamp(8rem,20vw,20rem); line-height:1;
+  -webkit-text-stroke:1px rgba(0,212,255,.035);
+  color:transparent; bottom:-4%; right:1%;
+}
+
+/* Right media panel */
+.slide-right {
+  position:relative; z-index:1;
+  display:flex; flex-direction:column;
+  background:#020609;
+  overflow:hidden;
+}
+
+/* Video slot */
+.s-video {
+  flex:1; position:relative; display:flex;
+  align-items:center; justify-content:center;
+  overflow:hidden; cursor:none; min-height:320px;
+  background:linear-gradient(160deg,#020609,#030d18,#020609);
+}
+.s-video::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(0,212,255,.015) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,212,255,.015) 1px,transparent 1px);
+  background-size:44px 44px;
+}
+.s-video video,
+.s-video iframe {
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border:none;
+}
+.v-badge {
+  position:absolute; top:.85rem; left:.85rem; z-index:4;
+  font-family:'DM Mono',monospace; font-size:.52rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--accent); padding:.2rem .5rem;
+  background:rgba(0,212,255,.07); border:1px solid rgba(0,212,255,.22); border-radius:2px;
+}
+.s-video-ph {
+  position:relative; z-index:2;
+  display:flex; flex-direction:column; align-items:center; gap:1.1rem;
+  opacity:.38; pointer-events:none; text-align:center; padding:2.5rem;
+  transition:opacity .3s;
+}
+.s-video:hover .s-video-ph { opacity:.58 }
+.s-play-ring {
+  width:76px; height:76px;
+  border:1.5px dashed rgba(0,212,255,.38); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  animation:rotateSpin 14s linear infinite;
+}
+@keyframes rotateSpin { to { transform:rotate(360deg) } }
+.s-play-ring svg { animation:rotateSpin 14s linear infinite reverse }
+.s-vid-label { font-family:'DM Mono',monospace; font-size:.6rem; color:var(--muted); letter-spacing:.1em; text-transform:uppercase }
+.s-vid-hint  { font-family:'DM Mono',monospace; font-size:.52rem; color:rgba(74,90,112,.45) }
+
+/* Photo strip */
+.s-photos {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  height:132px; flex-shrink:0;
+  border-top:1px solid var(--border);
+}
+.s-photo {
+  position:relative; background:#010508;
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; cursor:none;
+}
+.s-photo + .s-photo { border-left:1px solid var(--border) }
+.s-photo img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover }
+.s-photo-ph {
+  display:flex; flex-direction:column; align-items:center; gap:.3rem;
+  opacity:.22; pointer-events:none; transition:opacity .3s;
+}
+.s-photo:hover .s-photo-ph { opacity:.45 }
+.s-photo-ph svg { width:14px; height:14px; color:var(--accent) }
+.s-photo-ph span {
+  font-family:'DM Mono',monospace; font-size:.48rem;
+  color:var(--muted); letter-spacing:.08em; text-transform:uppercase;
+}
+
+/* ── OUTRO SLIDE ────────────────────────── */
+.outro-slide {
+  min-height:60vh; position:relative; overflow:hidden;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:2rem; padding:5rem 4rem;
+  border-top:1px solid var(--border);
+}
+.outro-slide::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse 55% 80% at 50% 100%,rgba(123,97,255,.05),transparent);
+}
+.outro-label {
+  font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted);
+  letter-spacing:.2em; text-transform:uppercase;
+}
+.outro-title {
+  font-family:'Syne',sans-serif; font-weight:800;
+  font-size:clamp(2.5rem,6.5vw,5.5rem); text-align:center; letter-spacing:-.03em; line-height:1.05;
+}
+.outro-title span {
+  -webkit-text-stroke:1.5px rgba(0,212,255,.35); color:transparent;
+}
+.outro-actions { display:flex; gap:1.2rem; flex-wrap:wrap; justify-content:center }
+.o-btn {
+  font-family:'DM Mono',monospace; font-size:.66rem; padding:.65rem 1.7rem;
+  border:1px solid rgba(0,212,255,.22); border-radius:2px; text-decoration:none;
+  color:var(--text); cursor:none; transition:all .35s;
+  letter-spacing:.08em; text-transform:uppercase;
+}
+.o-btn:hover { background:rgba(0,212,255,.07); border-color:var(--accent); color:var(--accent) }
+.o-btn.fill {
+  background:linear-gradient(135deg,rgba(0,212,255,.1),rgba(123,97,255,.1));
+  border-color:rgba(0,212,255,.28);
+}
+
+/* ── FOOTER ─────────────────────────────── */
+footer {
+  padding:1.8rem 4rem; border-top:1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:center;
+  flex-wrap:wrap; gap:.8rem;
+}
+.ft  { font-family:'DM Mono',monospace; font-size:.63rem; color:var(--muted) }
+.fa  { color:var(--accent) }
+.ft-nav { display:flex; align-items:center; gap:.7rem }
+.ft-nav a {
+  font-family:'DM Mono',monospace; font-size:.63rem; color:var(--muted);
+  text-decoration:none; transition:color .25s;
+}
+.ft-nav a:hover { color:var(--accent) }
+
+/* ── PROJECT 01 GALLERY ─────────────────── */
+.proj-gallery {
+  display:flex; flex-direction:column; height:100%; overflow:hidden;
+}
+.gallery-phase-bar {
+  display:flex; align-items:center; gap:.6rem; padding:.55rem 1rem;
+  border-bottom:1px solid var(--border); flex-shrink:0;
+  background:rgba(1,2,5,.6);
+}
+.gpb-label {
+  font-family:'DM Mono',monospace; font-size:.48rem;
+  color:var(--muted); letter-spacing:.14em; text-transform:uppercase;
+}
+.gpb-title {
+  font-family:'DM Mono',monospace; font-size:.58rem;
+  color:var(--accent); letter-spacing:.06em;
+}
+.gallery-main { flex:1; position:relative; overflow:hidden; }
+.g-phase {
+  position:absolute; inset:0; display:none; flex-direction:column;
+  overflow-y:auto; scrollbar-width:none;
+}
+.g-phase::-webkit-scrollbar { display:none }
+.g-phase.active { display:flex }
+.gimg-row {
+  display:grid; flex-shrink:0;
+  border-bottom:1px solid var(--border);
+}
+.gimg-row.cols-2 { grid-template-columns:1fr 1fr }
+.gimg-row.cols-1 { grid-template-columns:1fr }
+.gimg-cell {
+  position:relative; background:#010508;
+  overflow:hidden; cursor:none;
+  aspect-ratio:4/3;
+}
+.gimg-row.cols-1 .gimg-cell { aspect-ratio:16/9 }
+.gimg-cell + .gimg-cell { border-left:1px solid var(--border) }
+.gimg-cell img {
+  width:100%; height:100%; object-fit:cover;
+  transition:transform .4s ease; display:block;
+}
+.gimg-cell:hover img { transform:scale(1.04) }
+.gimg-cap {
+  position:absolute; bottom:0; left:0; right:0;
+  padding:.55rem .75rem .5rem;
+  background:linear-gradient(to top,rgba(1,2,5,.94) 0%,rgba(1,2,5,.6) 70%,transparent 100%);
+  transform:translateY(100%); transition:transform .3s ease;
+}
+.gimg-cell:hover .gimg-cap { transform:translateY(0) }
+.gimg-cap-title {
+  font-family:'DM Mono',monospace; font-size:.5rem;
+  color:var(--accent); letter-spacing:.1em; text-transform:uppercase; margin-bottom:.22rem;
+}
+.gimg-cap-text {
+  font-family:'Outfit',sans-serif; font-size:.7rem;
+  color:rgba(232,237,245,.72); line-height:1.55;
+}
+.gallery-phase-nav {
+  display:grid; grid-template-columns:repeat(5,1fr);
+  border-top:1px solid var(--border); flex-shrink:0;
+}
+.gpn-btn {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:.18rem; padding:.45rem .3rem; background:none; border:none;
+  border-right:1px solid var(--border); cursor:none; transition:background .25s;
+}
+.gpn-btn:last-child { border-right:none }
+.gpn-btn:hover { background:rgba(0,212,255,.04) }
+.gpn-btn.active {
+  background:rgba(0,212,255,.07);
+  box-shadow:inset 0 -2px 0 var(--accent);
+}
+.gpn-num {
+  font-family:'DM Mono',monospace; font-size:.42rem;
+  color:var(--muted); letter-spacing:.1em; transition:color .25s;
+}
+.gpn-lbl {
+  font-family:'DM Mono',monospace; font-size:.47rem;
+  color:var(--muted); letter-spacing:.07em; text-transform:uppercase; transition:color .25s;
+}
+.gpn-btn.active .gpn-num,
+.gpn-btn.active .gpn-lbl,
+.gpn-btn:hover .gpn-lbl { color:var(--accent) }
+
+/* ── NDA NOTICE ─────────────────────────── */
+.nda-notice {
+  display:flex; align-items:center; gap:.55rem;
+  padding:.38rem 1rem; border-bottom:1px solid rgba(255,107,53,.14);
+  background:rgba(255,107,53,.04); flex-shrink:0;
+}
+.nda-dot {
+  width:5px; height:5px; border-radius:50%;
+  background:var(--a3); flex-shrink:0;
+  animation:ndaPulse 2.2s ease infinite;
+}
+@keyframes ndaPulse { 0%,100%{opacity:.35} 50%{opacity:1} }
+.nda-text {
+  font-family:'DM Mono',monospace; font-size:.49rem;
+  color:rgba(255,107,53,.65); letter-spacing:.1em; text-transform:uppercase;
+}
+
+/* ── RESPONSIVE ─────────────────────────── */
+@media(max-width:960px) {
+  /* cursor: no rocket on touch */
+  body { cursor:auto }
+  #rocket-cursor { display:none }
+  a, button { cursor:pointer }
+
+  /* nav */
+  .side-nav  { display:none }
+  .top-nav   { padding:1.2rem 1.5rem }
+  .nav-links { display:none }
+  .menu-btn  { display:flex }
+
+  /* intro slide */
+  .intro-slide { padding:0 2rem }
+  .intro-title { font-size:clamp(3.5rem,16vw,5.5rem) }
+
+  /* project slides: single column */
+  .proj-slide  { grid-template-columns:1fr; min-height:auto }
+  .proj-slide.alt { grid-template-columns:1fr }
+  .proj-slide.alt .slide-left {
+    order:unset; padding:4rem 1.5rem 2rem;
+    border-left:none; border-right:none;
+  }
+  .proj-slide.alt .slide-right { order:unset }
+  .slide-left { padding:5rem 1.5rem 3rem; border-right:none }
+
+  /* gallery panel: fixed height so g-phase scrolls inside */
+  .slide-right { height:auto; min-height:0 }
+  .proj-gallery { height:auto; overflow:visible }
+  .gallery-main { flex:none; height:440px; position:relative; overflow:hidden }
+
+  /* gallery image rows: collapse 2-col → 1-col */
+  .gimg-row.cols-2 { grid-template-columns:1fr }
+  .gimg-cell + .gimg-cell { border-left:none; border-top:1px solid var(--border) }
+  /* change aspect ratio of cols-2 cells so they're not too tall when stacked */
+  .gimg-row.cols-2 .gimg-cell { aspect-ratio:16/9 }
+
+  /* gallery caption: always visible on touch (no hover) */
+  .gimg-cap { transform:translateY(0) }
+  .gimg-cap-text { display:none } /* hide verbose text; keep title only for space */
+
+  /* gallery phase nav: at most 3 per row */
+  .gallery-phase-nav { grid-template-columns:repeat(3,1fr) !important }
+
+  /* misc */
+  .s-photos { height:88px }
+  .nda-text { font-size:.44rem }
+  footer { flex-direction:column; text-align:center; padding:1.5rem }
+  .outro-slide { padding:4rem 1.5rem; min-height:auto }
+}
+
+@media(max-width:600px) {
+  /* intro */
+  .intro-slide { padding:0 1.5rem }
+  .intro-title { font-size:clamp(2.8rem,13vw,4.5rem) }
+  .intro-line  { white-space:normal }
+  .intro-bottom { flex-direction:column; gap:1.2rem; align-items:flex-start; margin-top:2rem }
+  .intro-stat strong { font-size:1.8rem }
+  .intro-scroll { display:none }
+
+  /* slide info panel */
+  .slide-left { padding:4rem 1.2rem 2rem }
+  .proj-slide.alt .slide-left { padding:3.5rem 1.2rem 2rem }
+  .slide-title { font-size:clamp(1.5rem,7vw,2.4rem) }
+  .slide-desc  { font-size:.82rem; max-width:none }
+  .slide-num-bg { font-size:clamp(5rem,18vw,9rem) }
+
+  /* metric rows: label on its own line */
+  .sm-row { flex-wrap:wrap; gap:.3rem }
+  .sm-lbl { min-width:auto; width:100%; font-size:.5rem }
+  .sm-track { width:100% }
+
+  /* tags & actions */
+  .s-tag { font-size:.5rem; padding:.15rem .45rem }
+  .slide-actions { flex-direction:column; gap:.5rem }
+  .s-btn { justify-content:center; text-align:center }
+
+  /* gallery */
+  .gallery-main { flex:none; height:360px }
+  .gallery-phase-nav { grid-template-columns:repeat(2,1fr) !important }
+  .gpn-btn { padding:.4rem .2rem }
+  .gpn-lbl { font-size:.4rem }
+  .gpn-num { font-size:.36rem }
+  .gimg-cap-title { font-size:.46rem }
+
+  /* outro */
+  .outro-title { font-size:clamp(2rem,10vw,3.5rem) }
+  .outro-actions { flex-direction:column; align-items:center; gap:.8rem }
+  .o-btn { text-align:center; width:100%; max-width:220px }
+}
+
+@media(max-width:400px) {
+  .intro-title { font-size:clamp(2.4rem,12vw,4rem) }
+  .slide-title { font-size:clamp(1.3rem,7vw,2rem) }
+  .gallery-main { flex:none; height:300px }
+}
+
+/* ── HAMBURGER / MOBILE MENU ─────────────── */
+.menu-btn { display:none; flex-direction:column; justify-content:center; gap:5px; background:none; border:none; cursor:pointer; padding:6px }
+.menu-btn span { display:block; width:22px; height:2px; background:var(--accent); border-radius:2px; transition:transform .3s,opacity .3s }
+.menu-btn.open span:nth-child(1) { transform:translateY(7px) rotate(45deg) }
+.menu-btn.open span:nth-child(2) { opacity:0 }
+.menu-btn.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg) }
+.mobile-menu { display:none; position:fixed; top:0; left:0; right:0; bottom:0; z-index:390; background:rgba(1,2,5,.97); backdrop-filter:blur(20px); flex-direction:column; align-items:center; justify-content:center; gap:2.5rem }
+.mobile-menu.open { display:flex }
+.mobile-menu a { color:rgba(232,237,245,.6); text-decoration:none; font-family:'DM Mono',monospace; font-size:1rem; letter-spacing:.15em; text-transform:uppercase; transition:color .3s }
+.mobile-menu a:hover,.mobile-menu a.active { color:var(--accent) }
+
+@media(prefers-reduced-motion:reduce) {
+  *, *::before, *::after { animation:none!important; transition:none!important }
+}
+</style>
+</head>
+<body>
+
+<!-- Rocket cursor -->
+<div id="rocket-cursor">
+  <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M22 5 C27 10 29 17 29 23 L22 29 L15 23 C15 17 17 10 22 5 Z"
+          stroke="#00d4ff" stroke-width="1.5" fill="rgba(0,212,255,0.07)" stroke-linejoin="round"/>
+    <path d="M15 22 L9 33 L15 28 Z"
+          stroke="#00d4ff" stroke-width="1.3" fill="rgba(0,212,255,0.05)" stroke-linejoin="round"/>
+    <path d="M29 22 L35 33 L29 28 Z"
+          stroke="#00d4ff" stroke-width="1.3" fill="rgba(0,212,255,0.05)" stroke-linejoin="round"/>
+    <path d="M17 28 L17 32 Q22 35 27 32 L27 28"
+          stroke="#00d4ff" stroke-width="1.3" fill="none" stroke-linejoin="round"/>
+    <circle cx="22" cy="17" r="4" stroke="#7b61ff" stroke-width="1.2" fill="rgba(123,97,255,0.12)"/>
+    <path class="flame-path"  d="M18 32 Q22 44 26 32" stroke="#ff6b35" stroke-width="1.8" fill="none" opacity="0"/>
+    <path class="flame-path2" d="M19.5 32 Q22 39 24.5 32" stroke="#ffbd2e" stroke-width="1.1" fill="none" opacity="0"/>
+  </svg>
+</div>
+
+<div id="prog"></div>
+
+<!-- ── SIDE NAV ────────────────────────────────────────── -->
+<nav class="side-nav" id="sideNav">
+  <a href="#s0" class="sn-item active" data-sid="s0">
+    <span class="sn-num">00</span>
+    <span class="sn-bar"></span>
+  </a>
+  <a href="#s5" class="sn-item" data-sid="s5">
+    <span class="sn-num">01</span>
+    <span class="sn-bar"></span>
+  </a>
+  <a href="#s1" class="sn-item" data-sid="s1">
+    <span class="sn-num">02</span>
+    <span class="sn-bar"></span>
+  </a>
+  <a href="#s2" class="sn-item" data-sid="s2">
+    <span class="sn-num">03</span>
+    <span class="sn-bar"></span>
+  </a>
+  <a href="#s3" class="sn-item" data-sid="s3">
+    <span class="sn-num">04</span>
+    <span class="sn-bar"></span>
+  </a>
+  <a href="#s4" class="sn-item" data-sid="s4">
+    <span class="sn-num">05</span>
+    <span class="sn-bar"></span>
+  </a>
+</nav>
+
+<!-- ── TOP NAV ──────────────────────────────────────────── -->
+<nav class="top-nav">
+  <a href="../index.html" class="nav-logo">HM</a>
+  <ul class="nav-links">
+    <li><a href="index.html#about">Über mich</a></li>
+    <li><a href="index.html#fähigkeiten">Fähigkeiten</a></li>
+    <li><a href="index.html#projekte">Projekte</a></li>
+    <li><a href="projects.html" class="active">Galerie</a></li>
+    <li><a href="index.html#ausbildung">Ausbildung</a></li>
+    <li><a href="index.html#kontakt">Kontakt</a></li>
+  </ul>
+  <a href="../projects.html" class="lang-btn" aria-label="Switch to English">EN</a>
+  <button class="menu-btn" id="menuBtn" aria-label="Toggle navigation" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <a href="index.html#about">Über mich</a>
+  <a href="index.html#fähigkeiten">Fähigkeiten</a>
+  <a href="index.html#projekte">Projekte</a>
+  <a href="projects.html" class="active">Galerie</a>
+  <a href="index.html#ausbildung">Ausbildung</a>
+  <a href="index.html#kontakt">Kontakt</a>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     INTRO — FULL SCREEN
+══════════════════════════════════════════════════════════ -->
+<section class="intro-slide" id="s0">
+  <div class="intro-grid-bg"></div>
+  <div class="intro-eyebrow" id="iEyebrow">Ausgewählte Projekte</div>
+  <h1 class="intro-title">
+    <div class="intro-line"><span class="it-solid" id="il1">AUSGEWÄHLTE</span></div>
+    <div class="intro-line"><span class="it-outline" id="il2">PROJEKTE.</span></div>
+  </h1>
+  <div class="intro-bottom">
+    <div class="intro-stat" id="is1">
+      <strong>05</strong>
+      Projekte
+    </div>
+    <div class="intro-stat" id="is2">
+      <strong>2024—26</strong>
+      Zeitraum
+    </div>
+    <div class="intro-scroll" id="iScroll">Scrollen</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     PROJECT 01 — ORBITAL MECHANICS TOOLS (LATEST)
+══════════════════════════════════════════════════════════ -->
+<section class="proj-slide" id="s5" data-index="01">
+  <div class="slide-left">
+    <div class="slide-idx">01 / 05</div>
+    <div class="slide-cat">Astrodynamik · Maschinelles Lernen · HMI</div>
+    <h2 class="slide-title">Orbital Mechanics<br>Tools &amp; AI Surrogate<br><span style="-webkit-text-stroke:1px rgba(0,212,255,.35);color:transparent;font-size:.72em;letter-spacing:.01em">Dashboard</span></h2>
+    <div class="slide-org">Eigenprojekt · Mär – Apr 2026</div>
+    <p class="slide-desc">Full-Stack-Python-Astrodynamik-Suite — Hohmann-, bielliptische &amp; Phasierungsmanöver analytisch berechnet, kombiniert mit einem MLPRegressor-Surrogatmodell (R²&nbsp;=&nbsp;0,9993 auf 40.000 Testszenarien). PySide6 HMI mit Live-Matplotlib-Orbitalvisualisierungen für Erde, Mond und Mars.</p>
+    <div class="slide-metrics">
+      <div class="sm-row">
+        <span class="sm-lbl">R²-Wert</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:99%"></div></div>
+        <span class="sm-val">0.9993</span>
+      </div>
+      <div class="sm-row">
+        <span class="sm-lbl">MAPE</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:97%"></div></div>
+        <span class="sm-val">2.88 %</span>
+      </div>
+      <div class="sm-row">
+        <span class="sm-lbl">Trainingsszenarien</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:80%"></div></div>
+        <span class="sm-val">200 k</span>
+      </div>
+    </div>
+    <div class="slide-tags">
+      <span class="s-tag">Python</span>
+      <span class="s-tag">PySide6</span>
+      <span class="s-tag">scikit-learn</span>
+      <span class="s-tag">NumPy</span>
+      <span class="s-tag">Matplotlib</span>
+      <span class="s-tag">Joblib</span>
+    </div>
+    <div class="slide-actions">
+      <a href="https://github.com/thehardikmadaan/orbital-mechanics-tools" target="_blank" rel="noopener noreferrer" class="s-btn pri">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+      <a href="index.html#projekte" class="s-btn">Details ansehen →</a>
+    </div>
+  </div>
+
+  <div class="slide-right">
+    <div class="proj-gallery">
+
+      <!-- Phase label bar -->
+      <div class="gallery-phase-bar">
+        <span class="gpb-label">Phase</span>
+        <span class="gpb-title" id="g5PhaseTitle">01 — Live-Dashboard</span>
+      </div>
+
+      <div class="gallery-main">
+
+        <!-- TAB 0 — DASHBOARD DEMO -->
+        <div class="g-phase active" data-gphase="0">
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img src="../assets/images/orbital-mechanics-tools/Orbital_transfer_calculator_prototype.gif" alt="Orbital Transfer Calculator Dashboard" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Live Dashboard — Orbital Transfer Calculator</div>
+                <div class="gimg-cap-text">PySide6 HMI showing a Hohmann transfer from LEO to GEO. Input panel on the left, physics results and AI surrogate prediction side-by-side on the right, with an embedded Matplotlib orbit plot drawn to scale at the bottom.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell" style="display:flex;flex-direction:column;justify-content:center;gap:.55rem;padding:1.1rem 1rem;background:#020609;cursor:default">
+              <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase">Physics Engine</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.7rem;color:rgba(232,237,245,.6);line-height:1.75">Hohmann Transfer<br>Bi-Elliptic Transfer<br>Phasing Manoeuvres<br>Tsiolkovsky Rocket Eq.</div>
+            </div>
+            <div class="gimg-cell" style="display:flex;flex-direction:column;justify-content:center;gap:.55rem;padding:1.1rem 1rem;background:#020609;cursor:default">
+              <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase">AI Surrogate</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.7rem;color:rgba(232,237,245,.6);line-height:1.75">R² = 0.9993<br>MAE = 16.47 m/s<br>MAPE = 2.88 %<br>40,000 test scenarios</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 1 — DATA GENERATION -->
+        <div class="g-phase" data-gphase="1">
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img data-src="../assets/images/orbital-mechanics-tools/generate_data.py.gif" src="" alt="Synthetic dataset generation — 200,000 mission scenarios">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">generate_data.py — 200.000 Missionsszenarien</div>
+                <div class="gimg-cap-text">Terminal output of the synthetic data pipeline: orbit radii, spacecraft mass, Isp, and manoeuvre type are randomly sampled; the physics engine computes the exact delta-v and propellant mass ground truth for each scenario. The result is saved as orbital_data.csv.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell" style="display:flex;flex-direction:column;justify-content:center;gap:.55rem;padding:1.1rem 1rem;background:#020609;cursor:default">
+              <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase">Training Coverage</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.7rem;color:rgba(232,237,245,.6);line-height:1.75">Earth · Moon · Mars<br>LEO → Trans-Lunar<br>v_c: 261 – 7,784 m/s<br>No body flags needed</div>
+            </div>
+            <div class="gimg-cell" style="display:flex;flex-direction:column;justify-content:center;gap:.55rem;padding:1.1rem 1rem;background:#020609;cursor:default">
+              <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase">Dataset Split</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.7rem;color:rgba(232,237,245,.6);line-height:1.75">200,000 total<br>160,000 train (80 %)<br>40,000 test (20 %)<br>Clean, zero measurement noise</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2 — TRAINING PIPELINE -->
+        <div class="g-phase" data-gphase="2">
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img data-src="../assets/images/orbital-mechanics-tools/train_model.py.gif" src="" alt="Neural network training pipeline — 5-stage MLP">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">train_model.py — 5-stufige MLP-Trainings-Pipeline</div>
+                <div class="gimg-cap-text">The terminal logs all five stages: dataset load → StandardScaler preprocessing → 80/20 split → MLPRegressor training → evaluation on 40,000 held-out samples. Final output: R² = 0.9993, MAE = 16.47 m/s, RMSE = 30.56 m/s, MAPE = 2.88 %. Both model and scaler serialised with Joblib.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell" style="display:flex;flex-direction:column;justify-content:center;gap:.55rem;padding:1.1rem 1rem;background:#020609;cursor:default">
+              <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase">Model Metrics</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.7rem;color:rgba(232,237,245,.6);line-height:1.75">MAE  = 16.47 m/s<br>RMSE = 30.56 m/s<br>MAPE = 2.88 %<br>R²   = 0.9993</div>
+            </div>
+            <div class="gimg-cell" style="display:flex;flex-direction:column;justify-content:center;gap:.55rem;padding:1.1rem 1rem;background:#020609;cursor:default">
+              <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase">Stack</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.7rem;color:rgba(232,237,245,.6);line-height:1.75">scikit-learn MLPRegressor<br>StandardScaler<br>Pandas · NumPy<br>Joblib serialisation</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /gallery-main -->
+
+      <nav class="gallery-phase-nav" id="g5PhaseNav" aria-label="Project phases" style="grid-template-columns:repeat(3,1fr)">
+        <button class="gpn-btn active" data-gphase="0">
+          <span class="gpn-num">01</span>
+          <span class="gpn-lbl">Dashboard</span>
+        </button>
+        <button class="gpn-btn" data-gphase="1">
+          <span class="gpn-num">02</span>
+          <span class="gpn-lbl">Daten</span>
+        </button>
+        <button class="gpn-btn" data-gphase="2">
+          <span class="gpn-num">03</span>
+          <span class="gpn-lbl">Training</span>
+        </button>
+      </nav>
+
+    </div><!-- /proj-gallery -->
+  </div>
+
+  <div class="slide-num-bg">01</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     PROJECT 02 — PHM SYSTEM (already correct)
+══════════════════════════════════════════════════════════ -->
+<section class="proj-slide" id="s1" data-index="02">
+  <div class="slide-left">
+    <div class="slide-idx">02 / 05</div>
+    <div class="slide-cat">Maschinelles Lernen · Luft- und Raumfahrt</div>
+    <h2 class="slide-title">Prognostics &amp; Health<br>Management System<br><span style="-webkit-text-stroke:1px rgba(0,212,255,.35);color:transparent;font-size:.72em;letter-spacing:.01em">for Gas Turbine Engine</span></h2>
+    <div class="slide-org">Personal Project · Oct – Dec 2025</div>
+    <p class="slide-desc">End-to-End-ML-Pipeline zur Vorhersage der verbleibenden Nutzungsdauer (RUL) auf dem NASA-C-MAPSS-Datensatz. Asymmetrische Verlustfunktion reduziert Sicherheitsverstöße von 12,4 % auf 1,09 %. LSTM übertrifft Random Forest (RMSE 17,17 → 13,32 Zyklen).</p>
+    <div class="slide-metrics">
+      <div class="sm-row">
+        <span class="sm-lbl">RMSE-Reduktion</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:78%"></div></div>
+        <span class="sm-val">78 %</span>
+      </div>
+      <div class="sm-row">
+        <span class="sm-lbl">Sicherheitsverstöße</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:91%"></div></div>
+        <span class="sm-val">↓ 91 %</span>
+      </div>
+      <div class="sm-row">
+        <span class="sm-lbl">Modellgenauigkeit</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:87%"></div></div>
+        <span class="sm-val">87 %</span>
+      </div>
+    </div>
+    <div class="slide-tags">
+      <span class="s-tag">LSTM</span>
+      <span class="s-tag">Python</span>
+      <span class="s-tag">MLflow</span>
+      <span class="s-tag">DVC</span>
+      <span class="s-tag">K-Means</span>
+      <span class="s-tag">NASA C-MAPSS</span>
+    </div>
+    <div class="slide-actions">
+      <a href="https://github.com/thehardikmadaan" target="_blank" rel="noopener" class="s-btn pri">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+      <a href="index.html#projekte" class="s-btn">Details ansehen →</a>
+    </div>
+  </div>
+
+  <div class="slide-right">
+    <div class="proj-gallery">
+
+      <!-- Phase label bar -->
+      <div class="gallery-phase-bar">
+        <span class="gpb-label">Phase</span>
+        <span class="gpb-title" id="g1PhaseTitle">01 — Explorative Datenanalyse</span>
+      </div>
+
+      <!-- ── Scrollable image area ─────────────────── -->
+      <div class="gallery-main">
+
+        <!-- PHASE 0 — EDA -->
+        <div class="g-phase active" data-gphase="0">
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1762781923171.jpeg" alt="Sensor 7 Degradation Trend" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Sensor 7 Degradationstrend</div>
+                <div class="gimg-cap-text">Der erste Beweis: Sensordaten über Zyklen aufgetragen zeigen einen deutlichen verrauschten Abwärtstrend — das Degradationssignal, das das Modell lernen muss.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1762781922692.jpeg" alt="Feature Correlation with RUL" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Merkmalkorrelation mit RUL</div>
+                <div class="gimg-cap-text">All 21 sensors ranked by predictive power. Top predictors (sensor_12, sensor_7) are physically linked to the HPC fault mode — the exact failure in this dataset. Six zero-correlation sensors dropped.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1762781923697.jpeg" alt="RUL vs Sensor 7 Relationship" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">RUL vs. Sensor 7</div>
+                <div class="gimg-cap-text">Piecewise linear scatter confirms the data engineering strategy: clipping RUL at 125 cycles simplifies the healthy phase, letting the model focus on the critical degradation zone.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1762781923716.jpeg" alt="RUL vs Sensor 12 Relationship" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">RUL vs. Sensor 12</div>
+                <div class="gimg-cap-text">Sensor 12 mirrors sensor 7 — both are HPC-linked indicators. Their near-identical shapes reveal strong multicollinearity: no issue for LSTM, but fatal for linear models.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1762781925240.jpeg" alt="Scatter Matrix of Key Features vs RUL" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Streuungsmatrix — Wichtige Merkmale vs. RUL</div>
+                <div class="gimg-cap-text">The full picture: top sensors are tightly correlated with each other and with RUL. This multicollinearity rules out linear regression and motivates the LSTM + cluster similarity approach.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHASE 1 — FEATURE ENGINEERING & PIPELINE -->
+        <div class="g-phase" data-gphase="1">
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1765029250405.jpeg" alt="K-Means Cluster Similarity" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">K-Means Betriebsmodi</div>
+                <div class="gimg-cap-text">Engines behave differently at different altitudes and throttles. K-Means on sensors 7 & 12 discovers these regimes automatically. Each point's similarity to cluster centers (X) becomes a "Health Signature" feature.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1765029250406.jpeg" alt="ColumnTransformer Pipeline Architecture" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Master-Pipeline — ColumnTransformer</div>
+                <div class="gimg-cap-text">The full preprocessing architecture: log-transforms for exponential decay sensors, K-Means similarity injection, and automatic unit ID stripping. A Group Split by Engine ID prevents data leakage across time.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1765029250430.jpeg" alt="Linear Regression Baseline Performance" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Lineare Regression — RMSE 17,17</div>
+                <div class="gimg-cap-text">The baseline "smear": predictions scatter widely around the perfect line. Engine degradation is exponential and non-linear — a straight line cannot capture the failure curve.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1765029250332.jpeg" alt="Random Forest Baseline Performance" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Random Forest — RMSE 16,05</div>
+                <div class="gimg-cap-text">A tighter fit to the perfect prediction line, but still with overgeneralisation at the extremes. Random Forest lacks "memory" — it sees one row at a time with no sense of degradation velocity.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHASE 2 — LSTM DEEP LEARNING -->
+        <div class="g-phase" data-gphase="2">
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1765030831882.jpeg" alt="LSTM Model Architecture" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">LSTM-Architektur</div>
+                <div class="gimg-cap-text">Two stacked LSTM layers (64 → 32 units) with Dropout(0.2). Input: (Samples, 30 TimeSteps, Features) — feeding the last 30 flight cycles so the model learns velocity and acceleration of degradation, not just absolute values.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1765030831863.jpeg" alt="LSTM Training History" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">LSTM-Trainingshistorie</div>
+                <div class="gimg-cap-text">Training and validation loss converge cleanly. No divergence between curves confirms the Dropout regularisation is working — the model generalises rather than memorising.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1765030831839.jpeg" alt="Random Forest Safety Analysis — Baseline" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">RF-Sicherheitsbasis — 12,41 % Risiko</div>
+                <div class="gimg-cap-text">Safety analysis of the Random Forest baseline. A tail of predictions falls in the Dangerous Zone (overestimation). A 1-in-8 chance of predicting a safe engine that is actually failing is unacceptable for safety-critical operations.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1765030831794.jpeg" alt="LSTM Error Distribution 10.26% Risk" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">LSTM-Fehlerverteilung — 10,26 % Risiko</div>
+                <div class="gimg-cap-text">The standard LSTM reduces dangerous overestimations from 12.41% to 10.26% — a genuine improvement. But 1 in 10 is still too high. Accuracy alone is not enough for safety-critical maintenance.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1765030831937.jpeg" alt="Random Forest Feature Importance" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Random Forest Merkmalswichtigkeit</div>
+                <div class="gimg-cap-text">The K-Means cluster similarity features dominate importance — validating the pipeline design decision. "Cluster_0_similarity" alone accounts for ~37% of predictive power, confirming operating-mode awareness is the key engineered signal.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHASE 3 — ASYMMETRIC SAFETY LOSS -->
+        <div class="g-phase" data-gphase="3">
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1767977171265.jpeg" alt="Keras Tuner Hyperparameter Distributions" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Keras Tuner — Hyperparameter-Suche</div>
+                <div class="gimg-cap-text">Keras Tuner mathematically optimises the LSTM architecture across layers, units, and dropout. Loguniform distributions efficiently explore learning rates across orders of magnitude, bringing RMSE to 13.32 cycles.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1765032329452.jpeg" alt="Tuned LSTM Training History" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Optimierte LSTM-Trainingshistorie</div>
+                <div class="gimg-cap-text">The optimised model converges faster and to a lower loss floor. Training and validation curves remain tightly coupled across all 22 epochs — no overfitting despite the increased model capacity.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1765032329507.jpeg" alt="Tuned LSTM Performance RMSE 13.32" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Optimierter LSTM — RMSE 13,32</div>
+                <div class="gimg-cap-text">The tuned model is more accurate than the baseline LSTM, but standard MSE loss still treats overestimation and underestimation equally. The risk factor stays at 9.60% — accuracy and safety are separate problems.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1765032329298.jpeg" alt="Asymmetric Loss Impact — Risk 1.09%" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Asymmetrische Verlustfunktion — Risiko sinkt auf 1,09 %</div>
+                <div class="gimg-cap-text">A custom TensorFlow loss applies a 10× penalty to overestimation errors. Gradient Descent is mathematically forced to "fear the danger zone." Risk collapses from 9.60% → 1.09% — a safety breakthrough.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1765032329536.jpeg" alt="Safety-First Model Scatter" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Sicherheitsorientiertes Modell — Konservative Schätzungen</div>
+                <div class="gimg-cap-text">Green predictions have shifted below the diagonal — the model now systematically errs on the side of caution. Maintenance crews will always be alerted before a failure becomes critical, not after.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1765032329379.jpeg" alt="Engine 1 Lifecycle Tracking" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Triebwerk #1 — Vollständiger Lebenszyklus verfolgt</div>
+                <div class="gimg-cap-text">The AI (green) tracks the ground truth (black dashed) closely across all 160 flight cycles, but stays slightly below — safe conservatism in action. This is the ideal human-machine interaction signature for predictive maintenance.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHASE 4 — FINAL RESULTS -->
+        <div class="g-phase" data-gphase="4">
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img src="../assets/images/gas-turbine-prognostics/1765032329444.jpeg" alt="Final Test Set Performance RMSE 18.79" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Abschlussprüfung — Neue Testmotoren, RMSE 18,79</div>
+                <div class="gimg-cap-text">Testing on a completely held-out set of engines never seen during training or validation. RMSE of 18.79 cycles reflects real-world generalisation cost — but the safety profile holds: predictions consistently avoid dangerous overestimation zones.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /gallery-main -->
+
+      <!-- ── Phase navigation strip ───────────── -->
+      <nav class="gallery-phase-nav" id="g1PhaseNav" aria-label="Project phases">
+        <button class="gpn-btn active" data-gphase="0">
+          <span class="gpn-num">01</span>
+          <span class="gpn-lbl">EDA</span>
+        </button>
+        <button class="gpn-btn" data-gphase="1">
+          <span class="gpn-num">02</span>
+          <span class="gpn-lbl">Pipeline</span>
+        </button>
+        <button class="gpn-btn" data-gphase="2">
+          <span class="gpn-num">03</span>
+          <span class="gpn-lbl">LSTM</span>
+        </button>
+        <button class="gpn-btn" data-gphase="3">
+          <span class="gpn-num">04</span>
+          <span class="gpn-lbl">Sicherheit</span>
+        </button>
+        <button class="gpn-btn" data-gphase="4">
+          <span class="gpn-num">05</span>
+          <span class="gpn-lbl">Ergebnisse</span>
+        </button>
+      </nav>
+
+    </div><!-- /proj-gallery -->
+  </div>
+
+  <div class="slide-num-bg">02</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     PROJECT 03 — SIMULATOR GUI  (media RIGHT, info LEFT alt)
+══════════════════════════════════════════════════════════ -->
+<section class="proj-slide alt" id="s2" data-index="02">
+  <div class="slide-right">
+    <div class="proj-gallery">
+
+      <!-- Phase label bar -->
+      <div class="gallery-phase-bar">
+        <span class="gpb-label">Section</span>
+        <span class="gpb-title" id="g2PhaseTitle">01 — Simulator-Aufbau</span>
+      </div>
+
+      <!-- NDA notice -->
+      <div class="nda-notice">
+        <span class="nda-dot"></span>
+        <span class="nda-text">Geschwärzte Bilder nur zur Referenz — Projekt unterliegt einem NDA</span>
+      </div>
+
+      <!-- ── Image area ──────────────────────────── -->
+      <div class="gallery-main">
+
+        <!-- TAB 0 — SIMULATOR RIG (eager, no GIFs = fast initial load) -->
+        <div class="g-phase active" data-gphase="0">
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img src="../assets/images/SPO/me.jpeg" alt="Developer in the simulator rig" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Im Simulator-Dom — FSR TU Darmstadt</div>
+                <div class="gimg-cap-text">All three monitors running the PySide6 GUI live in the FSR dome. Left: Flight Controls Panel; centre: aircraft synoptic; right: backup systems. Every panel driven by real X-Plane 12 telemetry streamed over UDP at 50 Hz.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell" style="display:flex;flex-direction:column;justify-content:center;gap:.5rem;padding:1.1rem 1rem;background:#020609;cursor:default">
+              <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase">Stack</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.7rem;color:rgba(232,237,245,.6);line-height:1.7">PySide6 · X-Plane 12<br>XHSI Plugin · UDP / Multi-threading<br>Python 3 · QTimer sync</div>
+            </div>
+            <div class="gimg-cell" style="display:flex;flex-direction:column;justify-content:center;gap:.5rem;padding:1.1rem 1rem;background:#020609;cursor:default">
+              <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase">Key Numbers</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.7rem;color:rgba(232,237,245,.6);line-height:1.7">50 Hz data rate<br>&lt; 20 ms end-to-end latency<br>Grade 1.3 awarded</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 1 — PFD / MFD DISPLAYS (deferred) -->
+        <div class="g-phase" data-gphase="1">
+          <div class="gimg-row cols-1" style="background:#010508">
+            <div class="gimg-cell" style="aspect-ratio:19/6">
+              <img data-src="../assets/images/SPO/PFD_mfd.png" src="" alt="PFD and MFD Display" style="object-fit:contain;width:100%;height:100%">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Primäres Flugdisplay + MFD — XHSI-Plugin</div>
+                <div class="gimg-cap-text">Left: ND (Navigation Display / HSI) with heading rose and traffic advisory. Centre: PFD with attitude indicator, speed tape, altitude tape, and FD bars. Right: dual-engine instruments. All rendered via the XHSI (X-Plane HSI) 3rd-party plugin, fed by live X-Plane 12 datarefs over UDP.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img data-src="../assets/images/SPO/me_flying_sim.gif" src="" alt="Live flight test with GUI active">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">GUI aktiv — Live-Flugtest</div>
+                <div class="gimg-cap-text">All panels updating simultaneously during an active sim session. Demonstrates the sub-20 ms latency from X-Plane dataref change to on-screen display refresh across every concurrent widget.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img data-src="../assets/images/SPO/1761608637937.jpeg" src="" alt="Single Pilot Cockpit Overview — NDA blurred">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Cockpit Layout Overview <span style="color:var(--a3);font-size:.9em">[NDA]</span></div>
+                <div class="gimg-cap-text">Full single-pilot window arrangement: ND + PFD + engine column on top, additional systems and synoptic pages below. Multiple independent PySide6 widgets tiled into one unified operator view.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2 — ECAM SYSTEMS (deferred) -->
+        <div class="g-phase" data-gphase="2">
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img data-src="../assets/images/SPO/1761608641351.gif" src="" alt="HYD/FUEL and ELEC/AIR systems live testing">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">HYD &amp; Kraftstoff / ELEK &amp; Luft — Live-Test</div>
+                <div class="gimg-cap-text">Bleed air system page streaming live from X-Plane. ENG 1/APU/ENG 2 BLEED states, XFEED AUTO, and HOT AIR buttons all respond directly to X-Plane datarefs over the multi-threaded UDP connection.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img data-src="../assets/images/SPO/1761608637668.jpeg" src="" alt="ECAM Systems Pages — NDA blurred">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">ECAM Systems Pages Grid <span style="color:var(--a3);font-size:.9em">[NDA]</span></div>
+                <div class="gimg-cap-text">Four synoptic pages displayed at once: electrical bus diagram, system data table, hydraulics schematic, and flight controls surface page with blue/yellow/green actuation colour-coding. Each page is a separate PySide6 widget on its own dataref set.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3 — FLIGHT CONTROLS (deferred) -->
+        <div class="g-phase" data-gphase="3">
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img data-src="../assets/images/SPO/1761608637716.gif" src="" alt="Flight Controls Panel UI with source code">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Flugsteuerungspanel — PySide6 + Quellcode</div>
+                <div class="gimg-cap-text">Side-by-side: FCP UI and FCPmain.py. Handles elevator trim (±3° animated slider), rudder trim, gear &amp; brakes, speed brakes, and flaps — each writing back to X-Plane datarefs. QTimer syncs control state from the sim every 30 s on startup.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img data-src="../assets/images/SPO/1761608639601.gif" src="" alt="Flight Controls Panel — NDA blurred">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">FCP Operational View <span style="color:var(--a3);font-size:.9em">[NDA]</span></div>
+                <div class="gimg-cap-text">Elevator trim indicator, gear &amp; brakes lights, speed brake and flap sliders (Low / Med / Max). All controls bi-directionally linked — physical inceptor movement in X-Plane updates the GUI in real time.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img data-src="../assets/images/SPO/1761608639155.gif" src="" alt="ATC and Backup Controls — NDA blurred">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">ATC + Backup Controls <span style="color:var(--a3);font-size:.9em">[NDA]</span></div>
+                <div class="gimg-cap-text">ATC radio management: active/standby frequency, VHF1/VHF2 select, and live command-history log. Backup Controls provide a fallback interface if primary displays fail — fulfilling the single-pilot redundancy requirement.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell" style="background:#010508">
+              <img data-src="../assets/images/SPO/nose_light_slider_gif.gif" src="" alt="Nose light slider widget" style="width:100%;height:100%;object-fit:contain">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Buglicht — AnimatedSlider</div>
+                <div class="gimg-cap-text">Custom PySide6 AnimatedSlider with discrete T.O / TAXI detents for nose landing-light control.</div>
+              </div>
+            </div>
+            <div class="gimg-cell" style="display:flex;flex-direction:column;justify-content:center;padding:1.1rem 1rem;background:#020609;cursor:default">
+              <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.55rem">Reusable Component</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.7rem;color:rgba(232,237,245,.6);line-height:1.65">Die gleiche AnimatedSlider-Klasse steuert Spoiler, Klappenhebel und alle anderen schiebergesteuerten Bedienelemente — einmal schreiben, überall in der GUI einsetzen.</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /gallery-main -->
+
+      <!-- ── Section navigation — 4 tabs ──────── -->
+      <nav class="gallery-phase-nav" id="g2PhaseNav" aria-label="Project sections" style="grid-template-columns:repeat(4,1fr)">
+        <button class="gpn-btn active" data-gphase="0">
+          <span class="gpn-num">01</span>
+          <span class="gpn-lbl">Aufbau</span>
+        </button>
+        <button class="gpn-btn" data-gphase="1">
+          <span class="gpn-num">02</span>
+          <span class="gpn-lbl">PFD/MFD</span>
+        </button>
+        <button class="gpn-btn" data-gphase="2">
+          <span class="gpn-num">03</span>
+          <span class="gpn-lbl">Systeme</span>
+        </button>
+        <button class="gpn-btn" data-gphase="3">
+          <span class="gpn-num">04</span>
+          <span class="gpn-lbl">Steuerung</span>
+        </button>
+      </nav>
+
+    </div><!-- /proj-gallery -->
+  </div>
+
+  <div class="slide-left">
+    <div class="slide-idx">03 / 05</div>
+    <div class="slide-cat">HMI · Luft- und Raumfahrt · Software</div>
+    <h2 class="slide-title">Einpiloten-Simulator-<br>Displays</h2>
+    <div class="slide-org">FSR — TU Darmstadt · Apr – Sep 2025</div>
+    <p class="slide-desc">Modulare GUI für Einpiloten-Cockpit-Operationen mit PySide6. Mehrfädig-UDP-Schicht streamt Echtzeit-Telemetrie von X-Plane 12 mit 50 Hz und unter 20 ms Latenz. Note 1,3 für HMI-Performance und Backend-Zuverlässigkeit.</p>
+    <div class="slide-metrics">
+      <div class="sm-row">
+        <span class="sm-lbl">Datenrate</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:95%"></div></div>
+        <span class="sm-val">50 Hz</span>
+      </div>
+      <div class="sm-row">
+        <span class="sm-lbl">Benotung</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:92%"></div></div>
+        <span class="sm-val">1.3</span>
+      </div>
+      <div class="sm-row">
+        <span class="sm-lbl">Latenz</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:85%"></div></div>
+        <span class="sm-val">&lt; 20 ms</span>
+      </div>
+    </div>
+    <div class="slide-tags">
+      <span class="s-tag">PySide6</span>
+      <span class="s-tag">X-Plane SDK</span>
+      <span class="s-tag">UDP</span>
+      <span class="s-tag">Multi-threading</span>
+      <span class="s-tag">HMI</span>
+    </div>
+    <div class="slide-actions">
+      <a href="https://github.com/thehardikmadaan" target="_blank" rel="noopener" class="s-btn pri">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+      <a href="index.html#projekte" class="s-btn">Details ansehen →</a>
+    </div>
+  </div>
+
+  <div class="slide-num-bg">03</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     PROJECT 04 — RUNWAY SAFETY
+══════════════════════════════════════════════════════════ -->
+<section class="proj-slide" id="s3" data-index="03">
+  <div class="slide-left">
+    <div class="slide-idx">04 / 05</div>
+    <div class="slide-cat">Sicherheitsanalyse · Luft- und Raumfahrt · ML</div>
+    <h2 class="slide-title">Rollfeld-Eindringung<br>Sicherheitsanalyse</h2>
+    <div class="slide-org">Boeing × FSR · Okt 2024 – Mär 2025</div>
+    <p class="slide-desc">30 Jahre Rollfeld-Eindringungsereignisse analysiert, mit Fokus auf kollisionskritische Szenarien. Sensitivitätsanalyse nach dem SURFIA-Framework und gemäß RTCA DO-323. Ergebnisse an Boeing-Sicherheitsingenieure und die FSR-Abteilung der TU Darmstadt präsentiert. Note 1,7.</p>
+    <div class="slide-metrics">
+      <div class="sm-row">
+        <span class="sm-lbl">Datenabdeckung</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:100%"></div></div>
+        <span class="sm-val">30 yrs</span>
+      </div>
+      <div class="sm-row">
+        <span class="sm-lbl">DO-323-Abdeckung</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:94%"></div></div>
+        <span class="sm-val">94 %</span>
+      </div>
+      <div class="sm-row">
+        <span class="sm-lbl">Benotung</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:88%"></div></div>
+        <span class="sm-val">1.7</span>
+      </div>
+    </div>
+    <div class="slide-tags">
+      <span class="s-tag">Safety Analysis</span>
+      <span class="s-tag">SURFIA</span>
+      <span class="s-tag">RTCA DO-323</span>
+      <span class="s-tag">Pandas</span>
+      <span class="s-tag">NumPy</span>
+      <span class="s-tag">Boeing</span>
+    </div>
+    <div class="slide-actions">
+      <a href="index.html#projekte" class="s-btn">Details ansehen →</a>
+    </div>
+  </div>
+
+  <div class="slide-right">
+    <div class="proj-gallery">
+
+      <!-- Phase label bar -->
+      <div class="gallery-phase-bar">
+        <span class="gpb-label">Section</span>
+        <span class="gpb-title" id="g3PhaseTitle">01 — Boeing-Meeting &amp; Datensatz</span>
+      </div>
+
+      <!-- NDA notice -->
+      <div class="nda-notice">
+        <span class="nda-dot"></span>
+        <span class="nda-text">Datenvisualisierungen absichtlich verdeckt — Projekt unterliegt einem NDA</span>
+      </div>
+
+      <div class="gallery-main">
+
+        <!-- TAB 0 — EVIDENCE (eager) -->
+        <div class="g-phase active" data-gphase="0">
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src="../assets/images/RI_analysis/boeing_meeting_idcard.jpeg" alt="Boeing meeting visitor badge" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Boeing-Meeting — 06. Mär 2025</div>
+                <div class="gimg-cap-text">Besucherausweis für das FSR × Boeing Sicherheitsreview. Ergebnisse der Rollfeld-Eindringungs-Sensitivitätsanalyse direkt an Boeing-Sicherheitsingenieure präsentiert.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src="../assets/images/RI_analysis/Screenshot_sample_of_data_collected_not_clear_protected_due_to_NDA.png" alt="Sample of RI dataset — NDA protected" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">30-Jahre-RI-Datensatz <span style="color:var(--a3);font-size:.9em">[NDA]</span></div>
+                <div class="gimg-cap-text">Sample of the runway incursion event database: date, airport, aircraft category, severity, contributing factors, and narrative fields. Major collision-critical events isolated from 30 years of ASRS / FAA records.</div>
+              </div>
+            </div>
+          </div>
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell" style="display:flex;flex-direction:column;justify-content:center;gap:.55rem;padding:1.1rem 1rem;background:#020609;cursor:default">
+              <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase">Dataset Scope</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.7rem;color:rgba(232,237,245,.6);line-height:1.75">30 years of major RI events<br>Collision-critical scenarios only<br>ASRS + FAA incident records<br>Multi-column feature extraction</div>
+            </div>
+            <div class="gimg-cell" style="display:flex;flex-direction:column;justify-content:center;gap:.55rem;padding:1.1rem 1rem;background:#020609;cursor:default">
+              <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase">Delivered To</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.7rem;color:rgba(232,237,245,.6);line-height:1.75">Boeing safety engineers<br>FSR — TU Darmstadt dept.<br>Grade awarded: <span style="color:var(--accent)">1.7</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 1 — METHODOLOGY (CSS cards, no images to defer) -->
+        <div class="g-phase" data-gphase="1">
+          <!-- SURFIA -->
+          <div class="gimg-row cols-1" style="background:#020609">
+            <div style="padding:1.1rem 1.2rem;display:flex;flex-direction:column;gap:.4rem;border-bottom:1px solid var(--border)">
+              <div style="display:flex;align-items:center;gap:.7rem">
+                <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--a2);letter-spacing:.14em;text-transform:uppercase;background:rgba(123,97,255,.08);border:1px solid rgba(123,97,255,.2);padding:.18rem .5rem;border-radius:2px">Framework</div>
+                <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--text)">SURFIA</div>
+              </div>
+              <div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted);letter-spacing:.06em">Oberflächenrisikoidentifikation &amp; -bewertung</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.72rem;color:rgba(232,237,245,.6);line-height:1.7;margin-top:.2rem">Sensitivitätsanalyse nach der SURFIA-Methodik — ein strukturiertes Framework zur Identifikation der einflussreichsten Risikofaktoren für Rollfeld-Eindringungen. Permutationswichtigkeits-Scoring rang Merkmale nach ihrem marginalen Effekt auf die Kollisionswahrscheinlichkeit.</div>
+            </div>
+          </div>
+          <!-- DO-323 -->
+          <div class="gimg-row cols-1" style="background:#020609">
+            <div style="padding:1.1rem 1.2rem;display:flex;flex-direction:column;gap:.4rem;border-bottom:1px solid var(--border)">
+              <div style="display:flex;align-items:center;gap:.7rem">
+                <div style="font-family:'DM Mono',monospace;font-size:.48rem;color:var(--a3);letter-spacing:.14em;text-transform:uppercase;background:rgba(255,107,53,.08);border:1px solid rgba(255,107,53,.2);padding:.18rem .5rem;border-radius:2px">Standard</div>
+                <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--text)">RTCA DO-323</div>
+              </div>
+              <div style="font-family:'DM Mono',monospace;font-size:.55rem;color:var(--muted);letter-spacing:.06em">Rollfeld-Eindringungssicherheit — Betriebsanforderungen</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.72rem;color:rgba(232,237,245,.6);line-height:1.7;margin-top:.2rem">Die gesamte Sicherheitslogik und Merkmals-Klassifikationsstruktur wurde gegen RTCA DO-323 — den Industriestandard für Rollfeld-Eindringungsvermeidung — abgebildet. 94 % der Anforderungskategorien wurden abgedeckt.</div>
+            </div>
+          </div>
+          <!-- Pipeline summary -->
+          <div class="gimg-row cols-2" style="background:#020609">
+            <div style="padding:1rem;display:flex;flex-direction:column;gap:.4rem;border-right:1px solid var(--border)">
+              <div style="font-family:'DM Mono',monospace;font-size:.46rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.2rem">Analysis Pipeline</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.68rem;color:rgba(232,237,245,.58);line-height:1.8">Data ingestion → cleaning<br>Feature engineering<br>SURFIA sensitivity scoring<br>DO-323 category mapping<br>Permutation importance<br>Boeing-ready report output</div>
+            </div>
+            <div style="padding:1rem;display:flex;flex-direction:column;gap:.4rem">
+              <div style="font-family:'DM Mono',monospace;font-size:.46rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.2rem">Tech Stack</div>
+              <div style="font-family:'Outfit',sans-serif;font-size:.68rem;color:rgba(232,237,245,.58);line-height:1.8">Python · Pandas · NumPy<br>Scikit-learn<br>Permutation importance<br>RTCA DO-323 mapping<br>SURFIA framework</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /gallery-main -->
+
+      <nav class="gallery-phase-nav" id="g3PhaseNav" aria-label="Project sections" style="grid-template-columns:repeat(2,1fr)">
+        <button class="gpn-btn active" data-gphase="0">
+          <span class="gpn-num">01</span>
+          <span class="gpn-lbl">Belege</span>
+        </button>
+        <button class="gpn-btn" data-gphase="1">
+          <span class="gpn-num">02</span>
+          <span class="gpn-lbl">Methode</span>
+        </button>
+      </nav>
+
+    </div><!-- /proj-gallery -->
+  </div>
+
+  <div class="slide-num-bg">04</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     PROJECT 05 — MOWER UNIT  (alt layout)
+══════════════════════════════════════════════════════════ -->
+<section class="proj-slide alt" id="s4" data-index="04">
+  <div class="slide-right">
+    <div class="proj-gallery">
+
+      <!-- Phase label bar -->
+      <div class="gallery-phase-bar">
+        <span class="gpb-label">Phase</span>
+        <span class="gpb-title" id="g4PhaseTitle">01 — Entwurf</span>
+      </div>
+
+      <div class="gallery-main">
+
+        <!-- TAB 0 — DESIGN (eager) -->
+        <div class="g-phase active" data-gphase="0">
+          <div class="gimg-row cols-2">
+            <div class="gimg-cell">
+              <img src="../assets/images/Height-Adjustable-Mower-Unit/CAD.jpeg" alt="CAD design of height-adjustable mower unit" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">CAD-Entwurf — Fusion 360</div>
+                <div class="gimg-cap-text">Lead-screw driven height-adjustment mechanism with stepper motor mount and dual guide rails. Designed for full integration with the mowing deck assembly.</div>
+              </div>
+            </div>
+            <div class="gimg-cell">
+              <img src="../assets/images/Height-Adjustable-Mower-Unit/SImulink_model.jpeg" alt="Simulink PID control model" loading="eager">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Simulink — PID-Regelungsmodell</div>
+                <div class="gimg-cap-text">Full closed-loop simulation: PID controller driving a stepper motor model with position, velocity, and acceleration feedback. Gains tuned in simulation before hardware deployment.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 1 — PROTOTYPE (lazy) -->
+        <div class="g-phase" data-gphase="1">
+          <div class="gimg-row cols-1">
+            <div class="gimg-cell">
+              <img src="../assets/images/Height-Adjustable-Mower-Unit/1771847835219.jpeg" alt="3D printing prototype parts on Prusa i3 MK3" loading="lazy">
+              <div class="gimg-cap">
+                <div class="gimg-cap-title">Prototyp — Prusa i3 MK3 Druck</div>
+                <div class="gimg-cap-text">Physical prototype components printed on a Prusa i3 MK3. Motor mounts and structural brackets iterated through multiple print cycles until all stability specs were met on first hardware test.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /gallery-main -->
+
+      <nav class="gallery-phase-nav" id="g4PhaseNav" aria-label="Project phases" style="grid-template-columns:repeat(2,1fr)">
+        <button class="gpn-btn active" data-gphase="0">
+          <span class="gpn-num">01</span>
+          <span class="gpn-lbl">Entwurf</span>
+        </button>
+        <button class="gpn-btn" data-gphase="1">
+          <span class="gpn-num">02</span>
+          <span class="gpn-lbl">Prototyp</span>
+        </button>
+      </nav>
+
+    </div><!-- /proj-gallery -->
+  </div>
+
+  <div class="slide-left">
+    <div class="slide-idx">05 / 05</div>
+    <div class="slide-cat">Mechatronik · Regelungssysteme</div>
+    <h2 class="slide-title">Höhenverstellbare<br>Mäheinheit</h2>
+    <div class="slide-org">TU Darmstadt · Apr – Sep 2024</div>
+    <p class="slide-desc">Aktive Stabilisierungssteuerungslogik für ein mechatronisches Mähsystem in MATLAB/Simulink. Physische Prototypen in Fusion 360 entworfen und 3D-gedruckt. Systemintegration mittels agilen SCRUMs. Alle Stabilitätsspezifikationen beim ersten Hardware-Test erfüllt.</p>
+    <div class="slide-metrics">
+      <div class="sm-row">
+        <span class="sm-lbl">Stabilitätszuwachs</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:88%"></div></div>
+        <span class="sm-val">88 %</span>
+      </div>
+      <div class="sm-row">
+        <span class="sm-lbl">Einschwingzeit</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:75%"></div></div>
+        <span class="sm-val">↓ 75 %</span>
+      </div>
+      <div class="sm-row">
+        <span class="sm-lbl">Überschwingen</span>
+        <div class="sm-track"><div class="sm-fill" style="--tw:60%"></div></div>
+        <span class="sm-val">&lt; 5 %</span>
+      </div>
+    </div>
+    <div class="slide-tags">
+      <span class="s-tag">MATLAB</span>
+      <span class="s-tag">Simulink</span>
+      <span class="s-tag">Fusion 360</span>
+      <span class="s-tag">SCRUM</span>
+      <span class="s-tag">3D Printing</span>
+    </div>
+    <div class="slide-actions">
+      <a href="index.html#projekte" class="s-btn">Details ansehen →</a>
+    </div>
+  </div>
+
+  <div class="slide-num-bg">05</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     OUTRO
+══════════════════════════════════════════════════════════ -->
+<section class="outro-slide" id="soutro">
+  <div class="outro-label">Was kommt als Nächstes</div>
+  <h2 class="outro-title">Derzeit<br><span>In Entwicklung</span></h2>
+  <p style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;text-align:center">Weitere Projekte folgen bald — schau wieder vorbei oder melde dich</p>
+  <div class="outro-actions">
+    <a href="index.html" class="o-btn">← Zurück zur Startseite</a>
+    <a href="index.html#kontakt" class="o-btn fill">Kontakt aufnehmen</a>
+  </div>
+</section>
+
+<footer>
+  <div class="ft">© 2026 <span class="fa">Hardik Madaan</span> · Darmstadt, Germany</div>
+  <nav class="ft-nav">
+    <a href="index.html">Startseite</a>
+    <span class="ft">·</span>
+    <span class="ft" style="color:var(--accent)">Galerie</span>
+    <span class="ft">·</span>
+    <a href="../terms.html">Nutzungsbedingungen</a>
+    <span class="ft">·</span>
+    <a href="../privacy.html">Datenschutz</a>
+  </nav>
+  <div class="ft">Luft- und Raumfahrt + KI-Ingenieur <span class="fa">✦</span> Präzise gebaut</div>
+</footer>
+
+<!-- GSAP + Lenis -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js" integrity="sha384-li4UtcFCH6QeUqR4JyV58/VgTprMuz9aauj+oWtew7V4Y7ZVjnvz5px9Y3UCG0Ea" crossorigin="anonymous"></script>
+<script>
+'use strict';
+
+/* ── Lenis smooth scroll ────────────────────────────── */
+const lenis = new Lenis({ duration:1.25, easing: t=>Math.min(1,1.001-Math.pow(2,-10*t)) });
+gsap.registerPlugin(ScrollTrigger);
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(t => lenis.raf(t * 1000));
+gsap.ticker.lagSmoothing(0);
+
+/* ── Scroll progress bar ────────────────────────────── */
+const prog = document.getElementById('prog');
+window.addEventListener('scroll', () => {
+  prog.style.width = (window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100) + '%';
+}, { passive:true });
+
+/* ── Intro animations (page load) ──────────────────── */
+const tl = gsap.timeline({ delay:.3 });
+tl.to('#il1',   { y:'0%', duration:.9, ease:'power3.out' })
+  .to('#il2',   { y:'0%', duration:.9, ease:'power3.out' }, '-=.65')
+  .to('#iEyebrow', { opacity:1, y:0, duration:.7, ease:'power2.out' }, '-=.5')
+  .to('#is1',   { opacity:1, y:0, duration:.6, ease:'power2.out' }, '-=.4')
+  .to('#is2',   { opacity:1, y:0, duration:.6, ease:'power2.out' }, '-=.45')
+  .to('#iScroll', { opacity:1, duration:.6 }, '-=.3');
+
+/* ── Per-project slide animations ──────────────────── */
+document.querySelectorAll('.proj-slide').forEach(slide => {
+  const isAlt = slide.classList.contains('alt');
+  const dx    = isAlt ? 28 : -28;
+
+  const els = slide.querySelectorAll(
+    '.slide-idx, .slide-cat, .slide-title, .slide-org, ' +
+    '.slide-desc, .slide-metrics, .slide-tags, .slide-actions'
+  );
+
+  ScrollTrigger.create({
+    trigger: slide,
+    start: 'top 72%',
+    once: true,
+    onEnter: () => {
+      slide.classList.add('in-view');
+      gsap.to(els, {
+        opacity: 1, x: 0, duration: .85,
+        stagger: .07, ease: 'power2.out'
+      });
+    }
+  });
+
+  /* Subtle parallax on the watermark number */
+  gsap.fromTo(slide.querySelector('.slide-num-bg'),
+    { y: 40 },
+    {
+      y: -40,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: slide,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true
+      }
+    }
+  );
+});
+
+/* ── Outro animation ────────────────────────────────── */
+ScrollTrigger.create({
+  trigger: '.outro-slide',
+  start: 'top 78%',
+  once: true,
+  onEnter: () => {
+    gsap.from('.outro-label, .outro-title, .outro-slide p, .outro-actions', {
+      opacity:0, y:30, duration:.8, stagger:.1, ease:'power2.out'
+    });
+  }
+});
+
+/* ── Side nav active state ──────────────────────────── */
+const sections   = ['s0','s5','s1','s2','s3','s4'];
+const snItems    = document.querySelectorAll('.sn-item');
+const sectionEls = sections.map(id => document.getElementById(id));
+
+const setActive = id => {
+  snItems.forEach(el => el.classList.toggle('active', el.dataset.sid === id));
+};
+
+const navObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) setActive(e.target.id);
+  });
+}, { rootMargin:'-45% 0px -45% 0px', threshold:0 });
+
+sectionEls.forEach(el => el && navObs.observe(el));
+
+/* ── Rocket cursor ──────────────────────────────────── */
+const rocketEl = document.getElementById('rocket-cursor');
+let mx = window.innerWidth/2, my = window.innerHeight/2;
+let cx = mx, cy = my, prevCx = mx, prevCy = my, rAngle = -90;
+
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY });
+
+(function rocketLoop() {
+  cx += (mx - cx) * .14; cy += (my - cy) * .14;
+  const dvx = cx - prevCx, dvy = cy - prevCy, spd = Math.sqrt(dvx*dvx + dvy*dvy);
+  if(spd > .6) {
+    let t = Math.atan2(dvy, dvx) * 180/Math.PI + 90;
+    let d = t - rAngle;
+    while(d > 180) d -= 360; while(d < -180) d += 360;
+    rAngle += d * .18;
+  }
+  prevCx = cx; prevCy = cy;
+  rocketEl.style.left  = cx + 'px';
+  rocketEl.style.top   = cy + 'px';
+  rocketEl.style.transform = `rotate(${rAngle}deg)`;
+  requestAnimationFrame(rocketLoop);
+})();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => rocketEl.classList.add('ignite'));
+  el.addEventListener('mouseleave', () => rocketEl.classList.remove('ignite'));
+});
+
+/* ── Project 01 phase gallery ───────────────────────── */
+(function() {
+  const nav    = document.getElementById('g1PhaseNav');
+  const title  = document.getElementById('g1PhaseTitle');
+  const titles = [
+    '01 — Explorative Datenanalyse',
+    '02 — Merkmalstechnik & Pipeline',
+    '03 — LSTM Deep Learning',
+    '04 — Asymmetrische Verlustfunktion',
+    '05 — Abschlussergebnisse'
+  ];
+  if (!nav) return;
+  nav.querySelectorAll('.gpn-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const phase = btn.dataset.gphase;
+      nav.querySelectorAll('.gpn-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#s1 .g-phase').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const target = document.querySelector(`#s1 .g-phase[data-gphase="${phase}"]`);
+      if (target) { target.classList.add('active'); target.scrollTop = 0; }
+      if (title) title.textContent = titles[+phase] || '';
+    });
+  });
+})();
+
+/* ── Project 02 section gallery — deferred loading ── */
+(function() {
+  const nav    = document.getElementById('g2PhaseNav');
+  const title  = document.getElementById('g2PhaseTitle');
+  const titles = [
+    '01 — Simulator-Aufbau',
+    '02 — PFD / MFD Displays',
+    '03 — ECAM-Systeme',
+    '04 — Flugsteuerung'
+  ];
+  if (!nav) return;
+  const phases = document.querySelectorAll('#s2 .g-phase');
+
+  function loadPhase(phase) {
+    phase.querySelectorAll('img[data-src]').forEach(img => {
+      img.src = img.dataset.src;
+      img.removeAttribute('data-src');
+    });
+  }
+
+  nav.querySelectorAll('.gpn-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = btn.dataset.gphase;
+      nav.querySelectorAll('.gpn-btn').forEach(b => b.classList.remove('active'));
+      phases.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const target = document.querySelector(`#s2 .g-phase[data-gphase="${idx}"]`);
+      if (target) { loadPhase(target); target.classList.add('active'); target.scrollTop = 0; }
+      if (title) title.textContent = titles[+idx] || '';
+    });
+  });
+})();
+
+/* ── Project 03 section gallery ────────────────────── */
+(function() {
+  const nav   = document.getElementById('g3PhaseNav');
+  const title = document.getElementById('g3PhaseTitle');
+  const titles = ['01 — Boeing-Meeting & Datensatz', '02 — Methodik'];
+  if (!nav) return;
+  const phases = document.querySelectorAll('#s3 .g-phase');
+  nav.querySelectorAll('.gpn-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = btn.dataset.gphase;
+      nav.querySelectorAll('.gpn-btn').forEach(b => b.classList.remove('active'));
+      phases.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const target = document.querySelector(`#s3 .g-phase[data-gphase="${idx}"]`);
+      if (target) { target.classList.add('active'); target.scrollTop = 0; }
+      if (title) title.textContent = titles[+idx] || '';
+    });
+  });
+})();
+
+/* ── Project 04 section gallery ────────────────────── */
+(function() {
+  const nav   = document.getElementById('g4PhaseNav');
+  const title = document.getElementById('g4PhaseTitle');
+  const titles = ['01 — Entwurf', '02 — Prototyp'];
+  if (!nav) return;
+  const phases = document.querySelectorAll('#s4 .g-phase');
+  nav.querySelectorAll('.gpn-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = btn.dataset.gphase;
+      nav.querySelectorAll('.gpn-btn').forEach(b => b.classList.remove('active'));
+      phases.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const target = document.querySelector(`#s4 .g-phase[data-gphase="${idx}"]`);
+      if (target) { target.classList.add('active'); target.scrollTop = 0; }
+      if (title) title.textContent = titles[+idx] || '';
+    });
+  });
+})();
+
+/* ── Project 05 section gallery ────────────────────── */
+(function() {
+  const nav   = document.getElementById('g5PhaseNav');
+  const title = document.getElementById('g5PhaseTitle');
+  const titles = ['01 — Live-Dashboard', '02 — Datengenerierung', '03 — Trainings-Pipeline'];
+  if (!nav) return;
+  const phases = document.querySelectorAll('#s5 .g-phase');
+
+  function loadPhase(phase) {
+    phase.querySelectorAll('img[data-src]').forEach(img => {
+      img.src = img.dataset.src;
+      img.removeAttribute('data-src');
+    });
+  }
+
+  nav.querySelectorAll('.gpn-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = btn.dataset.gphase;
+      nav.querySelectorAll('.gpn-btn').forEach(b => b.classList.remove('active'));
+      phases.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const target = document.querySelector(`#s5 .g-phase[data-gphase="${idx}"]`);
+      if (target) { loadPhase(target); target.classList.add('active'); target.scrollTop = 0; }
+      if (title) title.textContent = titles[+idx] || '';
+    });
+  });
+})();
+
+/* ── Magnetic CTA buttons ───────────────────────────── */
+document.querySelectorAll('.s-btn, .o-btn').forEach(el => {
+  el.addEventListener('mousemove', e => {
+    const r = el.getBoundingClientRect();
+    const x = e.clientX - r.left - r.width/2;
+    const y = e.clientY - r.top  - r.height/2;
+    gsap.to(el, { x: x*.28, y: y*.22, duration:.35, ease:'power2.out' });
+  });
+  el.addEventListener('mouseleave', () => {
+    gsap.to(el, { x:0, y:0, duration:.65, ease:'elastic.out(1,.55)' });
+  });
+});
+</script>
+<script>
+(function(){
+  var btn=document.getElementById('menuBtn'),menu=document.getElementById('mobileMenu');
+  if(!btn||!menu)return;
+  btn.addEventListener('click',function(){
+    var open=menu.classList.toggle('open');
+    btn.classList.toggle('open',open);
+    btn.setAttribute('aria-expanded',String(open));
+    menu.setAttribute('aria-hidden',String(!open));
+    document.body.style.overflow=open?'hidden':'';
+  });
+  menu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click',function(){
+      btn.classList.remove('open');
+      menu.classList.remove('open');
+      btn.setAttribute('aria-expanded','false');
+      menu.setAttribute('aria-hidden','true');
+      document.body.style.overflow='';
+    });
+  });
+})();
+</script>
+</body>
+</html>
