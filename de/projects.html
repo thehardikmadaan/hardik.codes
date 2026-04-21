@@ -813,7 +813,7 @@ footer {
               <img src="../assets/images/orbital-mechanics-tools/Orbital_transfer_calculator_prototype.gif" alt="Orbital Transfer Calculator Dashboard" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Live Dashboard — Orbital Transfer Calculator</div>
-                <div class="gimg-cap-text">PySide6 HMI showing a Hohmann transfer from LEO to GEO. Input panel on the left, physics results and AI surrogate prediction side-by-side on the right, with an embedded Matplotlib orbit plot drawn to scale at the bottom.</div>
+                <div class="gimg-cap-text">PySide6 HMI zeigt einen Hohmann-Transfer von LEO nach GEO. Eingabefeld links, Physik-Ergebnisse und KI-Surrogatvorhersage rechts nebeneinander, mit eingebettetem Matplotlib-Orbitalplot maßstabsgetreu unten.</div>
               </div>
             </div>
           </div>
@@ -836,7 +836,7 @@ footer {
               <img data-src="../assets/images/orbital-mechanics-tools/generate_data.py.gif" src="" alt="Synthetic dataset generation — 200,000 mission scenarios">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">generate_data.py — 200.000 Missionsszenarien</div>
-                <div class="gimg-cap-text">Terminal output of the synthetic data pipeline: orbit radii, spacecraft mass, Isp, and manoeuvre type are randomly sampled; the physics engine computes the exact delta-v and propellant mass ground truth for each scenario. The result is saved as orbital_data.csv.</div>
+                <div class="gimg-cap-text">Terminal-Ausgabe der synthetischen Datenpipeline: Orbitradien, Raumfahrzeugmasse, Isp und Manövertyp werden zufällig gesampelt; die Physik-Engine berechnet den exakten Delta-v- und Treibstoffmassen-Grundwahrheitswert für jedes Szenario. Das Ergebnis wird als orbital_data.csv gespeichert.</div>
               </div>
             </div>
           </div>
@@ -859,7 +859,7 @@ footer {
               <img data-src="../assets/images/orbital-mechanics-tools/train_model.py.gif" src="" alt="Neural network training pipeline — 5-stage MLP">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">train_model.py — 5-stufige MLP-Trainings-Pipeline</div>
-                <div class="gimg-cap-text">The terminal logs all five stages: dataset load → StandardScaler preprocessing → 80/20 split → MLPRegressor training → evaluation on 40,000 held-out samples. Final output: R² = 0.9993, MAE = 16.47 m/s, RMSE = 30.56 m/s, MAPE = 2.88 %. Both model and scaler serialised with Joblib.</div>
+                <div class="gimg-cap-text">Das Terminal protokolliert alle fünf Stufen: Datensatz laden → StandardScaler-Vorverarbeitung → 80/20-Aufteilung → MLPRegressor-Training → Auswertung auf 40.000 zurückgehaltenen Stichproben. Endergebnis: R² = 0,9993, MAE = 16,47 m/s, RMSE = 30,56 m/s, MAPE = 2,88 %. Modell und Scaler mit Joblib serialisiert.</div>
               </div>
             </div>
           </div>
@@ -968,7 +968,7 @@ footer {
               <img src="../assets/images/gas-turbine-prognostics/1762781922692.jpeg" alt="Feature Correlation with RUL" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Merkmalkorrelation mit RUL</div>
-                <div class="gimg-cap-text">All 21 sensors ranked by predictive power. Top predictors (sensor_12, sensor_7) are physically linked to the HPC fault mode — the exact failure in this dataset. Six zero-correlation sensors dropped.</div>
+                <div class="gimg-cap-text">Alle 21 Sensoren nach Vorhersagekraft gereiht. Top-Prädiktoren (Sensor_12, Sensor_7) sind physikalisch mit dem HPC-Fehlermodus verknüpft — dem genauen Ausfall in diesem Datensatz. Sechs Sensoren ohne Korrelation entfernt.</div>
               </div>
             </div>
           </div>
@@ -977,14 +977,14 @@ footer {
               <img src="../assets/images/gas-turbine-prognostics/1762781923697.jpeg" alt="RUL vs Sensor 7 Relationship" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">RUL vs. Sensor 7</div>
-                <div class="gimg-cap-text">Piecewise linear scatter confirms the data engineering strategy: clipping RUL at 125 cycles simplifies the healthy phase, letting the model focus on the critical degradation zone.</div>
+                <div class="gimg-cap-text">Stückweise lineare Streuung bestätigt die Datentechnik-Strategie: Begrenzung des RUL auf 125 Zyklen vereinfacht die gesunde Phase und lässt das Modell sich auf die kritische Degradationszone konzentrieren.</div>
               </div>
             </div>
             <div class="gimg-cell">
               <img src="../assets/images/gas-turbine-prognostics/1762781923716.jpeg" alt="RUL vs Sensor 12 Relationship" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">RUL vs. Sensor 12</div>
-                <div class="gimg-cap-text">Sensor 12 mirrors sensor 7 — both are HPC-linked indicators. Their near-identical shapes reveal strong multicollinearity: no issue for LSTM, but fatal for linear models.</div>
+                <div class="gimg-cap-text">Sensor 12 spiegelt Sensor 7 wider — beide sind HPC-verknüpfte Indikatoren. Ihre nahezu identischen Formen zeigen starke Multikollinearität: kein Problem für LSTM, aber fatal für lineare Modelle.</div>
               </div>
             </div>
           </div>
@@ -993,7 +993,7 @@ footer {
               <img src="../assets/images/gas-turbine-prognostics/1762781925240.jpeg" alt="Scatter Matrix of Key Features vs RUL" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Streuungsmatrix — Wichtige Merkmale vs. RUL</div>
-                <div class="gimg-cap-text">The full picture: top sensors are tightly correlated with each other and with RUL. This multicollinearity rules out linear regression and motivates the LSTM + cluster similarity approach.</div>
+                <div class="gimg-cap-text">Das vollständige Bild: Top-Sensoren korrelieren stark miteinander und mit dem RUL. Diese Multikollinearität schließt lineare Regression aus und motiviert den LSTM + Cluster-Ähnlichkeits-Ansatz.</div>
               </div>
             </div>
           </div>
@@ -1006,14 +1006,14 @@ footer {
               <img src="../assets/images/gas-turbine-prognostics/1765029250405.jpeg" alt="K-Means Cluster Similarity" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">K-Means Betriebsmodi</div>
-                <div class="gimg-cap-text">Engines behave differently at different altitudes and throttles. K-Means on sensors 7 & 12 discovers these regimes automatically. Each point's similarity to cluster centers (X) becomes a "Health Signature" feature.</div>
+                <div class="gimg-cap-text">Triebwerke verhalten sich bei verschiedenen Höhen und Drosselstellungen unterschiedlich. K-Means auf Sensoren 7 & 12 erkennt diese Betriebsmodi automatisch. Die Ähnlichkeit jedes Punktes zu Clusterzentren (X) wird zum „Gesundheitssignatur"-Merkmal.</div>
               </div>
             </div>
             <div class="gimg-cell">
               <img src="../assets/images/gas-turbine-prognostics/1765029250406.jpeg" alt="ColumnTransformer Pipeline Architecture" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Master-Pipeline — ColumnTransformer</div>
-                <div class="gimg-cap-text">The full preprocessing architecture: log-transforms for exponential decay sensors, K-Means similarity injection, and automatic unit ID stripping. A Group Split by Engine ID prevents data leakage across time.</div>
+                <div class="gimg-cap-text">Die vollständige Vorverarbeitungsarchitektur: Log-Transformationen für exponentiell abklingende Sensoren, K-Means-Ähnlichkeitsinjektion und automatisches Entfernen der Einheits-IDs. Ein Gruppen-Split nach Triebwerks-ID verhindert Datenlecks über die Zeit.</div>
               </div>
             </div>
           </div>
@@ -1022,14 +1022,14 @@ footer {
               <img src="../assets/images/gas-turbine-prognostics/1765029250430.jpeg" alt="Linear Regression Baseline Performance" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Lineare Regression — RMSE 17,17</div>
-                <div class="gimg-cap-text">The baseline "smear": predictions scatter widely around the perfect line. Engine degradation is exponential and non-linear — a straight line cannot capture the failure curve.</div>
+                <div class="gimg-cap-text">Die Basislinie „verschmiert": Vorhersagen streuen weit um die perfekte Linie. Triebwerksdegradation ist exponentiell und nichtlinear — eine Gerade kann die Ausfall-Kurve nicht erfassen.</div>
               </div>
             </div>
             <div class="gimg-cell">
               <img src="../assets/images/gas-turbine-prognostics/1765029250332.jpeg" alt="Random Forest Baseline Performance" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Random Forest — RMSE 16,05</div>
-                <div class="gimg-cap-text">A tighter fit to the perfect prediction line, but still with overgeneralisation at the extremes. Random Forest lacks "memory" — it sees one row at a time with no sense of degradation velocity.</div>
+                <div class="gimg-cap-text">Eine engere Anpassung an die perfekte Vorhersagelinie, aber noch Übergeneralisierung an den Extremen. Random Forest fehlt das „Gedächtnis" — er betrachtet eine Zeile nach der anderen ohne Sinn für Degradationsgeschwindigkeit.</div>
               </div>
             </div>
           </div>
@@ -1042,14 +1042,14 @@ footer {
               <img src="../assets/images/gas-turbine-prognostics/1765030831882.jpeg" alt="LSTM Model Architecture" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">LSTM-Architektur</div>
-                <div class="gimg-cap-text">Two stacked LSTM layers (64 → 32 units) with Dropout(0.2). Input: (Samples, 30 TimeSteps, Features) — feeding the last 30 flight cycles so the model learns velocity and acceleration of degradation, not just absolute values.</div>
+                <div class="gimg-cap-text">Zwei gestapelte LSTM-Schichten (64 → 32 Einheiten) mit Dropout(0.2). Eingabe: (Stichproben, 30 Zeitschritte, Merkmale) — die letzten 30 Flugzyklen, damit das Modell Degradationsgeschwindigkeit und -beschleunigung lernt, nicht nur absolute Werte.</div>
               </div>
             </div>
             <div class="gimg-cell">
               <img src="../assets/images/gas-turbine-prognostics/1765030831863.jpeg" alt="LSTM Training History" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">LSTM-Trainingshistorie</div>
-                <div class="gimg-cap-text">Training and validation loss converge cleanly. No divergence between curves confirms the Dropout regularisation is working — the model generalises rather than memorising.</div>
+                <div class="gimg-cap-text">Trainings- und Validierungsverlust konvergieren sauber. Keine Divergenz zwischen den Kurven bestätigt, dass die Dropout-Regularisierung funktioniert — das Modell generalisiert, anstatt auswendig zu lernen.</div>
               </div>
             </div>
           </div>
@@ -1058,14 +1058,14 @@ footer {
               <img src="../assets/images/gas-turbine-prognostics/1765030831839.jpeg" alt="Random Forest Safety Analysis — Baseline" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">RF-Sicherheitsbasis — 12,41 % Risiko</div>
-                <div class="gimg-cap-text">Safety analysis of the Random Forest baseline. A tail of predictions falls in the Dangerous Zone (overestimation). A 1-in-8 chance of predicting a safe engine that is actually failing is unacceptable for safety-critical operations.</div>
+                <div class="gimg-cap-text">Sicherheitsanalyse der Random-Forest-Basislinie. Ein Schwanz von Vorhersagen fällt in die Gefahrenzone (Überschätzung). Eine 1-in-8-Chance, ein tatsächlich ausfallendes Triebwerk als sicher vorherzusagen, ist für sicherheitskritische Betriebe inakzeptabel.</div>
               </div>
             </div>
             <div class="gimg-cell">
               <img src="../assets/images/gas-turbine-prognostics/1765030831794.jpeg" alt="LSTM Error Distribution 10.26% Risk" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">LSTM-Fehlerverteilung — 10,26 % Risiko</div>
-                <div class="gimg-cap-text">The standard LSTM reduces dangerous overestimations from 12.41% to 10.26% — a genuine improvement. But 1 in 10 is still too high. Accuracy alone is not enough for safety-critical maintenance.</div>
+                <div class="gimg-cap-text">Das Standard-LSTM reduziert gefährliche Überschätzungen von 12,41 % auf 10,26 % — eine echte Verbesserung. Aber 1 von 10 ist immer noch zu hoch. Genauigkeit allein reicht für sicherheitskritische Wartung nicht aus.</div>
               </div>
             </div>
           </div>
@@ -1074,7 +1074,7 @@ footer {
               <img src="../assets/images/gas-turbine-prognostics/1765030831937.jpeg" alt="Random Forest Feature Importance" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Random Forest Merkmalswichtigkeit</div>
-                <div class="gimg-cap-text">The K-Means cluster similarity features dominate importance — validating the pipeline design decision. "Cluster_0_similarity" alone accounts for ~37% of predictive power, confirming operating-mode awareness is the key engineered signal.</div>
+                <div class="gimg-cap-text">Die K-Means-Cluster-Ähnlichkeitsmerkmale dominieren die Wichtigkeit — was die Pipeline-Designentscheidung bestätigt. „Cluster_0_similarity" allein macht ~37 % der Vorhersagekraft aus und bestätigt, dass Betriebsmodusbewusstsein das entscheidende konstruierte Signal ist.</div>
               </div>
             </div>
           </div>
@@ -1087,14 +1087,14 @@ footer {
               <img src="../assets/images/gas-turbine-prognostics/1767977171265.jpeg" alt="Keras Tuner Hyperparameter Distributions" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Keras Tuner — Hyperparameter-Suche</div>
-                <div class="gimg-cap-text">Keras Tuner mathematically optimises the LSTM architecture across layers, units, and dropout. Loguniform distributions efficiently explore learning rates across orders of magnitude, bringing RMSE to 13.32 cycles.</div>
+                <div class="gimg-cap-text">Keras Tuner optimiert die LSTM-Architektur mathematisch über Schichten, Einheiten und Dropout hinweg. Loguniforme Verteilungen erkunden Lernraten über Größenordnungen hinweg effizient und bringen den RMSE auf 13,32 Zyklen.</div>
               </div>
             </div>
             <div class="gimg-cell">
               <img src="../assets/images/gas-turbine-prognostics/1765032329452.jpeg" alt="Tuned LSTM Training History" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Optimierte LSTM-Trainingshistorie</div>
-                <div class="gimg-cap-text">The optimised model converges faster and to a lower loss floor. Training and validation curves remain tightly coupled across all 22 epochs — no overfitting despite the increased model capacity.</div>
+                <div class="gimg-cap-text">Das optimierte Modell konvergiert schneller und zu einem niedrigeren Verlustboden. Trainings- und Validierungskurven bleiben über alle 22 Epochen eng gekoppelt — kein Overfitting trotz erhöhter Modellkapazität.</div>
               </div>
             </div>
           </div>
@@ -1103,14 +1103,14 @@ footer {
               <img src="../assets/images/gas-turbine-prognostics/1765032329507.jpeg" alt="Tuned LSTM Performance RMSE 13.32" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Optimierter LSTM — RMSE 13,32</div>
-                <div class="gimg-cap-text">The tuned model is more accurate than the baseline LSTM, but standard MSE loss still treats overestimation and underestimation equally. The risk factor stays at 9.60% — accuracy and safety are separate problems.</div>
+                <div class="gimg-cap-text">Das abgestimmte Modell ist genauer als das Basis-LSTM, aber der Standard-MSE-Verlust behandelt Über- und Unterschätzung noch gleich. Der Risikofaktor bleibt bei 9,60 % — Genauigkeit und Sicherheit sind separate Probleme.</div>
               </div>
             </div>
             <div class="gimg-cell">
               <img src="../assets/images/gas-turbine-prognostics/1765032329298.jpeg" alt="Asymmetric Loss Impact — Risk 1.09%" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Asymmetrische Verlustfunktion — Risiko sinkt auf 1,09 %</div>
-                <div class="gimg-cap-text">A custom TensorFlow loss applies a 10× penalty to overestimation errors. Gradient Descent is mathematically forced to "fear the danger zone." Risk collapses from 9.60% → 1.09% — a safety breakthrough.</div>
+                <div class="gimg-cap-text">Eine benutzerdefinierte TensorFlow-Verlustfunktion wendet einen 10-fachen Strafterm auf Überschätzungsfehler an. Der Gradientenabstieg ist mathematisch gezwungen, die „Gefahrenzone zu fürchten". Das Risiko fällt von 9,60 % → 1,09 % — ein Sicherheitsdurchbruch.</div>
               </div>
             </div>
           </div>
@@ -1119,14 +1119,14 @@ footer {
               <img src="../assets/images/gas-turbine-prognostics/1765032329536.jpeg" alt="Safety-First Model Scatter" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Sicherheitsorientiertes Modell — Konservative Schätzungen</div>
-                <div class="gimg-cap-text">Green predictions have shifted below the diagonal — the model now systematically errs on the side of caution. Maintenance crews will always be alerted before a failure becomes critical, not after.</div>
+                <div class="gimg-cap-text">Grüne Vorhersagen haben sich unter die Diagonale verschoben — das Modell irrt nun systematisch auf der Seite der Vorsicht. Wartungsteams werden immer gewarnt, bevor ein Ausfall kritisch wird, nicht danach.</div>
               </div>
             </div>
             <div class="gimg-cell">
               <img src="../assets/images/gas-turbine-prognostics/1765032329379.jpeg" alt="Engine 1 Lifecycle Tracking" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Triebwerk #1 — Vollständiger Lebenszyklus verfolgt</div>
-                <div class="gimg-cap-text">The AI (green) tracks the ground truth (black dashed) closely across all 160 flight cycles, but stays slightly below — safe conservatism in action. This is the ideal human-machine interaction signature for predictive maintenance.</div>
+                <div class="gimg-cap-text">Die KI (grün) verfolgt den Grundwahrheitswert (schwarz gestrichelt) eng über alle 160 Flugzyklen, bleibt aber leicht darunter — sicherer Konservatismus in Aktion. Dies ist die ideale Mensch-Maschine-Interaktionssignatur für vorausschauende Wartung.</div>
               </div>
             </div>
           </div>
@@ -1139,7 +1139,7 @@ footer {
               <img src="../assets/images/gas-turbine-prognostics/1765032329444.jpeg" alt="Final Test Set Performance RMSE 18.79" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Abschlussprüfung — Neue Testmotoren, RMSE 18,79</div>
-                <div class="gimg-cap-text">Testing on a completely held-out set of engines never seen during training or validation. RMSE of 18.79 cycles reflects real-world generalisation cost — but the safety profile holds: predictions consistently avoid dangerous overestimation zones.</div>
+                <div class="gimg-cap-text">Test auf einem vollständig zurückgehaltenen Satz von Triebwerken, die während Training und Validierung nie gesehen wurden. RMSE von 18,79 Zyklen spiegelt den Realgeneralisierungsaufwand wider — aber das Sicherheitsprofil hält: Vorhersagen vermeiden konsequent gefährliche Überschätzungszonen.</div>
               </div>
             </div>
           </div>
@@ -1206,7 +1206,7 @@ footer {
               <img src="../assets/images/SPO/me.jpeg" alt="Developer in the simulator rig" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Im Simulator-Dom — FSR TU Darmstadt</div>
-                <div class="gimg-cap-text">All three monitors running the PySide6 GUI live in the FSR dome. Left: Flight Controls Panel; centre: aircraft synoptic; right: backup systems. Every panel driven by real X-Plane 12 telemetry streamed over UDP at 50 Hz.</div>
+                <div class="gimg-cap-text">Alle drei Monitore zeigen die PySide6-GUI live im FSR-Dom. Links: Flugsteuerungspanel; Mitte: Flugzeugsynoptik; rechts: Backup-Systeme. Jedes Panel wird von echten X-Plane-12-Telemetriedaten über UDP mit 50 Hz gesteuert.</div>
               </div>
             </div>
           </div>
@@ -1229,7 +1229,7 @@ footer {
               <img data-src="../assets/images/SPO/PFD_mfd.png" src="" alt="PFD and MFD Display" style="object-fit:contain;width:100%;height:100%">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Primäres Flugdisplay + MFD — XHSI-Plugin</div>
-                <div class="gimg-cap-text">Left: ND (Navigation Display / HSI) with heading rose and traffic advisory. Centre: PFD with attitude indicator, speed tape, altitude tape, and FD bars. Right: dual-engine instruments. All rendered via the XHSI (X-Plane HSI) 3rd-party plugin, fed by live X-Plane 12 datarefs over UDP.</div>
+                <div class="gimg-cap-text">Links: ND (Navigationsanzeige / HSI) mit Kursrose und Verkehrshinweisen. Mitte: PFD mit Lageanzeige, Geschwindigkeitsband, Höhenband und FD-Balken. Rechts: Doppeltriebwerks-Instrumente. Alle über das XHSI-Drittanbieter-Plugin gerendert, gespeist von Live-X-Plane-12-Datarefs über UDP.</div>
               </div>
             </div>
           </div>
@@ -1238,7 +1238,7 @@ footer {
               <img data-src="../assets/images/SPO/me_flying_sim.gif" src="" alt="Live flight test with GUI active">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">GUI aktiv — Live-Flugtest</div>
-                <div class="gimg-cap-text">All panels updating simultaneously during an active sim session. Demonstrates the sub-20 ms latency from X-Plane dataref change to on-screen display refresh across every concurrent widget.</div>
+                <div class="gimg-cap-text">Alle Panels aktualisieren sich gleichzeitig während einer aktiven Simulator-Sitzung. Demonstriert die unter-20-ms-Latenz vom X-Plane-Dataref-Wechsel bis zur Bildschirmaktualisierung über alle gleichzeitigen Widgets hinweg.</div>
               </div>
             </div>
           </div>
@@ -1247,7 +1247,7 @@ footer {
               <img data-src="../assets/images/SPO/1761608637937.jpeg" src="" alt="Single Pilot Cockpit Overview — NDA blurred">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Cockpit Layout Overview <span style="color:var(--a3);font-size:.9em">[NDA]</span></div>
-                <div class="gimg-cap-text">Full single-pilot window arrangement: ND + PFD + engine column on top, additional systems and synoptic pages below. Multiple independent PySide6 widgets tiled into one unified operator view.</div>
+                <div class="gimg-cap-text">Vollständige Einpiloten-Fensteranordnung: ND + PFD + Triebwerkssäule oben, zusätzliche Systeme und Synoptik-Seiten unten. Mehrere unabhängige PySide6-Widgets zu einer einheitlichen Bedienansicht zusammengefügt.</div>
               </div>
             </div>
           </div>
@@ -1260,7 +1260,7 @@ footer {
               <img data-src="../assets/images/SPO/1761608641351.gif" src="" alt="HYD/FUEL and ELEC/AIR systems live testing">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">HYD &amp; Kraftstoff / ELEK &amp; Luft — Live-Test</div>
-                <div class="gimg-cap-text">Bleed air system page streaming live from X-Plane. ENG 1/APU/ENG 2 BLEED states, XFEED AUTO, and HOT AIR buttons all respond directly to X-Plane datarefs over the multi-threaded UDP connection.</div>
+                <div class="gimg-cap-text">Zapfluftsystem-Seite streamt live von X-Plane. ENG 1/APU/ENG 2 BLEED-Zustände, XFEED AUTO und HOT AIR-Schalter reagieren direkt auf X-Plane-Datarefs über die mehrfädige UDP-Verbindung.</div>
               </div>
             </div>
           </div>
@@ -1269,7 +1269,7 @@ footer {
               <img data-src="../assets/images/SPO/1761608637668.jpeg" src="" alt="ECAM Systems Pages — NDA blurred">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">ECAM Systems Pages Grid <span style="color:var(--a3);font-size:.9em">[NDA]</span></div>
-                <div class="gimg-cap-text">Four synoptic pages displayed at once: electrical bus diagram, system data table, hydraulics schematic, and flight controls surface page with blue/yellow/green actuation colour-coding. Each page is a separate PySide6 widget on its own dataref set.</div>
+                <div class="gimg-cap-text">Vier Synoptik-Seiten gleichzeitig angezeigt: Elektrisches Busdiagramm, Systemdatentabelle, Hydraulikschaltplan und Flugsteuerungs-Oberflächenseite mit blau/gelb/grüner Betätigungs-Farbkodierung. Jede Seite ist ein separates PySide6-Widget mit eigenem Dataref-Set.</div>
               </div>
             </div>
           </div>
@@ -1282,7 +1282,7 @@ footer {
               <img data-src="../assets/images/SPO/1761608637716.gif" src="" alt="Flight Controls Panel UI with source code">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Flugsteuerungspanel — PySide6 + Quellcode</div>
-                <div class="gimg-cap-text">Side-by-side: FCP UI and FCPmain.py. Handles elevator trim (±3° animated slider), rudder trim, gear &amp; brakes, speed brakes, and flaps — each writing back to X-Plane datarefs. QTimer syncs control state from the sim every 30 s on startup.</div>
+                <div class="gimg-cap-text">Nebeneinander: FCP-UI und FCPmain.py. Verwaltet Höhenruder-Trimmung (±3° animierter Schieberegler), Seitenruder-Trimmung, Fahrwerk &amp; Bremsen, Spoiler und Klappen — jede schreibt zurück in X-Plane-Datarefs. QTimer synchronisiert den Steuerzustand vom Simulator alle 30 s beim Start.</div>
               </div>
             </div>
           </div>
@@ -1291,14 +1291,14 @@ footer {
               <img data-src="../assets/images/SPO/1761608639601.gif" src="" alt="Flight Controls Panel — NDA blurred">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">FCP Operational View <span style="color:var(--a3);font-size:.9em">[NDA]</span></div>
-                <div class="gimg-cap-text">Elevator trim indicator, gear &amp; brakes lights, speed brake and flap sliders (Low / Med / Max). All controls bi-directionally linked — physical inceptor movement in X-Plane updates the GUI in real time.</div>
+                <div class="gimg-cap-text">Höhenruder-Trimmungsanzeige, Fahrwerk- &amp; Bremsleuchten, Spoiler- und Klappenregler (Niedrig / Mittel / Max). Alle Bedienelemente bidirektional verknüpft — physische Inzeptor-Bewegung in X-Plane aktualisiert die GUI in Echtzeit.</div>
               </div>
             </div>
             <div class="gimg-cell">
               <img data-src="../assets/images/SPO/1761608639155.gif" src="" alt="ATC and Backup Controls — NDA blurred">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">ATC + Backup Controls <span style="color:var(--a3);font-size:.9em">[NDA]</span></div>
-                <div class="gimg-cap-text">ATC radio management: active/standby frequency, VHF1/VHF2 select, and live command-history log. Backup Controls provide a fallback interface if primary displays fail — fulfilling the single-pilot redundancy requirement.</div>
+                <div class="gimg-cap-text">ATC-Funkverwaltung: Aktive/Standby-Frequenz, VHF1/VHF2-Auswahl und Live-Befehlsprotokoll. Backup-Steuerungen bieten eine Ausweich-Schnittstelle bei Ausfall der primären Displays — erfüllt die Einpiloten-Redundanzanforderung.</div>
               </div>
             </div>
           </div>
@@ -1307,7 +1307,7 @@ footer {
               <img data-src="../assets/images/SPO/nose_light_slider_gif.gif" src="" alt="Nose light slider widget" style="width:100%;height:100%;object-fit:contain">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Buglicht — AnimatedSlider</div>
-                <div class="gimg-cap-text">Custom PySide6 AnimatedSlider with discrete T.O / TAXI detents for nose landing-light control.</div>
+                <div class="gimg-cap-text">Benutzerdefinierter PySide6 AnimatedSlider mit diskreten T.O / TAXI-Rasten für die Buglandescheinwerfer-Steuerung.</div>
               </div>
             </div>
             <div class="gimg-cell" style="display:flex;flex-direction:column;justify-content:center;padding:1.1rem 1rem;background:#020609;cursor:default">
@@ -1455,7 +1455,7 @@ footer {
               <img src="../assets/images/RI_analysis/Screenshot_sample_of_data_collected_not_clear_protected_due_to_NDA.png" alt="Sample of RI dataset — NDA protected" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">30-Jahre-RI-Datensatz <span style="color:var(--a3);font-size:.9em">[NDA]</span></div>
-                <div class="gimg-cap-text">Sample of the runway incursion event database: date, airport, aircraft category, severity, contributing factors, and narrative fields. Major collision-critical events isolated from 30 years of ASRS / FAA records.</div>
+                <div class="gimg-cap-text">Ausschnitt der Rollfeld-Eindringungs-Ereignisdatenbank: Datum, Flughafen, Flugzeugkategorie, Schweregrad, Beitragsfaktoren und Narrativfelder. Kollisionskritische Ereignisse aus 30 Jahren ASRS/FAA-Aufzeichnungen isoliert.</div>
               </div>
             </div>
           </div>
@@ -1549,14 +1549,14 @@ footer {
               <img src="../assets/images/Height-Adjustable-Mower-Unit/CAD.jpeg" alt="CAD design of height-adjustable mower unit" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">CAD-Entwurf — Fusion 360</div>
-                <div class="gimg-cap-text">Lead-screw driven height-adjustment mechanism with stepper motor mount and dual guide rails. Designed for full integration with the mowing deck assembly.</div>
+                <div class="gimg-cap-text">Gewindestangen-getriebener Höhenverstellmechanismus mit Schrittmotorhalterung und doppelten Führungsschienen. Für die vollständige Integration mit der Mähdeck-Baugruppe konzipiert.</div>
               </div>
             </div>
             <div class="gimg-cell">
               <img src="../assets/images/Height-Adjustable-Mower-Unit/SImulink_model.jpeg" alt="Simulink PID control model" loading="eager">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Simulink — PID-Regelungsmodell</div>
-                <div class="gimg-cap-text">Full closed-loop simulation: PID controller driving a stepper motor model with position, velocity, and acceleration feedback. Gains tuned in simulation before hardware deployment.</div>
+                <div class="gimg-cap-text">Vollständige Closed-Loop-Simulation: PID-Regler treibt ein Schrittmotormodell mit Positions-, Geschwindigkeits- und Beschleunigungsrückmeldung an. Verstärkungen in der Simulation vor dem Hardware-Einsatz abgestimmt.</div>
               </div>
             </div>
           </div>
@@ -1569,7 +1569,7 @@ footer {
               <img src="../assets/images/Height-Adjustable-Mower-Unit/1771847835219.jpeg" alt="3D printing prototype parts on Prusa i3 MK3" loading="lazy">
               <div class="gimg-cap">
                 <div class="gimg-cap-title">Prototyp — Prusa i3 MK3 Druck</div>
-                <div class="gimg-cap-text">Physical prototype components printed on a Prusa i3 MK3. Motor mounts and structural brackets iterated through multiple print cycles until all stability specs were met on first hardware test.</div>
+                <div class="gimg-cap-text">Physische Prototyp-Komponenten auf einem Prusa i3 MK3 gedruckt. Motorhalterungen und Strukturbauteile durch mehrere Druckzyklen iteriert, bis alle Stabilitätsspezifikationen beim ersten Hardware-Test erfüllt wurden.</div>
               </div>
             </div>
           </div>
