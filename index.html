@@ -428,6 +428,29 @@ pre { font-family:'DM Mono',monospace; font-size:.68rem; line-height:1.8; color:
   letter-spacing:.1em; text-transform:uppercase; padding:.28rem .7rem;
   border:1px solid rgba(0,212,255,.2); display:inline-block; border-radius:2px; margin-bottom:1rem;
 }
+
+/* ── CERTIFICATES ───────────────────────────── */
+#certificates { min-height:auto }
+.cert-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:1.5rem }
+.cert-card {
+  padding:1.5rem; border:1px solid var(--border); border-radius:3px;
+  position:relative; overflow:hidden;
+  transition:border-color .35s,transform .35s;
+  background:rgba(6,12,20,.55); backdrop-filter:blur(12px);
+  box-shadow:0 8px 32px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.03);
+  transform-style:preserve-3d; will-change:transform;
+  text-decoration:none; display:flex; flex-direction:column; align-items:center; cursor:none;
+}
+.cert-card::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(0,212,255,.03),transparent);
+  opacity:0; transition:opacity .35s; pointer-events:none;
+}
+.cert-card:hover { border-color:var(--accent); transform:translateY(-5px) }
+.cert-card:hover::before { opacity:1 }
+.cert-card img { width:100%; height:auto; border-radius:2px; margin-bottom:1.5rem; box-shadow:0 4px 12px rgba(0,0,0,.4); transition:transform .3s; }
+.cert-card:hover img { transform:scale(1.02); }
+.cert-title { font-family:'DM Mono',monospace; font-size:.8rem; color:var(--text); text-align:center; }
 .edu-deg { font-family:'Syne',sans-serif; font-weight:700; font-size:1.25rem; margin-bottom:.4rem; line-height:1.2 }
 .edu-school { color:var(--muted); font-size:.88rem; margin-bottom:.25rem }
 .edu-period { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--accent2); margin-bottom:1rem }
@@ -503,7 +526,7 @@ footer {
   .s-inner { padding:5rem 1.5rem }
 
   /* about / edu */
-  .about-grid, .edu-grid { grid-template-columns:1fr; gap:2rem }
+  .about-grid, .edu-grid, .cert-grid { grid-template-columns:1fr; gap:2rem }
 
   /* skills */
   .sk-grid { grid-template-columns:1fr 1fr }
@@ -712,9 +735,9 @@ footer {
     <div class="s-label rv" data-n="02">Technical Skills</div>
     <h2 class="s-title rv d1">The full stack.</h2>
     <div class="sk-grid">
-      <div class="sk-cat"><div class="sk-cat-t">⚡ Languages</div><div class="sk-pills"><span class="sp">Python</span><span class="sp">C++</span><span class="sp">C</span><span class="sp">MATLAB</span></div></div>
+      <div class="sk-cat"><div class="sk-cat-t">⚡ Languages</div><div class="sk-pills"><span class="sp">Python</span><span class="sp">C++ (Scientific Computing)</span><span class="sp">C</span><span class="sp">MATLAB</span></div></div>
       <div class="sk-cat"><div class="sk-cat-t">🧠 Machine Learning</div><div class="sk-pills"><span class="sp">TensorFlow</span><span class="sp">Keras</span><span class="sp">Scikit-Learn</span><span class="sp">LSTM</span><span class="sp">Random Forest</span><span class="sp">K-Means</span><span class="sp">SVM</span></div></div>
-      <div class="sk-cat"><div class="sk-cat-t">🔧 Dev &amp; MLOps</div><div class="sk-pills"><span class="sp">Git/GitHub</span><span class="sp">MLflow</span><span class="sp">DVC</span><span class="sp">PyTest</span><span class="sp">PySide6</span><span class="sp">UDP</span></div></div>
+      <div class="sk-cat"><div class="sk-cat-t">🔧 Dev &amp; MLOps</div><div class="sk-pills"><span class="sp">Docker</span><span class="sp">CI/CD</span><span class="sp">Bash</span><span class="sp">Vim</span><span class="sp">Git/GitHub</span><span class="sp">MLflow</span><span class="sp">DVC</span><span class="sp">PyTest</span><span class="sp">PySide6</span><span class="sp">UDP</span></div></div>
       <div class="sk-cat"><div class="sk-cat-t">✈️ Aerospace</div><div class="sk-pills"><span class="sp">Simulink</span><span class="sp">X-Plane SDK</span><span class="sp">ANSYS CFD</span><span class="sp">RTCA DO-323</span><span class="sp">HMI Design</span></div></div>
       <div class="sk-cat"><div class="sk-cat-t">🎨 CAD &amp; Design</div><div class="sk-pills"><span class="sp">CATIA V5</span><span class="sp">Fusion 360</span><span class="sp">Blender</span></div></div>
       <div class="sk-cat"><div class="sk-cat-t">🌐 Languages</div><div class="sk-pills"><span class="sp">English — Fluent</span><span class="sp">Deutsch — B1/B2</span><span class="sp">Hindi — Native</span></div></div>
@@ -1010,6 +1033,30 @@ footer {
 </section>
 
 <div class="sdl" id="sdl5"></div>
+
+<!-- ── CERTIFICATES ─────────────────────────── -->
+<section id="certificates">
+  <div class="s-inner">
+    <div class="s-label rv" data-n="04.5">Certificates</div>
+    <h2 class="s-title rv d1">Continuous learning.</h2>
+    <div class="cert-grid">
+      <a href="assets/certificates/Coursera_UYCPLMNRIB64_Hardik.pdf" target="_blank" class="cert-card rv d2">
+        <img src="assets/certificates/Coursera_UYCPLMNRIB64_Hardik.png" alt="Coursera Certificate 1"/>
+        <div class="cert-title">Coursera Certification</div>
+      </a>
+      <a href="assets/certificates/Coursera IU2HI56N1YAE.pdf" target="_blank" class="cert-card rv d2">
+        <img src="assets/certificates/Coursera_IU2HI56N1YAE.png" alt="Coursera Certificate 2"/>
+        <div class="cert-title">Coursera Certification</div>
+      </a>
+      <a href="assets/certificates/free_code_camp_python_certification.png" target="_blank" class="cert-card rv d2">
+        <img src="assets/certificates/free_code_camp_python_certification.png" alt="FreeCodeCamp Certification"/>
+        <div class="cert-title">FreeCodeCamp Python Certification</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="sdl" id="sdl6"></div>
 
 <!-- ── CONTACT ──────────────────────────────── -->
 <section id="contact">
@@ -1608,6 +1655,13 @@ gsap.fromTo('.edu-card',
   { rotateX:-22, opacity:0, y:45 },
   { rotateX:0, opacity:1, y:0, duration:.85, stagger:.18, ease:'power2.out',
     scrollTrigger:{ trigger:'#education .edu-grid', start:'top 78%', toggleActions:'play none none reverse' } }
+);
+
+/* ── Certificate cards ─────────────────────────────────── */
+gsap.fromTo('.cert-card',
+  { rotateX:-22, opacity:0, y:45 },
+  { rotateX:0, opacity:1, y:0, duration:.85, stagger:.18, ease:'power2.out',
+    scrollTrigger:{ trigger:'#certificates .cert-grid', start:'top 78%', toggleActions:'play none none reverse' } }
 );
 
 /* ── Contact entrance ──────────────────────────────────── */
