@@ -70,9 +70,18 @@ body {
   z-index:400; width:0%;
 }
 
+/* ── HUD SCROLL CANVAS ───────────────────── */
+#hud-canvas {
+  position:fixed; inset:0; z-index:1;
+  pointer-events:none;
+  opacity:0.5; mix-blend-mode:screen;
+  /* Balanced monochrome visibility */
+  filter: grayscale(1) brightness(1.2) contrast(1.2);
+}
+
 /* ── THREE.JS CANVAS BACKGROUND ──────────── */
 #three-canvas {
-  position:fixed; inset:0; z-index:1;
+  position:fixed; inset:0; z-index:0;
   pointer-events:none;
   opacity:1;
 }
@@ -289,7 +298,7 @@ section { min-height:100vh; display:flex; align-items:center }
 .sc-l { font-size:.72rem; color:var(--muted); margin-top:.4rem; font-family:'DM Mono',monospace; letter-spacing:.04em }
 
 /* ── SKILLS ──────────────────────────────── */
-#skills { min-height:auto }
+#fähigkeiten { min-height:auto }
 .sk-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem }
 .sk-cat {
   padding:1.8rem; border:1px solid var(--border); border-radius:3px;
@@ -313,7 +322,7 @@ section { min-height:100vh; display:flex; align-items:center }
 .sp:hover { background:rgba(200,200,200,.15); border-color:var(--accent2); color:var(--text) }
 
 /* ── PROJECTS ────────────────────────────── */
-#projects { min-height:auto; background:var(--surface) }
+#projekte { min-height:auto; background:var(--surface) }
 .proj-tabs {
   display:flex; border:1px solid var(--border); border-radius:4px;
   overflow:hidden; margin-bottom:2.5rem; width:fit-content;
@@ -406,7 +415,7 @@ pre { font-family:'DM Mono',monospace; font-size:.68rem; line-height:1.8; color:
 .t-ok{color:#27c93f}.t-val{color:var(--accent)}.t-warn{color:#666666}.t-head{color:var(--accent2)}
 
 /* ── EDUCATION ───────────────────────────── */
-#education { min-height:auto }
+#ausbildung { min-height:auto }
 .edu-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem }
 .edu-card {
   padding:2.2rem; border:1px solid var(--border); border-radius:3px;
@@ -626,6 +635,9 @@ footer {
 
 <!-- Scroll Progress Bar -->
 <div id="prog"></div>
+
+<!-- HUD Scroll Animation Canvas -->
+<canvas id="hud-canvas"></canvas>
 
 <!-- Three.js 3D Background Canvas -->
 <canvas id="three-canvas"></canvas>
@@ -1625,7 +1637,7 @@ document.querySelectorAll('.sc').forEach((card,i)=>{
     gsap.set(c,{ rotateX:t.rx, rotateY:t.ry, opacity:0, scale:.86, z:-70 });
   });
   ScrollTrigger.create({
-    trigger:'#skills .sk-grid', start:'top 76%',
+    trigger:'#fähigkeiten .sk-grid', start:'top 76%',
     onEnter:()=> gsap.to(cards,{ rotateX:0,rotateY:0,opacity:1,scale:1,z:0, duration:.8, stagger:CFG.cardStagger, ease:'back.out(1.5)' }),
     onLeaveBack:()=> cards.forEach((c,i)=>{ const t=tilts[i%tilts.length]; gsap.to(c,{rotateX:t.rx,rotateY:t.ry,opacity:0,scale:.86,z:-70,duration:.4})}),
     once:false
@@ -1654,7 +1666,7 @@ document.querySelectorAll('.sc').forEach((card,i)=>{
 gsap.fromTo('.edu-card',
   { rotateX:-22, opacity:0, y:45 },
   { rotateX:0, opacity:1, y:0, duration:.85, stagger:.18, ease:'power2.out',
-    scrollTrigger:{ trigger:'#education .edu-grid', start:'top 78%', toggleActions:'play none none reverse' } }
+    scrollTrigger:{ trigger:'#ausbildung .edu-grid', start:'top 78%', toggleActions:'play none none reverse' } }
 );
 
 /* ── Certificate cards ─────────────────────────────────── */
@@ -1801,6 +1813,77 @@ document.querySelectorAll('.btn-p,.btn-o').forEach(btn=>{
 
 /* ── Refresh after load ────────────────────────────────── */
 window.addEventListener('load', ()=>{ ScrollTrigger.refresh() });
+
+/* ═══════════════════════════════════════════════════════════
+   9. HUD SCROLL ANIMATION (IMAGE SEQUENCE)
+═══════════════════════════════════════════════════════════ */
+(function initHudScroll() {
+  const canvas = document.getElementById('hud-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  
+  const frameCount = 224;
+  const currentFrame = index => (
+    `../assets/hud_gif/ezgif-frame-${index.toString().padStart(3, '0')}.jpg`
+  );
+
+  const images = [];
+  const hudObj = { frame: 1 };
+
+  /* Preload frames */
+  for (let i = 1; i <= frameCount; i++) {
+    const img = new Image();
+    img.src = currentFrame(i);
+    images.push(img);
+  }
+
+  images[0].onload = resizeHud;
+
+  function resizeHud() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    renderHud();
+  }
+
+  function renderHud() {
+    const img = images[Math.round(hudObj.frame) - 1];
+    if(!img || !img.complete) return;
+    
+    const canvasRatio = canvas.width / canvas.height;
+    const imgRatio = img.width / img.height;
+    
+    let drawWidth, drawHeight, offsetX, offsetY;
+    if (canvasRatio > imgRatio) {
+      drawWidth = canvas.width;
+      drawHeight = canvas.width / imgRatio;
+      offsetX = 0;
+      offsetY = (canvas.height - drawHeight) / 2;
+    } else {
+      drawHeight = canvas.height;
+      drawWidth = canvas.height * imgRatio;
+      offsetX = (canvas.width - drawWidth) / 2;
+      offsetY = 0;
+    }
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+  }
+
+  window.addEventListener('resize', resizeHud);
+
+  /* GSAP ScrollTrigger */
+  gsap.to(hudObj, {
+    frame: frameCount,
+    snap: "frame",
+    ease: "none",
+    scrollTrigger: {
+      scrub: 1, // Smooth scrub
+      start: "top top",
+      end: "bottom bottom",
+      onUpdate: renderHud
+    }
+  });
+})();
 </script>
 <script>
 (function(){

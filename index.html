@@ -1841,12 +1841,15 @@ window.addEventListener('load', ()=>{ ScrollTrigger.refresh() });
     images.push(img);
   }
 
-  images[0].onload = renderHud;
+  images[0].onload = resizeHud;
 
-  function renderHud() {
+  function resizeHud() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    
+    renderHud();
+  }
+
+  function renderHud() {
     const img = images[Math.round(hudObj.frame) - 1];
     if(!img || !img.complete) return;
     
@@ -1870,7 +1873,7 @@ window.addEventListener('load', ()=>{ ScrollTrigger.refresh() });
     ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
   }
 
-  window.addEventListener('resize', renderHud);
+  window.addEventListener('resize', resizeHud);
 
   /* GSAP ScrollTrigger */
   gsap.to(hudObj, {
