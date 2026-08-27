@@ -70,6 +70,15 @@ body {
   z-index:400; width:0%;
 }
 
+/* ── HUD SCROLL CANVAS ───────────────────── */
+#hud-canvas {
+  position:fixed; inset:0; z-index:0;
+  pointer-events:none;
+  opacity:0.25; mix-blend-mode:screen;
+  /* Filter to map grayscale hud into the accent colors of the design */
+  filter: sepia(1) hue-rotate(170deg) saturate(3) brightness(0.8);
+}
+
 /* ── THREE.JS CANVAS BACKGROUND ──────────── */
 #three-canvas {
   position:fixed; inset:0; z-index:1;
@@ -626,6 +635,9 @@ footer {
 
 <!-- Scroll Progress Bar -->
 <div id="prog"></div>
+
+<!-- HUD Scroll Animation Canvas -->
+<canvas id="hud-canvas"></canvas>
 
 <!-- Three.js 3D Background Canvas -->
 <canvas id="three-canvas"></canvas>
@@ -1801,6 +1813,73 @@ document.querySelectorAll('.btn-p,.btn-o').forEach(btn=>{
 
 /* ── Refresh after load ────────────────────────────────── */
 window.addEventListener('load', ()=>{ ScrollTrigger.refresh() });
+/* ═══════════════════════════════════════════════════════════
+   9. HUD SCROLL ANIMATION (IMAGE SEQUENCE)
+═══════════════════════════════════════════════════════════ */
+(function initHudScroll() {
+  const canvas = document.getElementById('hud-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  
+  const frameCount = 224;
+  const currentFrame = index => (
+    `assets/hud_gif/ezgif-frame-${index.toString().padStart(3, '0')}.jpg`
+  );
+
+  const images = [];
+  const hudObj = { frame: 1 };
+
+  /* Preload frames */
+  for (let i = 1; i <= frameCount; i++) {
+    const img = new Image();
+    img.src = currentFrame(i);
+    images.push(img);
+  }
+
+  images[0].onload = renderHud;
+
+  function renderHud() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    const img = images[Math.round(hudObj.frame) - 1];
+    if(!img || !img.complete) return;
+    
+    const canvasRatio = canvas.width / canvas.height;
+    const imgRatio = img.width / img.height;
+    
+    let drawWidth, drawHeight, offsetX, offsetY;
+    if (canvasRatio > imgRatio) {
+      drawWidth = canvas.width;
+      drawHeight = canvas.width / imgRatio;
+      offsetX = 0;
+      offsetY = (canvas.height - drawHeight) / 2;
+    } else {
+      drawHeight = canvas.height;
+      drawWidth = canvas.height * imgRatio;
+      offsetX = (canvas.width - drawWidth) / 2;
+      offsetY = 0;
+    }
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+  }
+
+  window.addEventListener('resize', renderHud);
+
+  /* GSAP ScrollTrigger */
+  gsap.to(hudObj, {
+    frame: frameCount,
+    snap: "frame",
+    ease: "none",
+    scrollTrigger: {
+      scrub: 1, // Smooth scrub
+      start: "top top",
+      end: "bottom bottom",
+      onUpdate: renderHud
+    }
+  });
+})();
 </script>
 <script>
 (function(){
