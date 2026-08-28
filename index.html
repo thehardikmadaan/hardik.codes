@@ -807,6 +807,7 @@ footer {
       <button class="p-tab" data-proj="1">Simulator GUI</button>
       <button class="p-tab" data-proj="2">Runway Safety</button>
       <button class="p-tab" data-proj="3">Mower Control</button>
+      <button class="p-tab" data-proj="5">Brusselator Solver</button>
     </div>
       <a href="projects.html" class="btn-o rv d2" style="font-size:.75rem;padding:.6rem 1.4rem;white-space:nowrap">View Full Gallery →</a>
     </div>
@@ -1047,6 +1048,40 @@ footer {
     <span class="ck">return</span> <span class="cv">model</span>.predict(<span class="cv">X</span>)[<span class="cn">0</span>]</pre></div>
           <div class="code-footer"><span class="code-footer-l">Python 3.10 · scikit-learn · NumPy · PySide6</span><button class="code-run" onclick="runSim(4)">▶ Run Simulation</button></div>
           <div class="term-overlay" id="term-4"><div class="term-bar"><span class="term-title">Terminal Output</span><button class="term-close" onclick="closeTerm(4)">✕</button></div><div class="term-out" id="tout-4"></div></div>
+        </div>
+      </div>
+
+      <!-- PANEL 5 -->
+      <div class="proj-panel" id="panel-5">
+        <div class="proj-info">
+          <div class="proj-num-big">06</div>
+          <div class="proj-title-big">2D Brusselator Reaction-Diffusion Solver</div>
+          <div class="proj-org-badge">Course Project · Summer 2026</div>
+          <p class="proj-desc-full">High-performance C++ solver for the 2D Brusselator system. Features explicit RK4 and unconditionally stable implicit backward Euler integration. Employs sparse matrix operations via Eigen3 and an inexact Newton-Raphson method for stiff nonlinear equations.</p>
+          <div class="proj-metrics">
+            <div class="metric-row"><span class="metric-label">Execution speedup (implicit)</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="90"></div></div><span class="metric-val">~70%</span></div>
+            <div class="metric-row"><span class="metric-label">Spatial Resolution</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="80"></div></div><span class="metric-val">40×40</span></div>
+            <div class="metric-row"><span class="metric-label">Convergence Tolerance</span><div class="metric-bar-wrap"><div class="metric-bar" data-w="100"></div></div><span class="metric-val">10⁻⁶</span></div>
+          </div>
+          <div class="proj-tags-row"><span class="pt">C++17</span><span class="pt">Eigen</span><span class="pt">CMake</span><span class="pt">Docker</span><span class="pt">Bash</span></div>
+        </div>
+        <div class="proj-code-side">
+          <div class="code-topbar"><div class="code-dots"><div class="code-dot dot-r"></div><div class="code-dot dot-y"></div><div class="code-dot dot-g"></div></div><span class="code-fname">integrator.cpp</span></div>
+          <div class="code-body"><pre><span class="cc">// Implicit Euler Integration</span>
+<span class="cv">C_new</span> = <span class="cv">C_old</span> + <span class="cv">dt</span> * (<span class="cv">A_tilde</span> * <span class="cv">C_new</span> + <span class="cf">omega_dot</span>(<span class="cv">C_new</span>));
+
+<span class="cc">// Inexact Newton-Raphson Solver</span>
+<span class="cv">J</span>.setFromTriplets(<span class="cv">triplets</span>.begin(), <span class="cv">triplets</span>.end());
+<span class="cv">solver</span>.compute(<span class="cv">J</span>);
+
+<span class="ck">for</span> (<span class="ck">int</span> <span class="cv">i</span> = <span class="cn">0</span>; <span class="cv">i</span> &lt; <span class="cv">max_iter</span>; ++<span class="cv">i</span>) {
+    <span class="cv">Eigen::VectorXd</span> <span class="cv">g</span> = <span class="cv">C_new</span> - <span class="cv">C_old</span> - <span class="cv">dt</span> * (<span class="cv">A_tilde</span> * <span class="cv">C_new</span> + <span class="cf">omega_dot</span>(<span class="cv">C_new</span>));
+    <span class="ck">if</span> (<span class="cv">g</span>.template lpNorm&lt;<span class="cv">Eigen::Infinity</span>&gt;() &lt; <span class="cn">1e-6</span>) <span class="ck">break</span>;
+    <span class="cv">Eigen::VectorXd</span> <span class="cv">delta_C</span> = <span class="cv">solver</span>.solve(-<span class="cv">g</span>);
+    <span class="cv">C_new</span> += <span class="cv">delta_C</span>;
+}</pre></div>
+          <div class="code-footer"><span class="code-footer-l">C++17 · Eigen3 · CMake</span><button class="code-run" onclick="runSim(5)">▶ Run Simulation</button></div>
+          <div class="term-overlay" id="term-5"><div class="term-bar"><span class="term-title">Terminal Output</span><button class="term-close" onclick="closeTerm(5)">✕</button></div><div class="term-out" id="tout-5"></div></div>
         </div>
       </div>
 
@@ -1743,7 +1778,7 @@ document.querySelectorAll('.p-tab').forEach(tab=>{
     document.querySelectorAll('.proj-panel').forEach(p=>p.classList.remove('active'));
     tab.classList.add('active');
     document.getElementById('panel-'+idx).classList.add('active');
-    [0,1,2,3,4].forEach(i=>closeTerm(i));
+    [0,1,2,3,4,5].forEach(i=>closeTerm(i));
     setTimeout(()=>{
       document.querySelectorAll('#panel-'+idx+' .metric-bar').forEach(b=>{
         b.style.width='0'; setTimeout(()=>{ b.style.width=b.dataset.w+'%' },100);
@@ -1757,7 +1792,8 @@ const termData=[
   [{t:'t-head',v:'$ python udp_interface.py'},{t:'',v:'Binding socket to 0.0.0.0:49001...'},{t:'t-ok',v:'✓ Socket bound'},{t:'t-ok',v:'✓ Thread active — awaiting X-Plane 12'},{t:'',v:'Connection established'},{t:'t-val',v:'  [idx=3]  airspeed = 142.8 kt'},{t:'t-val',v:'  [idx=17] altitude = 3420.0 ft'},{t:'t-val',v:'  [idx=18] vertical = +480 fpm'},{t:'t-val',v:'  [idx=20] heading  = 274.3°'},{t:'',v:'Packet rate: 50 Hz — latency: 8ms'},{t:'t-ok',v:'✓ PFD / ND / EICAS nominal'},{t:'t-warn',v:'⚠ Terrain proximity alert (demo mode)'},{t:'t-ok',v:'✓ Alert rendered within 12ms'}],
   [{t:'t-head',v:'$ python runway_analysis.py'},{t:'',v:'Loading 30-year incursion database...'},{t:'t-ok',v:'✓ 14,382 runway events (1994–2024)'},{t:'',v:'Mapping DO-323 severity...'},{t:'t-ok',v:'✓ A:312  B:1847  C:6201  D:6022'},{t:'',v:'Training Random Forest (200 trees)...'},{t:'t-ok',v:'✓ OOB accuracy: 82.4%'},{t:'t-val',v:'  traffic_density : 0.312 ± 0.018'},{t:'t-val',v:'  visibility      : 0.287 ± 0.022'},{t:'t-val',v:'  time_of_day     : 0.201 ± 0.015'},{t:'t-ok',v:'✓ CRITICAL alerts flagged: 94.2%'},{t:'t-ok',v:'✓ Report → boeing_safety_report.pdf'}],
   [{t:'t-head',v:'$ python pid_stabiliser.py'},{t:'',v:'PID: Kp=8.5  Ki=2.1  Kd=0.4'},{t:'t-ok',v:'✓ Plant TF: 1/(0.08s²+1.2s+1)'},{t:'',v:'Simulating step response...'},{t:'',v:'  t=0.00s  h=0.0mm  u=42.5'},{t:'',v:'  t=0.25s  h=22.1mm u=21.4'},{t:'',v:'  t=0.50s  h=43.8mm u=5.2'},{t:'',v:'  t=1.00s  h=50.1mm u=-0.1'},{t:'t-val',v:'► Rise time     : 0.48 s'},{t:'t-val',v:'► Settling time : 0.92 s (spec: <2.0s ✓)'},{t:'t-val',v:'► Overshoot     : 3.8%  (spec: <5%  ✓)'},{t:'t-ok',v:'✓ All stability specs met'}],
-  [{t:'t-head',v:'$ python astrodynamics.py'},{t:'',v:'Hohmann Transfer: LEO → GEO'},{t:'',v:'  r1 = 6,571 km  (300 km alt)'},{t:'',v:'  r2 = 42,164 km (GEO)'},{t:'t-val',v:'► ΔV₁     : 2,422 m/s'},{t:'t-val',v:'► ΔV₂     : 1,478 m/s'},{t:'t-val',v:'► Total ΔV: 3,900 m/s'},{t:'t-val',v:'► TOF     : 5.27 h'},{t:'',v:'Loading AI surrogate...'},{t:'t-ok',v:'✓ MLP loaded (R²=0.9993  MAE=16.47)'},{t:'t-val',v:'► Surrogate ΔV: 3,886 m/s  (err 0.36%)'},{t:'t-ok',v:'✓ Propellant mass: 847.2 kg'},{t:'t-ok',v:'✓ Dashboard ready — 200k training samples'}]
+  [{t:'t-head',v:'$ python astrodynamics.py'},{t:'',v:'Hohmann Transfer: LEO → GEO'},{t:'',v:'  r1 = 6,571 km  (300 km alt)'},{t:'',v:'  r2 = 42,164 km (GEO)'},{t:'t-val',v:'► ΔV₁     : 2,422 m/s'},{t:'t-val',v:'► ΔV₂     : 1,478 m/s'},{t:'t-val',v:'► Total ΔV: 3,900 m/s'},{t:'t-val',v:'► TOF     : 5.27 h'},{t:'',v:'Loading AI surrogate...'},{t:'t-ok',v:'✓ MLP loaded (R²=0.9993  MAE=16.47)'},{t:'t-val',v:'► Surrogate ΔV: 3,886 m/s  (err 0.36%)'},{t:'t-ok',v:'✓ Propellant mass: 847.2 kg'},{t:'t-ok',v:'✓ Dashboard ready — 200k training samples'}],
+  [{t:'t-head',v:'$ ./brusselator --method implicit --dt 0.05'},{t:'',v:'Initializing 40x40 Grid...'},{t:'t-ok',v:'✓ Grid parameters loaded (Ca=1.0, Cb=3.0)'},{t:'',v:'Assembling sparse matrices...'},{t:'t-ok',v:'✓ A_tilde assembled (N=3200)'},{t:'',v:'Running Implicit Backward Euler...'},{t:'',v:'  Step 0050: t=2.50s  iters=2'},{t:'',v:'  Step 0100: t=5.00s  iters=1'},{t:'t-val',v:'► Total time: 5.0 s'},{t:'t-val',v:'► Total Newton iterations: 213'},{t:'t-val',v:'► Avg iterations/step: 2.13'},{t:'t-ok',v:'✓ Final state exported to .vts'},{t:'t-ok',v:'✓ Turing patterns identified'}]
 ];
 function runSim(idx){
   const term=document.getElementById('term-'+idx), out=document.getElementById('tout-'+idx);
