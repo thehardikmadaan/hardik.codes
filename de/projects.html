@@ -654,6 +654,24 @@ footer {
 @media(prefers-reduced-motion:reduce) {
   *, *::before, *::after { animation:none!important; transition:none!important }
 }
+
+@media (hover: none) and (pointer: coarse) {
+  .p-tab:hover { border-color: var(--border); color: var(--muted); background: transparent; }
+  .p-tab.active:hover { border-color: var(--accent); background: rgba(255,255,255,.06); color: var(--accent); }
+  .nav-links a:hover { color: var(--muted); }
+  .nav-links a:hover::after { transform: scaleX(0); }
+  .btn-p:hover { transform: none; box-shadow: 0 8px 32px rgba(255,255,255,.15); }
+  .btn-o:hover { border-color: var(--border); color: var(--text); transform: none; }
+  .chip:hover { border-color: var(--border); color: var(--text); transform: none; }
+  .sc:hover { transform: none; background: transparent; border-color: var(--border); }
+  .sc:hover::before { transform: scaleX(0); }
+  .edu-card:hover { transform: none; border-color: var(--border); }
+  .edu-card:hover::before { opacity: 0; }
+  .cert-card:hover { transform: none; border-color: var(--border); }
+  .cert-card:hover::before { opacity: 0; }
+  .cert-card:hover img { transform: none; }
+  .c-link:hover { transform: none; border-color: var(--border); color: var(--text); }
+}
 </style>
 </head>
 <body>
