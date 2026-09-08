@@ -543,9 +543,11 @@ footer {
 /* ── RESPONSIVE ─────────────────────────── */
 @media(max-width:960px) {
   /* cursor: no rocket on touch */
-  body { cursor:auto }
-  #rocket-cursor { display:none }
-  a, button { cursor:pointer }
+  @media (pointer: coarse) {
+    body { cursor:auto }
+    #rocket-cursor { display:none }
+    a, button { cursor:pointer }
+  }
 
   /* nav */
   .side-nav  { display:none }

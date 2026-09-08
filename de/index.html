@@ -522,9 +522,11 @@ footer {
 /* ── MOBILE ──────────────────────────────── */
 @media(max-width:900px) {
   /* cursor: rocket doesn't work on touch */
-  body { cursor:auto }
-  #rocket-cursor { display:none }
-  a, button { cursor:pointer }
+  @media (pointer: coarse) {
+    body { cursor:auto }
+    #rocket-cursor { display:none }
+    a, button { cursor:pointer }
+  }
 
   /* nav */
   nav { padding:1.2rem 1.5rem }
@@ -1913,7 +1915,7 @@ window.addEventListener('load', ()=>{ ScrollTrigger.refresh() });
     snap: "frame",
     ease: "none",
     scrollTrigger: {
-      scrub: 1, // Smooth scrub
+      scrub: true, // Smooth scrub
       start: "top top",
       end: "bottom bottom",
       onUpdate: renderHud
