@@ -215,14 +215,6 @@ footer {
 .ft-nav a { font-family:'DM Mono',monospace; font-size:.65rem; color:var(--muted); text-decoration:none; transition:color .25s }
 .ft-nav a:hover { color:var(--accent) }
 
-@media(max-width:900px) {
-  nav { padding:1.2rem 1.5rem }
-  .nav-links { display:none }
-  .menu-btn { display:flex }
-  .t-hero { padding:4rem 1.5rem 2rem }
-  .content-grid { grid-template-columns:1fr; padding:0 1.5rem }
-  footer { flex-direction:column; text-align:center; padding:1.5rem }
-}
 /* ── HAMBURGER / MOBILE MENU ─────────────── */
 .menu-btn { display:none; flex-direction:column; justify-content:center; gap:5px; background:none; border:none; cursor:pointer; padding:6px }
 .menu-btn span { display:block; width:22px; height:2px; background:var(--accent); border-radius:2px; transition:transform .3s,opacity .3s }
@@ -234,6 +226,18 @@ footer {
 .mobile-menu a { color:rgba(232,237,245,.6); text-decoration:none; font-family:'DM Mono',monospace; font-size:1rem; letter-spacing:.15em; text-transform:uppercase; transition:color .3s }
 .mobile-menu a:hover,.mobile-menu a.active { color:var(--accent) }
 
+
+/* ── NAV CONTROLS ────────────────────────── */
+.nav-controls { display: flex; align-items: center; gap: 1rem; }
+
+@media(max-width:900px) {
+  nav { padding:1.2rem 1.5rem }
+  .nav-links { display:none }
+  .menu-btn { display:flex }
+  .t-hero { padding:4rem 1.5rem 2rem }
+  .content-grid { grid-template-columns:1fr; padding:0 1.5rem }
+  footer { flex-direction:column; text-align:center; padding:1.5rem }
+}
 @media(prefers-reduced-motion:reduce) { * { animation:none !important; transition:none !important } }
 </style>
 </head>
@@ -264,10 +268,14 @@ footer {
     <li><a href="projects.html">Gallery</a></li>
     <li><a href="index.html#contact">Contact</a></li>
   </ul>
-  <a href="de/terms.html" class="lang-btn" aria-label="Auf Deutsch wechseln">DE</a>
+  <div class="nav-controls">
+    <div class="nav-controls">
+    <a href="de/terms.html" class="lang-btn" aria-label="Auf Deutsch wechseln">DE</a>
   <button class="menu-btn" id="menuBtn" aria-label="Toggle navigation" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
+    </div>
+</div>
 </nav>
 <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
   <a href="index.html#about">About</a>

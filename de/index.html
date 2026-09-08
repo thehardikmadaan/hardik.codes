@@ -519,6 +519,37 @@ footer {
   pointer-events:none; opacity:.6;
 }
 
+/* ── HAMBURGER / MOBILE MENU ─────────────── */
+.menu-btn { display:none; flex-direction:column; justify-content:center; gap:5px; background:none; border:none; cursor:pointer; padding:6px }
+.menu-btn span { display:block; width:22px; height:2px; background:var(--accent); border-radius:2px; transition:transform .3s,opacity .3s }
+.menu-btn.open span:nth-child(1) { transform:translateY(7px) rotate(45deg) }
+.menu-btn.open span:nth-child(2) { opacity:0 }
+.menu-btn.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg) }
+.mobile-menu {
+  display:none; position:fixed; inset:0; z-index:190;
+  background:rgba(0,0,0,.85); backdrop-filter:blur(24px);
+  flex-direction:column; align-items:center; justify-content:center; gap:2.5rem;
+}
+.mobile-menu.open { display:flex }
+.mobile-menu a {
+  color:rgba(232,237,245,.6); text-decoration:none; font-family:'DM Mono',monospace;
+  font-size:1rem; letter-spacing:.15em; text-transform:uppercase;
+  opacity:0; transform:translateY(20px);
+  transition:opacity .4s ease, transform .4s ease, color .3s;
+}
+.mobile-menu.open a { opacity:1; transform:translateY(0); }
+.mobile-menu.open a:nth-child(1) { transition-delay: .1s; }
+.mobile-menu.open a:nth-child(2) { transition-delay: .15s; }
+.mobile-menu.open a:nth-child(3) { transition-delay: .2s; }
+.mobile-menu.open a:nth-child(4) { transition-delay: .25s; }
+.mobile-menu.open a:nth-child(5) { transition-delay: .3s; }
+.mobile-menu.open a:nth-child(6) { transition-delay: .35s; }
+.mobile-menu a:hover,.mobile-menu a.active { color:var(--accent) }
+
+
+/* ── NAV CONTROLS ────────────────────────── */
+.nav-controls { display: flex; align-items: center; gap: 1rem; }
+
 /* ── MOBILE ──────────────────────────────── */
 @media(max-width:900px) {
   /* cursor: rocket doesn't work on touch */
@@ -613,33 +644,6 @@ footer {
   .btn-p, .btn-o { width:100%; text-align:center; }
 }
 
-/* ── HAMBURGER / MOBILE MENU ─────────────── */
-.menu-btn { display:none; flex-direction:column; justify-content:center; gap:5px; background:none; border:none; cursor:pointer; padding:6px }
-.menu-btn span { display:block; width:22px; height:2px; background:var(--accent); border-radius:2px; transition:transform .3s,opacity .3s }
-.menu-btn.open span:nth-child(1) { transform:translateY(7px) rotate(45deg) }
-.menu-btn.open span:nth-child(2) { opacity:0 }
-.menu-btn.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg) }
-.mobile-menu {
-  display:none; position:fixed; inset:0; z-index:190;
-  background:rgba(0,0,0,.85); backdrop-filter:blur(24px);
-  flex-direction:column; align-items:center; justify-content:center; gap:2.5rem;
-}
-.mobile-menu.open { display:flex }
-.mobile-menu a {
-  color:rgba(232,237,245,.6); text-decoration:none; font-family:'DM Mono',monospace;
-  font-size:1rem; letter-spacing:.15em; text-transform:uppercase;
-  opacity:0; transform:translateY(20px);
-  transition:opacity .4s ease, transform .4s ease, color .3s;
-}
-.mobile-menu.open a { opacity:1; transform:translateY(0); }
-.mobile-menu.open a:nth-child(1) { transition-delay: .1s; }
-.mobile-menu.open a:nth-child(2) { transition-delay: .15s; }
-.mobile-menu.open a:nth-child(3) { transition-delay: .2s; }
-.mobile-menu.open a:nth-child(4) { transition-delay: .25s; }
-.mobile-menu.open a:nth-child(5) { transition-delay: .3s; }
-.mobile-menu.open a:nth-child(6) { transition-delay: .35s; }
-.mobile-menu a:hover,.mobile-menu a.active { color:var(--accent) }
-
 @media(prefers-reduced-motion:reduce) {
   * { animation:none !important; transition:none !important }
   #three-canvas { display:none }
@@ -715,10 +719,14 @@ footer {
     <li><a href="#ausbildung">Ausbildung</a></li>
     <li><a href="#kontakt">Kontakt</a></li>
   </ul>
-  <a href="../index.html" class="lang-btn" aria-label="Switch to English">EN</a>
+  <div class="nav-controls">
+    <div class="nav-controls">
+    <a href="../index.html" class="lang-btn" aria-label="Switch to English">EN</a>
   <button class="menu-btn" id="menuBtn" aria-label="Toggle navigation" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
+    </div>
+</div>
 </nav>
 <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
   <a href="#about">Über mich</a>
